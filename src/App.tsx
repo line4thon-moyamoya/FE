@@ -3,6 +3,7 @@ import RootLayout from "./layout/RootLayout";
 import Onboarding from "./pages/Onboarding/Onboarding";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
+import Ready from "./pages/Ready/Reday";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
           <Route path="/" element={<Onboarding />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/ready" element={<Ready />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -48,7 +48,13 @@ export default function Signup() {
       {step === 4 && (
         <PinStep data={data} updateData={updateData} onNext={goNext} />
       )}
-      {step === 5 && <MicPermissionStep onNext={() => navigate("/ready")} />}
+      {step === 5 && (
+        <MicPermissionStep
+          onNext={() =>
+            navigate("/ready", { state: { childName: data.childName.trim() } })
+          }
+        />
+      )}
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import type { StepProps } from "../../../types/signup";
 import speaker from "../../../assets/icons/speaker.svg";
 import moya from "../../../assets/images/moya/default/moya_wave.svg";
@@ -10,7 +9,6 @@ export default function MicPermissionStep({
   onNext,
 }: Pick<StepProps, "onNext">) {
   const [denied, setDenied] = useState(false);
-  const navigate = useNavigate();
 
   const handleMicRequest = async () => {
     try {
@@ -74,8 +72,8 @@ export default function MicPermissionStep({
 
       <button
         type="button"
-        onClick={() => navigate("/ready")}
-        className="font-jua text-base leading-6 font-normal text-[#9A96B3]"
+        onClick={onNext}
+        className="cursor-pointer font-jua text-base leading-6 font-normal text-[#9A96B3]"
       >
         나중에 할게요
       </button>

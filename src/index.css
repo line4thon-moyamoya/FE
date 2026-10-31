@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+@theme {
+  --color-cream: #fdf9ed;
+  --color-lavender: #efecff;
+
+  --font-noto: "Noto Sans KR", sans-serif;
+  --font-jua: "Jua", sans-serif;
+}

@@ -19,7 +19,7 @@ export default function App() {
           <Route path="/ready" element={<Ready />} />
           <Route path="/guardian/password" element={<GuardianPassword />} />
           <Route path="/guardian" element={<GuardianHome />} />
-          <Route path="/guardian/missing-words" element={<MissingWords />} />
+          <Route path="/guardian/missing-words/:childId" element={<MissingWords />} />
         </Route>
       </Routes>
     </BrowserRouter>

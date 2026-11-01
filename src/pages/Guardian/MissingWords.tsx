@@ -1,12 +1,19 @@
 import { useState } from "react";
+import { Navigate, useParams } from "react-router-dom";
 import BackButton from "../../components/common/BackButton/BackButton";
 import MissingWordItem from "../../components/Guardian/MissingWordItem";
 import { MOCK_CHILD_LIST } from "../../mocks/guardian";
 
 export default function MissingWords() {
-  const [words, setWords] = useState(MOCK_CHILD_LIST[0].missingWords);
+  const { childId } = useParams();
+  const child = MOCK_CHILD_LIST.find((c) => c.id === Number(childId));
 
-  // 최신순으로 정렬
+  const [words, setWords] = useState(child?.missingWords ?? []);
+
+  // 없는 아이 id로 들어오면 보호자 홈으로
+  if (!child) return <Navigate to="/guardian" replace />;
+
+  // 최신순 정렬
   const sortedWords = [...words].sort(
     (a, b) => new Date(b.askedAt).getTime() - new Date(a.askedAt).getTime()
   );

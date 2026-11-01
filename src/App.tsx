@@ -4,6 +4,7 @@ import Onboarding from "./pages/Onboarding/Onboarding";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Ready from "./pages/Ready/Reday";
+import GuardianPassword from "./pages/Guardian/GuardianPassword";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/ready" element={<Ready />} />
+          <Route path="/guardian/password" element={<GuardianPassword />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -6,6 +6,7 @@ import Signup from "./pages/Signup/Signup";
 import Ready from "./pages/Ready/Reday";
 import GuardianPassword from "./pages/Guardian/GuardianPassword";
 import GuardianHome from "./pages/Guardian/GuardianHome";
+import MissingWords from "./pages/Guardian/MissingWords";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/ready" element={<Ready />} />
           <Route path="/guardian/password" element={<GuardianPassword />} />
           <Route path="/guardian" element={<GuardianHome />} />
+          <Route path="/guardian/missing-words" element={<MissingWords />} />
         </Route>
       </Routes>
     </BrowserRouter>

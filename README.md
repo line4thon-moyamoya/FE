@@ -20,17 +20,20 @@
 ```
 main ← develop ← feature/#이슈번호/기능명
 ```
-​
 | 브랜치 | 설명 |
-| --- | --- |
-| `main` |  배포용 브랜치. 직접 push 금지 |
+|---|---|
+| `main` | 배포용 브랜치. 직접 push 금지 |
 | `develop` | 개발 통합 브랜치. 기능이 완성되면 여기로 merge |
 | `feature/#이슈번호/기능명` | 기능 개발 |
 | `fix/#이슈번호/내용` | 버그 수정 |
-| `hotfix/#이슈번호/내용` | 배포 후 긴급 수정 | 
+| `hotfix/#이슈번호/내용` | 배포 후 긴급 수정 |
+| `design/#이슈번호/내용` | UI, CSS 등 디자인 변경 |
+| `refactor/#이슈번호/내용` | 코드 리팩토링 |
+| `chore/#이슈번호/내용` | 패키지 설치, 설정 파일 등 기타 작업 |
+| `docs/#이슈번호/내용` | 문서 수정 (README 등) |
 
-- 브랜치 이름은 영어 소문자와 (하이픈)으로 작성해요
-- 예시: `feature/#12/voice-input`, `fix/#15/song-play-error`
+- 브랜치 이름은 영어 소문자와 -(하이픈)으로 작성해요
+- 예시: `feature/#12/voice-input`, `fix/#15/song-play-error`, `design/#7/onboarding-decoration`
 
 ## Commit Convention
 

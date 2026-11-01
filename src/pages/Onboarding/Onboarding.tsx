@@ -1,6 +1,8 @@
 import title from "../../assets/images/moyamoya_title.svg";
 import highlight from "../../assets/images/highlight.svg";
 import moya from "../../assets/images/moya/default/moya_wave.svg";
+import wondering from "../../assets/images/wondering.svg";
+import music from "../../assets/images/music.svg";
 import Button from "../../components/common/Button/Button";
 
 import { useNavigate } from "react-router-dom";
@@ -34,8 +36,20 @@ export default function Onboarding() {
           <img src={title} className="w-[212px] h-[49px]" />
           <img src={highlight} className="w-[108px] h-[11px] ml-25" />
         </div>
-        <img src={moya} className="w-[390px] h-[410px] mt-6" />
-        <p className="text-[#6F6A8C] text-base font-bold font-noto leading-7 mt-12 mb-3">
+        <div className="relative w-full max-w-[390px] aspect-[390/410] mt-6">
+          <img src={moya} className="w-[390px] h-[410px] object-contain" />
+          <img
+            src={wondering}
+            aria-hidden="true"
+            className="absolute top-[23%] left-[2%] w-[100px] h-[100px]"
+          />
+          <img
+            src={music}
+            aria-hidden="true"
+            className="absolute top-[45%] left-[82%] w-9 h-9"
+          />
+        </div>
+        <p className="text-[#6F6A8C] text-base font-bold font-noto leading-7 mt-17 mb-3">
           모르는 말, 모야한테 물어봐!
         </p>
         <Button onClick={() => navigate("/signup")} text="시작하기" showArrow />

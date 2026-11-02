@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/common/Button/Button";
-import moya from "../../assets/images/moya/default/moya_exciting.svg";
+import moya from "../../assets/images/moya/default/moya_excited.png";
 
 export default function Ready() {
   const navigate = useNavigate();

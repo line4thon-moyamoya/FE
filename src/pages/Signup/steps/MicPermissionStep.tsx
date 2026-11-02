@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { StepProps } from "../../../types/signup";
 import speaker from "../../../assets/icons/speaker.svg";
-import moya from "../../../assets/images/moya/default/moya_wave.svg";
+import moya from "../../../assets/images/moya/default/moya_greeting.png";
 import voice from "../../../assets/icons/voice.svg";
 import Button from "../../../components/common/Button/Button";
 

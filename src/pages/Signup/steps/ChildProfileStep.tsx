@@ -1,7 +1,7 @@
 import type { StepProps } from "../../../types/signup";
 import Input from "../../../components/common/Input/Input";
 import Button from "../../../components/common/Button/Button";
-import moya from "../../../assets/images/moya/default/moya_description.svg";
+import moya from "../../../assets/images/moya/default/moya_explain.png";
 import AgeSelect from "../../../components/Signup/AgeSelect";
 
 // 받침이 있으면 "아", 없으면 "야" (지우야 / 민준아)

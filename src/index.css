@@ -17,12 +17,19 @@
 
   /* 브랜드 */
   --color-brand: #7b61f8; /* Brand/Primary */
+  --color-brand-action: #6a4ff3; /* Brand/Action, 눌린 상태 */
+  --color-brand-light: #a08dff; /* Brand/Light */
   --color-brand-depth: #4c34c3; /* Brand/Depth, 버튼 입체 그림자 */
   --color-lime: #d2ec7c; /* Brand/Lime, 쿠폰 도장 */
+
+  /* 비활성 */
+  --color-disabled-face: #dad6e4; /* State/DisabledFace */
+  --color-disabled-depth: #bfb9cf; /* State/DisabledDepth */
 
   /* 테두리 */
   --color-line: #e4dff5; /* Border/Soft */
   --color-line-warm: #e0ddd7; /* Border/Warm */
+  --color-line-lavender: #d9d0ff; /* Border/Lavender */
   --color-line-cream: #efe6d3; /* Figma 변수 미확인. BackButton 등에서 쓰던 값 */
 
   /* ---------------------------------------------------------------
@@ -50,4 +57,46 @@
    * --------------------------------------------------------------- */
   --font-noto: "Noto Sans KR", sans-serif;
   --font-jua: "Jua", sans-serif;
+
+  /* ---------------------------------------------------------------
+   * 움직임
+   * --------------------------------------------------------------- */
+  --animate-pulse-ring: pulse-ring 1.8s ease-out infinite;
+  --animate-think-dot: think-dot 1.2s ease-in-out infinite;
+
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(0.82);
+      opacity: 0.9;
+    }
+    70% {
+      transform: scale(1.12);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1.12);
+      opacity: 0;
+    }
+  }
+
+  @keyframes think-dot {
+    0%,
+    60%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.55;
+    }
+    30% {
+      transform: translateY(-4px);
+      opacity: 1;
+    }
+  }
+}
+
+/* 움직임을 줄이도록 설정한 기기 */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse-ring,
+  .animate-think-dot {
+    animation: none;
+  }
 }

@@ -52,7 +52,7 @@ export default function GuardianHome() {
         <WeeklySummaryCard
           childName={selectedChild.name}
           summary={selectedChild.weeklySummary}
-          onReportClick={() => navigate("/guardian/report")}
+          onReportClick={() => navigate(`/guardian/report/${selectedChild.id}`)}
         />
         <MissingWordCard
           missingWords={selectedChild.missingWords}

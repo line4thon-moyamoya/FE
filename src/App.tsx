@@ -7,6 +7,7 @@ import Ready from "./pages/Ready/Reday";
 import GuardianPassword from "./pages/Guardian/GuardianPassword";
 import GuardianHome from "./pages/Guardian/GuardianHome";
 import MissingWords from "./pages/Guardian/MissingWords";
+import WeeklyReport from "./pages/Guardian/WeeklyReport";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/guardian/password" element={<GuardianPassword />} />
           <Route path="/guardian" element={<GuardianHome />} />
           <Route path="/guardian/missing-words/:childId" element={<MissingWords />} />
+          <Route path="/guardian/report/:childId" element={<WeeklyReport />} />
         </Route>
       </Routes>
     </BrowserRouter>

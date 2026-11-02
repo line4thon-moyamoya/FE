@@ -8,6 +8,7 @@ import GuardianPassword from "./pages/Guardian/GuardianPassword";
 import GuardianHome from "./pages/Guardian/GuardianHome";
 import MissingWords from "./pages/Guardian/MissingWords";
 import WeeklyReport from "./pages/Guardian/WeeklyReport";
+import ChildHome from "./pages/Child/ChildHome";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/ready" element={<Ready />} />
+          <Route path="/home" element={<ChildHome />} />
           <Route path="/guardian/password" element={<GuardianPassword />} />
           <Route path="/guardian" element={<GuardianHome />} />
           <Route path="/guardian/missing-words/:childId" element={<MissingWords />} />

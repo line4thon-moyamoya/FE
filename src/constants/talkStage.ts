@@ -1,5 +1,5 @@
 import type { MicState } from "../components/common/MicButton/MicButton";
-import type { TalkStage } from "../types/child";
+import type { MoyaStage } from "../types/child";
 import type { MoyaMood } from "../types/moya";
 
 interface TalkStageView {
@@ -16,7 +16,7 @@ interface TalkStageView {
   shadow: boolean;
 }
 
-export const TALK_STAGE_VIEW: Record<TalkStage, TalkStageView> = {
+export const TALK_STAGE_VIEW: Record<MoyaStage, TalkStageView> = {
   idle: {
     line: null,
     mood: "explain",

@@ -8,8 +8,8 @@ interface SpeechBubbleProps {
   tail?: TailSide;
   showReplay?: boolean;
   onReplay?: () => void;
-  /** 말풍선 가로 길이(px) */
-  width?: number;
+  /** 말풍선 가로 길이(px). "fill" 이면 남는 자리를 채움 */
+  width?: number | "fill";
   className?: string;
 }
 
@@ -51,9 +51,9 @@ export default function SpeechBubble({
 }: SpeechBubbleProps) {
   return (
     <div
-      style={{ width }}
+      style={width === "fill" ? undefined : { width }}
       className={`relative flex items-center gap-3 rounded-3xl border-2 border-line-warm
-        bg-white py-[18px] pr-[30px] pl-5 shadow-bubble ${className}`}
+        bg-white py-[18px] pr-[30px] pl-5 shadow-bubble ${width === "fill" ? "flex-1" : ""} ${className}`}
     >
       <p className="flex-1 text-center font-jua text-xl leading-[1.5] font-normal whitespace-pre-line text-ink">
         {text}

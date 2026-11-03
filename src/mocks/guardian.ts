@@ -9,6 +9,8 @@ export const MOCK_CHILD_LIST: Child[] = [
   {
     id: 1,
     name: "지우",
+    ageGroup: "3-4",
+    moyaLook: "default",
     weeklySummary: {
       askedCount: 12,
       reviewedCount: 7,
@@ -70,6 +72,8 @@ export const MOCK_CHILD_LIST: Child[] = [
   {
     id: 2,
     name: "서아",
+    ageGroup: "5",
+    moyaLook: "car",
     weeklySummary: {
       askedCount: 5,
       reviewedCount: 3,

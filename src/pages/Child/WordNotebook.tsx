@@ -7,7 +7,7 @@ import { findChildProfile } from "../../mocks/child";
 import { findWord } from "../../mocks/words";
 import {
   getCollectedCards,
-  getRemainingForNextSong,
+  getRemainingForNextCoupon,
 } from "../../mocks/notebook";
 import type { CollectedCard, Word } from "../../types/word";
 import { getCurrentChildId } from "../../utils/currentChild";
@@ -24,7 +24,7 @@ export default function WordNotebook() {
     // 단어 정보를 못 찾은 카드는 빼기
     .filter((item): item is CardWithWord => item.word !== undefined);
 
-  const remaining = getRemainingForNextSong(cards.length);
+  const remaining = getRemainingForNextCoupon(cards.length);
 
   return (
     <main className="flex h-full flex-col bg-cream pt-[62px] pb-[113px]">

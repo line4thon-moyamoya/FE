@@ -10,6 +10,7 @@ import MissingWords from "./pages/Guardian/MissingWords";
 import WeeklyReport from "./pages/Guardian/WeeklyReport";
 import ChildHome from "./pages/Child/ChildHome";
 import Settings from "./pages/Guardian/Settings";
+import ChildProfileEdit from "./pages/Guardian/ChildProfileEdit";
 
 export default function App() {
   return (
@@ -29,6 +30,10 @@ export default function App() {
           />
           <Route path="/guardian/report/:childId" element={<WeeklyReport />} />
           <Route path="/guardian/settings" element={<Settings />} />
+          <Route
+            path="/guardian/settings/child/:childId"
+            element={<ChildProfileEdit />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

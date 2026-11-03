@@ -29,7 +29,7 @@ export default function BackButton({ variant = "back", onClick }: BackButtonProp
       type="button"
       onClick={handleClick}
       aria-label={label}
-      className="flex h-11 w-11 items-center justify-center rounded-3xl bg-white mt-[68px] ml-6
+      className="flex h-11 w-11 items-center justify-center rounded-3xl bg-white 
         shadow-[0px_4px_0px_0px_rgba(250,237,209,1.00)] border-2 border-[#EFE6D3]"
     >
       <img src={src} alt="" />

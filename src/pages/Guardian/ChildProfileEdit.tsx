@@ -40,11 +40,11 @@ export default function ChildProfileEdit() {
   };
 
   const handleSave = () => {
-    if (!canSave) return;
-    setIsSaving(true); // 토스트가 떠 있는 동안 중복 저장 방지
+    if (!canSave || ageGroup === null) return;
+    setIsSaving(true); // 중복 저장 방지
     updateMockChild(child.id, { name: trimmedName, ageGroup, moyaLook });
     setToast("저장되었어요");
-    setTimeout(goBack, 1000); // 1초 보여 주고 설정으로
+    setTimeout(goBack, 1000); // 1초 보여 주고 설정으로 이동
   };
 
   return (

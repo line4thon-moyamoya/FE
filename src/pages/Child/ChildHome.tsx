@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 import ChildHeader from "../../components/common/ChildHeader/ChildHeader";
 import Footer from "../../components/common/Footer/Footer";
+import CandidatePick from "../../components/Child/CandidatePick";
 import ConfirmQuestion from "../../components/Child/ConfirmQuestion";
+import HeardPlacePick from "../../components/Child/HeardPlacePick";
 import MoyaStageView from "../../components/Child/MoyaStageView";
 import SayAgain from "../../components/Child/SayAgain";
 import { findChildProfile } from "../../mocks/child";
@@ -48,8 +50,26 @@ export default function ChildHome() {
         <ConfirmQuestion
           quiz={quiz}
           onConfirm={() => alert("뜻 알려주기 화면은 준비 중이에요")}
-          onDeny={() => setStage("sayAgain")}
+          onDeny={() => setStage("place")}
           onRetry={startListening}
+        />
+      );
+    }
+
+    if (stage === "place") {
+      return (
+        <HeardPlacePick
+          onPick={() => setStage("candidates")}
+          onSkip={() => setStage("candidates")}
+        />
+      );
+    }
+
+    if (stage === "candidates") {
+      return (
+        <CandidatePick
+          onPick={() => alert("뜻 알려주기 화면은 준비 중이에요")}
+          onDeny={() => setStage("sayAgain")}
         />
       );
     }
@@ -58,7 +78,7 @@ export default function ChildHome() {
       return (
         <SayAgain
           onRetry={startListening}
-          onPickCard={() => alert("글자 카드 고르기는 준비 중이에요")}
+          onPickCard={() => setStage("place")}
         />
       );
     }

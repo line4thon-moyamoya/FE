@@ -25,7 +25,25 @@ export type MoyaStage = "idle" | "listening" | "thinking";
  *   confirm   이 단어가 맞는지 되묻는 중
  *   sayAgain  못 알아들어서 다시 말해달라고 하는 중
  */
-export type TalkStage = MoyaStage | "confirm" | "sayAgain";
+export type TalkStage =
+  | MoyaStage
+  | "confirm"
+  | "place"
+  | "candidates"
+  | "sayAgain";
+
+/** 아이가 단어를 들은 곳 */
+export interface HeardPlace {
+  id: "tv" | "parents" | "book" | "kindergarten";
+  label: string;
+}
+
+/** 후보 고르기에 올라가는 단어 */
+export interface WordCandidate {
+  word: string;
+  /** 단어를 설명하는 짧은 힌트 */
+  hint: string;
+}
 
 /** 되묻기 한 건. 후보가 하나면 single, 둘이면 two */
 export type ConfirmQuiz =

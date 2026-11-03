@@ -1,4 +1,4 @@
-import type { ConfirmQuiz } from "../types/child";
+import type { ConfirmQuiz, HeardPlace, WordCandidate } from "../types/child";
 
 /**
  * 되묻기 목데이터.
@@ -28,4 +28,19 @@ export const MOCK_CONFIRM_QUIZZES: ConfirmQuiz[] = [
     word: "통장",
     description: "돈을 맡겨 둔 걸 적는 책!",
   },
+];
+
+/** 어디서 들었어? 선택지 */
+export const MOCK_HEARD_PLACES: HeardPlace[] = [
+  { id: "tv", label: "TV·유튜브" },
+  { id: "parents", label: "엄마 아빠" },
+  { id: "book", label: "책" },
+  { id: "kindergarten", label: "유치원" },
+];
+
+/** 들은 곳을 고른 뒤 보여줄 단어 후보 */
+export const MOCK_WORD_CANDIDATES: WordCandidate[] = [
+  { word: "적금", hint: "돈을 꾸준히 모으는 것" },
+  { word: "적응", hint: "새로운 곳에 익숙해지는 것" },
+  { word: "세금", hint: "나라에 내는 돈" },
 ];

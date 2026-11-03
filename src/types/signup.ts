@@ -18,3 +18,8 @@ export interface StepProps {
   updateData: (value: Partial<SignupData>) => void;
   onNext: () => void;
 }
+
+export const AGE_GROUP_LABEL: Record<AgeGroup, string> = {
+  "3-4": "만 3~4세",
+  "5": "만 5세",
+};

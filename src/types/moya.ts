@@ -12,3 +12,9 @@ export const MOYA_MOODS = [
   "excited", // 신남
 ] as const;
 export type MoyaMood = (typeof MOYA_MOODS)[number];
+
+export const MOYA_LOOK_LABEL: Record<MoyaLook, string> = {
+  default: "기본 모야",
+  car: "자동차 모야",
+  princess: "공주 모야",
+};

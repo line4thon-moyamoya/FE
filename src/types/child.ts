@@ -77,3 +77,5 @@ export interface WordLessonData {
   /** 따라 말하기가 잘 안 됐을 때 대사 */
   retryLine: string;
 }
+
+export type ChildErrorType = "connection" | "micPermission";

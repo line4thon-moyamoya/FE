@@ -19,7 +19,7 @@ export default function PictureCard({ word, hint, onReplay, onClick }: PictureCa
       onClick={onClick}
       onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onClick?.()}
       className="flex h-[236px] w-[171px] cursor-pointer flex-col items-center justify-center gap-1.5
-        rounded-3xl bg-white shadow-picture-card"
+        rounded-3xl bg-white shadow-picture-card transition-transform duration-100 active:scale-[0.97]"
     >
       {icon && <img src={icon} alt="" className="h-24 w-24" />}
 

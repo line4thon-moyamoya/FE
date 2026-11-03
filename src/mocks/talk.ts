@@ -1,4 +1,9 @@
-import type { ConfirmQuiz, HeardPlace, WordCandidate } from "../types/child";
+import type {
+  ConfirmQuiz,
+  HeardPlace,
+  WordCandidate,
+  WordLessonData,
+} from "../types/child";
 
 /**
  * 되묻기 목데이터.
@@ -44,3 +49,12 @@ export const MOCK_WORD_CANDIDATES: WordCandidate[] = [
   { word: "적응", hint: "새로운 곳에 익숙해지는 것" },
   { word: "세금", hint: "나라에 내는 돈" },
 ];
+
+/** 뜻 알려주기 ~ 따라 말하기에 쓰는 단어 */
+export const MOCK_WORD_LESSON: WordLessonData = {
+  word: "적금",
+  letters: ["적", "금"],
+  meaningLine: "적금은 돈을 꾸준히 모으는 거야.\n조금씩 차곡차곡 모아!",
+  successLine: "우와! 적금!\n잘했어!",
+  retryLine: "적금! 적금!\n다음에 또 해보자!",
+};

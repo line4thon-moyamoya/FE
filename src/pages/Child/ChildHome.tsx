@@ -3,13 +3,16 @@ import { useNavigate } from "react-router-dom";
 
 import ChildHeader from "../../components/common/ChildHeader/ChildHeader";
 import Footer from "../../components/common/Footer/Footer";
+import AskLater from "../../components/Child/AskLater";
 import CandidatePick from "../../components/Child/CandidatePick";
 import ConfirmQuestion from "../../components/Child/ConfirmQuestion";
 import HeardPlacePick from "../../components/Child/HeardPlacePick";
 import MoyaStageView from "../../components/Child/MoyaStageView";
+import RepeatAfter from "../../components/Child/RepeatAfter";
+import WordLesson from "../../components/Child/WordLesson";
 import SayAgain from "../../components/Child/SayAgain";
 import { findChildProfile } from "../../mocks/child";
-import { MOCK_CONFIRM_QUIZZES } from "../../mocks/talk";
+import { MOCK_CONFIRM_QUIZZES, MOCK_WORD_LESSON } from "../../mocks/talk";
 import type { MoyaStage, TalkStage } from "../../types/child";
 import { getCurrentChildId } from "../../utils/currentChild";
 
@@ -23,6 +26,8 @@ export default function ChildHome() {
   const [stage, setStage] = useState<TalkStage>("idle");
   // 음성 인식이 붙기 전까지는 목데이터를 순서대로 돌려 씀
   const [quizIndex, setQuizIndex] = useState(0);
+  // 음성 인식이 없어 따라 말하기 결과를 번갈아 보여 줌
+  const [repeatCount, setRepeatCount] = useState(0);
   const quiz = MOCK_CONFIRM_QUIZZES[quizIndex];
 
   // 생각이 끝나면 되묻기로 넘어감
@@ -49,7 +54,7 @@ export default function ChildHome() {
       return (
         <ConfirmQuestion
           quiz={quiz}
-          onConfirm={() => alert("뜻 알려주기 화면은 준비 중이에요")}
+          onConfirm={() => setStage("meaning")}
           onDeny={() => setStage("place")}
           onRetry={startListening}
         />
@@ -60,7 +65,7 @@ export default function ChildHome() {
       return (
         <HeardPlacePick
           onPick={() => setStage("candidates")}
-          onSkip={() => setStage("candidates")}
+          onSkip={() => setStage("askLater")}
         />
       );
     }
@@ -68,8 +73,68 @@ export default function ChildHome() {
     if (stage === "candidates") {
       return (
         <CandidatePick
-          onPick={() => alert("뜻 알려주기 화면은 준비 중이에요")}
+          onPick={() => setStage("meaning")}
           onDeny={() => setStage("sayAgain")}
+        />
+      );
+    }
+
+    if (stage === "meaning") {
+      return (
+        <WordLesson
+          letters={MOCK_WORD_LESSON.letters}
+          line={MOCK_WORD_LESSON.meaningLine}
+          mood="explain"
+          buttonLabel="알았어!"
+          bubbleWidth={340}
+          onNext={() => setStage("repeat")}
+        />
+      );
+    }
+
+    if (stage === "repeat") {
+      return (
+        <RepeatAfter
+          letters={MOCK_WORD_LESSON.letters}
+          word={MOCK_WORD_LESSON.word}
+          onSpeak={() => {
+            setRepeatCount((count) => count + 1);
+            setStage(repeatCount % 2 === 0 ? "repeatSuccess" : "repeatRetry");
+          }}
+        />
+      );
+    }
+
+    if (stage === "repeatSuccess") {
+      return (
+        <WordLesson
+          letters={MOCK_WORD_LESSON.letters}
+          line={MOCK_WORD_LESSON.successLine}
+          mood="excited"
+          buttonLabel="좋아!"
+          sticker
+          onNext={() => alert("카드 획득 화면은 준비 중이에요")}
+        />
+      );
+    }
+
+    if (stage === "repeatRetry") {
+      return (
+        <WordLesson
+          letters={MOCK_WORD_LESSON.letters}
+          line={MOCK_WORD_LESSON.retryLine}
+          mood="explain"
+          buttonLabel="알았어!"
+          onNext={() => alert("카드 획득 화면은 준비 중이에요")}
+        />
+      );
+    }
+
+    if (stage === "askLater") {
+      return (
+        <AskLater
+          onConfirm={() => setStage("idle")}
+          onAskAnother={startListening}
         />
       );
     }

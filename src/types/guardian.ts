@@ -1,3 +1,6 @@
+import type { AgeGroup } from "./signup";
+import type { MoyaLook } from "./moya";
+
 export interface WeeklySummary {
   askedCount: number;    // 물어본 단어
   reviewedCount: number; // 복습 끝냄
@@ -39,6 +42,8 @@ export interface WeeklyReport {
 export interface Child {
   id: number;
   name: string;
+  ageGroup: AgeGroup; // 회원가입 시 고른 나이대
+  moyaLook: MoyaLook | null; // 선택한 모야, 아직 없으면 null
   weeklySummary: WeeklySummary;
   missingWords: MissingWord[];
   freeTrial: FreeTrial;

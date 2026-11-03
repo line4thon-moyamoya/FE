@@ -1,11 +1,28 @@
-import mic from "../../../assets/icons/mic.svg";
-
 export type MicState = "idle" | "listening" | "thinking";
 
 interface MicButtonProps {
   state?: MicState;
   label?: string;
   onClick?: () => void;
+}
+
+/* 마이크 아이콘 */
+function MicIcon() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" fill="none" className="h-full w-full">
+      <path
+        d="M15.5 6.2998C15.5 4.36681 13.933 2.7998 12 2.7998C10.067 2.7998 8.5 4.36681 8.5 6.2998V10.7998C8.5 12.7328 10.067 14.2998 12 14.2998C13.933 14.2998 15.5 12.7328 15.5 10.7998V6.2998Z"
+        fill="currentColor"
+      />
+      <path
+        d="M5.5 11.5C5.5 13.2239 6.18482 14.8772 7.40381 16.0962C8.62279 17.3152 10.2761 18 12 18M12 18C13.7239 18 15.3772 17.3152 16.5962 16.0962C17.8152 14.8772 18.5 13.2239 18.5 11.5M12 18V21"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
 }
 
 /* 듣는 중일 때 마이크 자리에 들어가는 음성 파형 */
@@ -104,17 +121,15 @@ export default function MicButton({
             ${thinking ? "bg-[#CEC9DA]" : "bg-linear-to-b from-brand-action to-[#826CF2]"}`}
         />
 
-        {/* mic.svg 는 24x24 안에 가운데 정렬돼 있어 88px 로 키우면 그림이 48x67 이 됨 */}
+        {/* 아이콘은 24x24 안에 가운데 정렬돼 있어 88px 로 키우면 그림이 48x67 이 됨 */}
         {listening ? (
           <span className="absolute top-6 left-[35px]">
             <WaveIcon />
           </span>
         ) : (
-          <img
-            src={mic}
-            alt=""
-            className="absolute inset-0 m-auto h-[88px] w-[88px]"
-          />
+          <span className="absolute inset-0 m-auto h-[88px] w-[88px] text-white">
+            <MicIcon />
+          </span>
         )}
       </button>
 

@@ -68,6 +68,7 @@
    * --------------------------------------------------------------- */
   --animate-pulse-ring: pulse-ring 1.8s ease-out infinite;
   --animate-think-dot: think-dot 1.2s ease-in-out infinite;
+  --animate-sticker-pop: sticker-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 
   @keyframes pulse-ring {
     0% {
@@ -81,6 +82,17 @@
     100% {
       transform: scale(1.12);
       opacity: 0;
+    }
+  }
+
+  @keyframes sticker-pop {
+    0% {
+      transform: scale(0.3) rotate(-18deg);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
     }
   }
 
@@ -101,7 +113,8 @@
 /* 움직임을 줄이도록 설정한 기기 */
 @media (prefers-reduced-motion: reduce) {
   .animate-pulse-ring,
-  .animate-think-dot {
+  .animate-think-dot,
+  .animate-sticker-pop {
     animation: none;
   }
 }

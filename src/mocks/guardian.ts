@@ -1,9 +1,9 @@
 import type { Child } from "../types/guardian";
-import receipt from "../assets/icons/words/receipt_icon.svg";
-import savings from "../assets/icons/words/savings_icon.svg";
-import brave from "../assets/icons/words/brave_icon.svg";
-import recycling from "../assets/icons/words/separate-recycling_icon.svg";
-import finedust from "../assets/icons/words/finedust_icon.svg";
+import receipt from "../assets/icons/words/receipt.svg";
+import savings from "../assets/icons/words/savings.svg";
+import brave from "../assets/icons/words/brave.svg";
+import recycling from "../assets/icons/words/separate-recycling.svg";
+import finedust from "../assets/icons/words/fine-dust.svg";
 
 export const MOCK_CHILD_LIST: Child[] = [
   {

@@ -12,6 +12,8 @@ import ChildHome from "./pages/Child/ChildHome";
 import Settings from "./pages/Guardian/Settings";
 import ChildProfileEdit from "./pages/Guardian/ChildProfileEdit";
 import ChildAdd from "./pages/Guardian/ChildAdd";
+import WordNotebook from "./pages/Child/WordNotebook";
+import WordCardDetail from "./pages/Child/WordCardDetail";
 
 export default function App() {
   return (
@@ -36,6 +38,8 @@ export default function App() {
             element={<ChildProfileEdit />}
           />
           <Route path="/guardian/settings/child/new" element={<ChildAdd />} />
+          <Route path="/notebook" element={<WordNotebook />} />
+          <Route path="/notebook/:wordId" element={<WordCardDetail />} />
         </Route>
       </Routes>
     </BrowserRouter>

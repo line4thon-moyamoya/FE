@@ -26,9 +26,9 @@ export default function MissingWords() {
 
   return (
     <div className="min-h-full w-full bg-[#FBFBFB] flex flex-col">
-      <header className="flex items-center gap-2.5">
+      <header className="flex items-center gap-2.5 pl-6 pt-12">
         <BackButton />
-        <h1 className="text-[#241F48] text-xl font-normal font-jua leading-7 mt-[73px]">
+        <h1 className="text-[#241F48] text-xl font-normal font-jua leading-7 ">
           물어볼 단어
         </h1>
       </header>

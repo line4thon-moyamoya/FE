@@ -44,7 +44,9 @@ export default function GuardianPassword() {
 
   return (
     <main className="min-h-full w-full bg-[#FBFBFB] flex flex-col">
-      <BackButton variant="close" />
+      <div className="flex pl-6 pt-13">
+        <BackButton variant="close" />
+      </div>
 
       <div className="flex flex-col items-center gap-6 mt-[30px]">
         {/* 자물쇠 아이콘 */}

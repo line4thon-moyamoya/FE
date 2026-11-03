@@ -37,7 +37,7 @@ export default function GuardianHome() {
         <button
           type="button"
           aria-label="설정"
-          onClick={() => navigate("/settings")}
+          onClick={() => navigate("/guardian/settings")}
           className="cursor-pointer w-11 h-11 bg-white rounded-3xl shadow-[0px_4px_0px_0px_rgba(231,228,243,1.00)] border-2 border-[#EFE6D3] flex justify-center items-center"
         >
           <img src={settings} alt="" className="w-[26px] h-[26px]" />

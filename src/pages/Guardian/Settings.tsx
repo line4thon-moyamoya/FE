@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/common/BackButton/BackButton";
 import SettingSection from "../../components/Guardian/SettingSection";
@@ -6,6 +7,8 @@ import { MOCK_CHILD_LIST } from "../../mocks/guardian";
 import type { Child } from "../../types/guardian";
 import { AGE_GROUP_LABEL } from "../../types/signup";
 import { MOYA_LOOK_LABEL } from "../../types/moya";
+import VoiceConsentWithdrawSheet from "../../components/Guardian/VoiceConsentWithdrawSheet";
+import { setVoiceConsent } from "../../utils/voiceConsent";
 
 const getChildProfileLabel = (child: Child) => {
   const parts = [child.name, AGE_GROUP_LABEL[child.ageGroup]];
@@ -18,7 +21,15 @@ const comingSoon = () => alert("준비 중인 기능이에요");
 
 export default function Settings() {
   const navigate = useNavigate();
-  const childList = MOCK_CHILD_LIST; // TODO: API 연동 시 교체
+  const childList = MOCK_CHILD_LIST; // API 연동 시 교체
+
+  const [isWithdrawSheetOpen, setIsWithdrawSheetOpen] = useState(false);
+
+  const handleWithdraw = () => {
+    setVoiceConsent(false);
+    setIsWithdrawSheetOpen(false);
+    navigate("/home");
+  };
 
   return (
     <main className="min-h-full w-full bg-[#FBFBFB] flex flex-col">
@@ -38,7 +49,11 @@ export default function Settings() {
               onClick={() => navigate(`/guardian/settings/child/${child.id}`)}
             />
           ))}
-          <SettingItem label="+ 아이 추가하기" variant="primary" onClick={() => navigate("/guardian/settings/child/new")} />
+          <SettingItem
+            label="+ 아이 추가하기"
+            variant="primary"
+            onClick={() => navigate("/guardian/settings/child/new")}
+          />
         </SettingSection>
 
         <SettingSection
@@ -46,7 +61,11 @@ export default function Settings() {
           description="아이 목소리는 알아들은 뒤 바로 지우고, 물어볼 단어 녹음만 7일 동안 보관해요."
         >
           <SettingItem label="음성 기록 삭제" onClick={comingSoon} />
-          <SettingItem label="음성 수집 동의 철회" variant="danger" onClick={comingSoon} />
+          <SettingItem
+            label="음성 수집 동의 철회"
+            variant="danger"
+            onClick={() => setIsWithdrawSheetOpen(true)}
+          />
         </SettingSection>
 
         <SettingSection title="계정">
@@ -55,10 +74,15 @@ export default function Settings() {
             label="구독 관리"
             onClick={() => alert("구독 기능은 준비 중이에요")}
           />
-          <SettingItem label="로그아웃" onClick={comingSoon} />
+          <SettingItem label="로그아웃" onClick={() => navigate("/")} />
           <SettingItem label="회원 탈퇴" variant="muted" onClick={comingSoon} />
         </SettingSection>
       </div>
+      <VoiceConsentWithdrawSheet
+        isOpen={isWithdrawSheetOpen}
+        onClose={() => setIsWithdrawSheetOpen(false)}
+        onWithdraw={handleWithdraw}
+      />
     </main>
   );
 }

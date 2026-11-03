@@ -19,7 +19,11 @@ export default function ChildAdd() {
   const [isSaving, setIsSaving] = useState(false);
 
   const trimmedName = name.trim();
-  const canSave = trimmedName.length > 0 && ageGroup !== null && !isSaving;
+  const canSave =
+    trimmedName.length > 0 &&
+    ageGroup !== null &&
+    moyaLook !== null &&
+    !isSaving;
 
   const goBack = () => {
     // 이전 기록이 있으면 뒤로, 주소로 바로 들어왔으면 설정으로
@@ -31,11 +35,11 @@ export default function ChildAdd() {
   };
 
   const handleAdd = () => {
-    if (!canSave || ageGroup === null) return;
-    setIsSaving(true); // 중복 추가 방지
+    if (!canSave || ageGroup === null || moyaLook === null) return;
+    setIsSaving(true); // 토스트가 떠 있는 동안 중복 추가 방지
     addMockChild({ name: trimmedName, ageGroup, moyaLook });
     setToast("아이를 추가했어요");
-    setTimeout(goBack, 1000); // 1초 보여 주고 설정으로 이동
+    setTimeout(goBack, 1000); // 1초 보여 주고 설정으로
   };
 
   return (

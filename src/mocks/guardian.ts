@@ -10,7 +10,7 @@ import type { MoyaLook } from "../types/moya";
 interface NewChildInput {
   name: string;
   ageGroup: AgeGroup;
-  moyaLook: MoyaLook | null;
+  moyaLook: MoyaLook; 
 }
 
 export const MOCK_CHILD_LIST: Child[] = [

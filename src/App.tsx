@@ -11,6 +11,7 @@ import WeeklyReport from "./pages/Guardian/WeeklyReport";
 import ChildHome from "./pages/Child/ChildHome";
 import Settings from "./pages/Guardian/Settings";
 import ChildProfileEdit from "./pages/Guardian/ChildProfileEdit";
+import ChildAdd from "./pages/Guardian/ChildAdd";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
             path="/guardian/settings/child/:childId"
             element={<ChildProfileEdit />}
           />
+          <Route path="/guardian/settings/child/new" element={<ChildAdd />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -2,14 +2,11 @@ import { useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import BackButton from "../../components/common/BackButton/BackButton";
 import Button from "../../components/common/Button/Button";
-import Input from "../../components/common/Input/Input";
 import Toast from "../../components/common/Toast/Toast";
-import AgeSelect from "../../components/Signup/AgeSelect";
-import MoyaLookSelector from "../../components/Guardian/MoyaLookSelector";
+import ChildProfileForm from "../../components/Guardian/ChildProfileForm";
 import { MOCK_CHILD_LIST, updateMockChild } from "../../mocks/guardian";
 import type { AgeGroup } from "../../types/signup";
 import type { MoyaLook } from "../../types/moya";
-import childProfile from "../../assets/images/child_profile.svg";
 
 export default function ChildProfileEdit() {
   const navigate = useNavigate();
@@ -59,19 +56,15 @@ export default function ChildProfileEdit() {
         </h1>
       </header>
 
-      <div className="flex flex-1 flex-col items-center gap-6 px-6 pt-6">
-        <div className="flex w-[88px] h-[88px] items-center justify-center rounded-full bg-[#EEEAFF]">
-          <img src={childProfile} alt="" className="w-14 h-14" />
-        </div>
-
-        <Input
-          label="아이 별명"
-          value={name}
-          onChange={setName}
-          placeholder="아이 별명을 입력해 주세요"
+      <div className="flex flex-1 flex-col px-6 pt-6">
+        <ChildProfileForm
+          name={name}
+          onNameChange={setName}
+          ageGroup={ageGroup}
+          onAgeGroupChange={setAgeGroup}
+          moyaLook={moyaLook}
+          onMoyaLookChange={setMoyaLook}
         />
-        <AgeSelect value={ageGroup} onChange={setAgeGroup} />
-        <MoyaLookSelector value={moyaLook} onChange={setMoyaLook} />
       </div>
 
       <div className="px-6 pt-6 pb-10 mt-auto">

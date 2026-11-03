@@ -28,9 +28,14 @@ export type MoyaStage = "idle" | "listening" | "thinking";
 export type TalkStage =
   | MoyaStage
   | "confirm"
+  | "sayAgain"
   | "place"
   | "candidates"
-  | "sayAgain";
+  | "meaning"
+  | "repeat"
+  | "repeatSuccess"
+  | "repeatRetry"
+  | "askLater";
 
 /** 아이가 단어를 들은 곳 */
 export interface HeardPlace {
@@ -59,3 +64,16 @@ export type ConfirmQuiz =
       line: string;
       candidates: { word: string; hint: string }[];
     };
+
+/** 뜻을 알려주고 따라 말하기까지 이어지는 한 단어 분량의 수업 */
+export interface WordLessonData {
+  word: string;
+  /** 글자 칸에 한 글자씩 올림 */
+  letters: string[];
+  /** 뜻 알려주기 대사 */
+  meaningLine: string;
+  /** 따라 말하기 성공 대사 */
+  successLine: string;
+  /** 따라 말하기가 잘 안 됐을 때 대사 */
+  retryLine: string;
+}

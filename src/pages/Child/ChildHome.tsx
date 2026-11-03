@@ -11,12 +11,17 @@ import MoyaStageView from "../../components/Child/MoyaStageView";
 import RepeatAfter from "../../components/Child/RepeatAfter";
 import WordLesson from "../../components/Child/WordLesson";
 import SayAgain from "../../components/Child/SayAgain";
+import ConnectionLost from "../../components/Error/ConnectionLost";
+import MicPermissionOff from "../../components/Error/MicPermissionOff";
+import VoiceConsentOff from "../../components/Error/VoiceConsentOff";
 import { findChildProfile } from "../../mocks/child";
 import { MOCK_CONFIRM_QUIZZES, MOCK_WORD_LESSON } from "../../mocks/talk";
-import type { MoyaStage, TalkStage } from "../../types/child";
+import type { ChildErrorType, MoyaStage, TalkStage } from "../../types/child";
 import { getCurrentChildId } from "../../utils/currentChild";
-import VoiceConsentOff from "../../components/Child/VoiceConsentOff";
 import { getVoiceConsent, setVoiceConsent } from "../../utils/voiceConsent";
+import { requestMicPermission } from "../../utils/micPermission";
+import { isOnline } from "../../utils/network";
+import { getDebugError } from "../../utils/debugError";
 
 /** 생각 중에서 되묻기로 넘어가기까지 기다리는 시간 */
 const THINKING_MS = 1600;
@@ -32,6 +37,13 @@ export default function ChildHome() {
   const [repeatCount, setRepeatCount] = useState(0);
   const quiz = MOCK_CONFIRM_QUIZZES[quizIndex];
 
+  // 음성 수집 동의 여부 (설정에서 철회하면 false)
+  const [hasVoiceConsent, setHasVoiceConsent] = useState(getVoiceConsent());
+  // 에러 상태 (테스트: /home?error=connection, /home?error=micPermission)
+  const [errorType, setErrorType] = useState<ChildErrorType | null>(() =>
+    getDebugError(),
+  );
+
   // 생각이 끝나면 되묻기로 넘어감
   useEffect(() => {
     if (stage !== "thinking") return;
@@ -39,31 +51,97 @@ export default function ChildHome() {
     return () => window.clearTimeout(timer);
   }, [stage]);
 
+  // 대화 중 인터넷이 끊기면 연결 끊김 화면
+  useEffect(() => {
+    const handleOffline = () => setErrorType("connection");
+    window.addEventListener("offline", handleOffline);
+    return () => window.removeEventListener("offline", handleOffline);
+  }, []);
+
   const startListening = () => {
     setQuizIndex((index) => (index + 1) % MOCK_CONFIRM_QUIZZES.length);
     setStage("listening");
   };
 
+  // 연결과 마이크를 확인한 뒤 듣기 시작
+  // (iOS는 버튼 클릭 안에서만 마이크 권한 팝업이 떠서 클릭 핸들러에서 호출)
+  const tryStartListening = async () => {
+    if (!isOnline()) {
+      setErrorType("connection");
+      return;
+    }
+    const permission = await requestMicPermission();
+    if (permission !== "granted") {
+      setErrorType("micPermission");
+      return;
+    }
+    setErrorType(null);
+    startListening();
+  };
+
   const handleMicClick = () => {
     // 기다리는 중 -> 듣는 중 -> 생각 중.
     // 생각 중에는 버튼이 비활성이라 여기로 들어오지 않음
-    if (stage === "idle") startListening();
+    if (stage === "idle") tryStartListening();
     else setStage("thinking");
   };
 
+  const handleAgreeAgain = () => {
+    setVoiceConsent(true);
+    setHasVoiceConsent(true);
+    setStage("idle"); // 처음 기다리는 화면부터 시작
+  };
+
+  // 에러 화면 버튼
+  const handleRetry = async () => {
+    if (!isOnline()) {
+      setErrorType("connection");
+      return;
+    }
+    const permission = await requestMicPermission();
+    if (permission !== "granted") {
+      setErrorType("micPermission");
+      return;
+    }
+    setErrorType(null);
+    setQuizIndex((index) => (index + 1) % MOCK_CONFIRM_QUIZZES.length);
+    setStage("listening"); // 2-2 "응, 응, 듣고 있어!"
+  };
+
+  const handleGoHome = () => {
+    setErrorType(null);
+    setStage("idle");
+  };
+
+  const handleAskGuardian = () => navigate("/guardian/password");
+
   const renderMain = () => {
-    // 동의가 꺼져 있으면 대화 단계와 상관없이 꺼짐 화면
+    // 1순위: 보호자가 음성 동의를 끈 상태
     if (!hasVoiceConsent) {
       return <VoiceConsentOff onAgreeAgain={handleAgreeAgain} />;
     }
-    
+
+    // 2순위: 에러 상태
+    if (errorType === "connection") {
+      return <ConnectionLost onRetry={handleRetry} onGoHome={handleGoHome} />;
+    }
+
+    if (errorType === "micPermission") {
+      return (
+        <MicPermissionOff
+          onRetry={handleRetry}
+          onAskGuardian={handleAskGuardian}
+        />
+      );
+    }
+
     if (stage === "confirm") {
       return (
         <ConfirmQuestion
           quiz={quiz}
           onConfirm={() => setStage("meaning")}
           onDeny={() => setStage("place")}
-          onRetry={startListening}
+          onRetry={tryStartListening}
         />
       );
     }
@@ -141,7 +219,7 @@ export default function ChildHome() {
       return (
         <AskLater
           onConfirm={() => setStage("idle")}
-          onAskAnother={startListening}
+          onAskAnother={tryStartListening}
         />
       );
     }
@@ -149,7 +227,7 @@ export default function ChildHome() {
     if (stage === "sayAgain") {
       return (
         <SayAgain
-          onRetry={startListening}
+          onRetry={tryStartListening}
           onPickCard={() => setStage("place")}
         />
       );
@@ -162,15 +240,6 @@ export default function ChildHome() {
         onMicClick={handleMicClick}
       />
     );
-  };
-
-  // 음성 수집 동의 여부 (설정에서 철회하면 false)
-  const [hasVoiceConsent, setHasVoiceConsent] = useState(getVoiceConsent());
-
-  const handleAgreeAgain = () => {
-    setVoiceConsent(true);
-    setHasVoiceConsent(true);
-    setStage("idle"); // 처음 기다리는 화면부터 시작
   };
 
   return (

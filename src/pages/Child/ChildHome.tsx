@@ -15,6 +15,8 @@ import { findChildProfile } from "../../mocks/child";
 import { MOCK_CONFIRM_QUIZZES, MOCK_WORD_LESSON } from "../../mocks/talk";
 import type { MoyaStage, TalkStage } from "../../types/child";
 import { getCurrentChildId } from "../../utils/currentChild";
+import VoiceConsentOff from "../../components/Child/VoiceConsentOff";
+import { getVoiceConsent, setVoiceConsent } from "../../utils/voiceConsent";
 
 /** 생각 중에서 되묻기로 넘어가기까지 기다리는 시간 */
 const THINKING_MS = 1600;
@@ -50,6 +52,11 @@ export default function ChildHome() {
   };
 
   const renderMain = () => {
+    // 동의가 꺼져 있으면 대화 단계와 상관없이 꺼짐 화면
+    if (!hasVoiceConsent) {
+      return <VoiceConsentOff onAgreeAgain={handleAgreeAgain} />;
+    }
+    
     if (stage === "confirm") {
       return (
         <ConfirmQuestion
@@ -155,6 +162,15 @@ export default function ChildHome() {
         onMicClick={handleMicClick}
       />
     );
+  };
+
+  // 음성 수집 동의 여부 (설정에서 철회하면 false)
+  const [hasVoiceConsent, setHasVoiceConsent] = useState(getVoiceConsent());
+
+  const handleAgreeAgain = () => {
+    setVoiceConsent(true);
+    setHasVoiceConsent(true);
+    setStage("idle"); // 처음 기다리는 화면부터 시작
   };
 
   return (

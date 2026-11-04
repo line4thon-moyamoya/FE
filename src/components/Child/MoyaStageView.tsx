@@ -4,6 +4,7 @@ import Moya from "../common/Moya/Moya";
 import SpeechBubble from "../common/SpeechBubble/SpeechBubble";
 import { TALK_STAGE_VIEW } from "../../constants/talkStage";
 import type { MoyaStage } from "../../types/child";
+import { getCurrentLook } from "../../utils/currentLook";
 
 /* 모야 주변에 뿌려지는 노란 반짝이 */
 function Sparkle({ size, left, top }: { size: number; left: number; top: number }) {
@@ -67,7 +68,7 @@ export default function MoyaStageView({ stage, greeting, onMicClick }: MoyaStage
         )}
 
         <Moya
-          look="default"
+          look={getCurrentLook()}
           mood={view.mood}
           size={290}
           glow

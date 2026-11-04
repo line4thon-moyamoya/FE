@@ -1,6 +1,7 @@
 import Moya from "../common/Moya/Moya";
 import SpeechBubble from "../common/SpeechBubble/SpeechBubble";
 import type { MoyaMood } from "../../types/moya";
+import { getCurrentLook } from "../../utils/currentLook";
 
 interface MoyaAsideProps {
   line: string;
@@ -19,7 +20,7 @@ export default function MoyaAside({
 }: MoyaAsideProps) {
   return (
     <div className="flex h-[104px] w-full items-center gap-1">
-      <Moya look="default" mood={mood} size={moyaSize} />
+      <Moya look={getCurrentLook()} mood={mood} size={moyaSize} />
       <SpeechBubble text={line} tail="left" width="fill" onReplay={onReplay} />
     </div>
   );

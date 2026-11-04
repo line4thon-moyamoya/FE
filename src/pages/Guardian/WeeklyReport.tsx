@@ -19,9 +19,9 @@ export default function WeeklyReport() {
 
   return (
     <main className="min-h-full w-full bg-[#FBFBFB] flex flex-col">
-      <header className="flex gap-2.5 items-center">
+      <header className="flex gap-2.5 items-center pl-6 pt-12">
         <BackButton />
-        <h1 className="font-jua leading-7 font-normal text-xl text-[#241F48] mt-[73px]">
+        <h1 className="font-jua leading-7 font-normal text-xl text-[#241F48]">
           주간 리포트
         </h1>
       </header>

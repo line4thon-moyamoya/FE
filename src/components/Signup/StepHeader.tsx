@@ -6,10 +6,16 @@ interface StepHeaderProps {
   onBack: () => void;
 }
 
-export default function StepHeader({ step, totalSteps, onBack }: StepHeaderProps) {
+export default function StepHeader({
+  step,
+  totalSteps,
+  onBack,
+}: StepHeaderProps) {
   return (
-    <div className="relative flex items-center">
-      <BackButton onClick={onBack} />
+    <div className="relative flex items-center ">
+      <div className="flex pl-6 pt-12">
+        <BackButton onClick={onBack} />
+      </div>
 
       {/* 단계 표시 + 진행 바 (정가운데) */}
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-1.5 mt-[60px]">

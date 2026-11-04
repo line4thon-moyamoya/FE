@@ -88,3 +88,6 @@ export interface EarnedCard {
   /** 카드 아래 설명 */
   description: string;
 }
+
+/** 아이 모드에서 다루는 오류 */
+export type ChildErrorType = "connection" | "micPermission";

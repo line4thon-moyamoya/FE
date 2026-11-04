@@ -1,5 +1,5 @@
-import rightButton from "../../assets/images/right_button.svg";
-import checkIcon from "../../assets/icons/check_icon.svg";
+import rightButton from "../../assets/icons/chevron-right.svg";
+import checkIcon from "../../assets/icons/check.svg";
 
 interface AgreeCheckboxProps {
   text: string;

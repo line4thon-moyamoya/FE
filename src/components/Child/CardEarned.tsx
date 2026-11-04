@@ -1,4 +1,4 @@
-import wordBook from "../../assets/icons/word_book.svg";
+import wordBook from "../../assets/icons/word-book.svg";
 import Button from "../common/Button/Button";
 import CouponStamp from "./CouponStamp";
 import MoyaAside from "./MoyaAside";

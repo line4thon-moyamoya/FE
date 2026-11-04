@@ -1,5 +1,5 @@
 import type { WeeklySummary } from "../../types/guardian";
-import right from "../../assets/icons/right_icon.svg";
+import right from "../../assets/icons/chevron-right.svg";
 import StatGrid from "./StatGrid";
 
 interface WeeklySummaryCardProps {

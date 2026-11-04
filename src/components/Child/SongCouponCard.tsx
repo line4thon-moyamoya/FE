@@ -1,4 +1,4 @@
-import note from "../../assets/icons/note_icon.svg";
+import NoteIcon from "../common/NoteIcon/NoteIcon";
 import speaker from "../../assets/icons/speaker.svg";
 
 interface SongCouponCardProps {
@@ -35,7 +35,7 @@ export default function SongCouponCard({
               key={i}
               className="flex w-[50px] h-[50px] items-center justify-center rounded-3xl bg-[#D2EC7C]"
             >
-              <img src={note} className="w-[26px] h-[26px" />
+              <NoteIcon size={26} className="text-[#567814]" />
             </li>
           ) : (
             <li

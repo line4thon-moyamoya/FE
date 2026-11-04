@@ -1,4 +1,4 @@
-import avatarDefault from "../../../assets/icons/avatar.png";
+import avatarDefault from "../../../assets/images/child-profile.svg";
 import lock from "../../../assets/icons/lock.svg";
 import NoteIcon from "../NoteIcon/NoteIcon";
 

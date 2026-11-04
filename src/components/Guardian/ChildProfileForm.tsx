@@ -3,7 +3,7 @@ import AgeSelect from "../Signup/AgeSelect";
 import MoyaLookSelector from "./MoyaLookSelector";
 import type { AgeGroup } from "../../types/signup";
 import type { MoyaLook } from "../../types/moya";
-import childProfile from "../../assets/images/child_profile.svg";
+import childProfile from "../../assets/images/child-profile.svg";
 
 interface ChildProfileFormProps {
   name: string;

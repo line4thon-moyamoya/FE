@@ -1,4 +1,4 @@
-import wordBox from "../../assets/icons/word_box.svg";
+import wordBox from "../../assets/icons/word-box.svg";
 import Button from "../common/Button/Button";
 import Moya from "../common/Moya/Moya";
 import SpeechBubble from "../common/SpeechBubble/SpeechBubble";

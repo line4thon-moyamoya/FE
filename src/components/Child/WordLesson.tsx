@@ -1,4 +1,4 @@
-import praiseSticker from "../../assets/icons/praise_sticker.svg";
+import praiseSticker from "../../assets/icons/praise-sticker.svg";
 import Button from "../common/Button/Button";
 import LetterTiles from "./LetterTiles";
 import Moya from "../common/Moya/Moya";

@@ -1,6 +1,6 @@
 import moyaConfused from "../../assets/images/moya/default/moya_confused.png";
 import speaker from "../../assets/icons/speaker.svg";
-import reset from "../../assets/icons/reset_white.svg";
+import reset from "../../assets/icons/reset.svg";
 import lock from "../../assets/icons/lock.svg";
 import { speak } from "../../utils/speak";
 

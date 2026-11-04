@@ -1,5 +1,5 @@
-import bell from "../../assets/icons/bell_icon.svg";
-import right from "../../assets/icons/right_icon.svg";
+import bell from "../../assets/icons/bell.svg";
+import right from "../../assets/icons/chevron-right.svg";
 
 interface SongProgressBannerProps {
   remaining: number;

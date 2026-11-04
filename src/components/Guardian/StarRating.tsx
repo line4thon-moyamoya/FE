@@ -1,6 +1,6 @@
 import type { StarCount } from "../../types/guardian";
-import starFilled from "../../assets/images/star_filled.svg";
-import starEmpty from "../../assets/images/star_empty.svg";
+import starFilled from "../../assets/icons/star-filled.svg";
+import starEmpty from "../../assets/icons/star-empty.svg";
 
 const MAX_STARS = 3;
 

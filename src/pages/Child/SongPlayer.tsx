@@ -11,9 +11,9 @@ import { findChildProfile } from "../../mocks/child";
 import { findSong } from "../../mocks/songs";
 import { findWord } from "../../mocks/words";
 import { getCurrentChildId } from "../../utils/currentChild";
-import pauseIcon from "../../assets/icons/pause_icon.svg";
-import playIcon from "../../assets/icons/play_icon.svg";
-import replayIcon from "../../assets/icons/replay_icon.svg";
+import pauseIcon from "../../assets/icons/pause.svg";
+import playIcon from "../../assets/icons/play.svg";
+import replayIcon from "../../assets/icons/replay.svg";
 
 export default function SongPlayer() {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import BottomSheet from "../common/BottomSheet/BottomSheet";
 import Button from "../common/Button/Button";
-import mic from "../../assets/icons/mic_icon.svg";
+import mic from "../../assets/icons/mic.svg";
 import lock from "../../assets/icons/lock.svg";
 import settings from "../../assets/icons/settings.svg";
 

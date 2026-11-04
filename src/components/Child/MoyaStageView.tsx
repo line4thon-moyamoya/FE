@@ -5,26 +5,7 @@ import SpeechBubble from "../common/SpeechBubble/SpeechBubble";
 import { TALK_STAGE_VIEW } from "../../constants/talkStage";
 import type { MoyaStage } from "../../types/child";
 import { getCurrentLook } from "../../utils/currentLook";
-
-/* 모야 주변에 뿌려지는 노란 반짝이 */
-function Sparkle({ size, left, top }: { size: number; left: number; top: number }) {
-  return (
-    <svg
-      aria-hidden
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      className="absolute"
-      style={{ left, top }}
-    >
-      <path
-        d="M12 0c0 6.6-5.4 12-12 12 6.6 0 12 5.4 12 12 0-6.6 5.4-12 12-12-6.6 0-12-5.4-12-12Z"
-        fill="#FFD25A"
-      />
-    </svg>
-  );
-}
+import Sparkle from "./Sparkle";
 
 /* 듣는 중일 때 모야 양옆에서 퍼지는 소리 물결.
    에셋의 호가 왼쪽으로 열려 있어 오른쪽 자리에서는 뒤집어 씀 */
@@ -60,12 +41,11 @@ export default function MoyaStageView({ stage, greeting, onMicClick }: MoyaStage
 
       {/* 모야 무대. 캐릭터가 위로 조금 삐져나오도록 둠 */}
       <div className="relative h-[276px] w-[300px]">
-        {view.shadow && (
-          <span
-            aria-hidden
-            className="absolute top-[252px] left-[65px] h-6 w-[170px] rounded-[50%] bg-line-warm blur-[2px]"
-          />
-        )}
+        {/* 발밑 그림자. 단계가 바뀔 때 나타났다 사라지지 않도록 항상 깔아 둠 */}
+        <span
+          aria-hidden
+          className="absolute top-[252px] left-[65px] h-6 w-[170px] rounded-[50%] bg-line-warm blur-[2px]"
+        />
 
         <Moya
           look={getCurrentLook()}

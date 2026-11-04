@@ -12,8 +12,6 @@ interface TalkStageView {
   soundWave: boolean;
   /** 모야 주변 노란 반짝이 */
   sparkles: boolean;
-  /** 모야 발밑 그림자 */
-  shadow: boolean;
 }
 
 export const TALK_STAGE_VIEW: Record<MoyaStage, TalkStageView> = {
@@ -24,7 +22,6 @@ export const TALK_STAGE_VIEW: Record<MoyaStage, TalkStageView> = {
     micLabel: "눌러서 말하기",
     soundWave: false,
     sparkles: true,
-    shadow: false,
   },
   listening: {
     line: "응, 응. 듣고있어!",
@@ -33,7 +30,6 @@ export const TALK_STAGE_VIEW: Record<MoyaStage, TalkStageView> = {
     micLabel: "듣고 있어…",
     soundWave: true,
     sparkles: false,
-    shadow: true,
   },
   thinking: {
     line: "음… 무슨 말인지\n찾아볼게!",
@@ -42,6 +38,5 @@ export const TALK_STAGE_VIEW: Record<MoyaStage, TalkStageView> = {
     micLabel: "모야가 찾고 있어",
     soundWave: false,
     sparkles: false,
-    shadow: true,
   },
 };

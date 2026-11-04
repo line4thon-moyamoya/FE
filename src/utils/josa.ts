@@ -8,3 +8,6 @@ const hasBatchim = (word: string) => {
 
 // "편니점" → "이라고", "무지게" → "라고"
 export const iraGo = (word: string) => (hasBatchim(word) ? "이라고" : "라고");
+
+// "적금" → "이야", "모야" → "야"
+export const iya = (word: string) => (hasBatchim(word) ? "이야" : "야");

@@ -21,6 +21,8 @@
   --color-brand-light: #a08dff; /* Brand/Light */
   --color-brand-depth: #4c34c3; /* Brand/Depth, 버튼 입체 그림자 */
   --color-lime: #d2ec7c; /* Brand/Lime, 쿠폰 도장 */
+  --color-lime-card: #e6f4c4; /* Surface/LimeCard, 새 카드 머리띠 */
+  --color-on-lime: #3a540a; /* Text/OnLime */
 
   /* 비활성 */
   --color-disabled-face: #dad6e4; /* State/DisabledFace */
@@ -30,7 +32,9 @@
   --color-line: #e4dff5; /* Border/Soft */
   --color-line-warm: #e0ddd7; /* Border/Warm */
   --color-line-lavender: #d9d0ff; /* Border/Lavender */
-  --color-line-cream: #efe6d3; /* Figma 변수 미확인. BackButton 등에서 쓰던 값 */
+  --color-handle: #d9d3e6; /* System/Handle, 시트 손잡이 */
+  --color-dim: rgba(36, 31, 72, 0.5); /* Overlay/Dim50, 시트 뒤 어두운 배경 */
+  --color-line-cream: #efe6d3; /* Border/Beige */
 
   /* ---------------------------------------------------------------
    * 그림자
@@ -46,6 +50,7 @@
   --shadow-button-secondary: 0 5px 0 0 rgba(228, 220, 255, 1); /* 06 버튼 · 아니야 */
   --shadow-place-tile: 0 4px 0 0 rgba(250, 237, 209, 1); /* 08 들은 곳 */
   --shadow-candidate: 0 5px 0 0 rgba(250, 237, 209, 1); /* 09 후보 */
+  --shadow-stamp: 0 3px 8px 0 rgba(86, 120, 20, 0.18); /* 10 노래 쿠폰 도장 */
   --shadow-button-primary: 0 5px 0 0 rgba(74, 53, 201, 1); /* 07 버튼 · 맞아! */
   --shadow-picture-card: 0 4px 12px 0 rgba(106, 79, 243, 0.08); /* 11 그림 카드 · 길 */
 
@@ -85,6 +90,29 @@
     }
   }
 
+  --animate-sheet-up: sheet-up 0.3s ease-out both;
+  --animate-stamp-pop: stamp-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+
+  @keyframes sheet-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes stamp-pop {
+    0% {
+      transform: scale(0.3) rotate(30deg);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1) rotate(8deg);
+      opacity: 1;
+    }
+  }
+
   @keyframes sticker-pop {
     0% {
       transform: scale(0.3) rotate(-18deg);
@@ -114,7 +142,14 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-pulse-ring,
   .animate-think-dot,
-  .animate-sticker-pop {
+  .animate-sticker-pop,
+  .animate-stamp-pop,
+  .animate-sheet-up {
     animation: none;
+    /* 애니메이션을 끄면 도장이 똑바로 서므로 기울기는 유지 */
+  }
+
+  .animate-stamp-pop {
+    transform: rotate(8deg);
   }
 }

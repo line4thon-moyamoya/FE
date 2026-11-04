@@ -1,4 +1,5 @@
 import check from "../../../assets/icons/check_icon.svg";
+import speaker from "../../../assets/icons/speaker_modal.svg";
 import wordBook from "../../../assets/icons/word_book.svg";
 import arrow from "../../../assets/images/arrow.svg";
 
@@ -13,7 +14,7 @@ interface ButtonProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
   /** 라벨 앞에 붙는 아이콘 */
-  icon?: "check" | "wordBook" | "mic";
+  icon?: "check" | "wordBook" | "mic" | "speaker";
   showArrow?: boolean;
   /** 가로를 꽉 채움. 끄면 346px 고정 */
   fullWidth?: boolean;
@@ -23,6 +24,7 @@ interface ButtonProps {
 const ICON_SRC = {
   check,
   wordBook,
+  speaker,
 };
 
 /* 마이크는 버튼 종류에 따라 색이 달라서 인라인으로 그림 */

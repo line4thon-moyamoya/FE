@@ -3,6 +3,7 @@ import LetterTiles from "./LetterTiles";
 import MicButton from "../common/MicButton/MicButton";
 import Moya from "../common/Moya/Moya";
 import SpeechBubble from "../common/SpeechBubble/SpeechBubble";
+import { getCurrentLook } from "../../utils/currentLook";
 
 interface RepeatAfterProps {
   letters: string[];
@@ -20,7 +21,7 @@ export default function RepeatAfter({ letters, word, onSpeak }: RepeatAfterProps
 
       <div className="flex h-[210px] items-center">
         <img src={soundwave} alt="" aria-hidden className="h-11 w-[30px]" />
-        <Moya look="default" mood="curious" size={210} />
+        <Moya look={getCurrentLook()} mood="curious" size={210} />
         <img src={soundwave} alt="" aria-hidden className="h-11 w-[30px] -scale-x-100" />
       </div>
 

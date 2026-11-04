@@ -2,6 +2,7 @@ import wordBox from "../../assets/icons/word_box.svg";
 import Button from "../common/Button/Button";
 import Moya from "../common/Moya/Moya";
 import SpeechBubble from "../common/SpeechBubble/SpeechBubble";
+import { getCurrentLook } from "../../utils/currentLook";
 
 interface AskLaterProps {
   /** 알았어! */
@@ -15,7 +16,7 @@ export default function AskLater({ onConfirm, onAskAnother }: AskLaterProps) {
     <div className="flex flex-1 flex-col items-center justify-center gap-[22px] px-6 pt-[18px] pb-[14px]">
       <SpeechBubble text={"어른한테 같이 물어보자!\n모야가 기억할게!"} width={290} />
 
-      <Moya look="default" mood="explain" size={190} />
+      <Moya look={getCurrentLook()} mood="explain" size={190} />
 
       <div className="flex w-full flex-col">
         {/* 물어볼 단어 상자 안내 */}

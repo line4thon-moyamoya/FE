@@ -4,6 +4,7 @@ import LetterTiles from "./LetterTiles";
 import Moya from "../common/Moya/Moya";
 import SpeechBubble from "../common/SpeechBubble/SpeechBubble";
 import type { MoyaMood } from "../../types/moya";
+import { getCurrentLook } from "../../utils/currentLook";
 
 interface WordLessonProps {
   letters: string[];
@@ -40,7 +41,7 @@ export default function WordLesson({
           <SpeechBubble text={line} width={bubbleWidth} onReplay={onReplay} />
 
           <div className="flex w-full flex-col items-center gap-9">
-            <Moya look="default" mood={mood} size={210} />
+            <Moya look={getCurrentLook()} mood={mood} size={210} />
             <Button
               text={buttonLabel}
               size="normal"

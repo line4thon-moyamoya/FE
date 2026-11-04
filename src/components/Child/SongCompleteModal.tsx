@@ -1,6 +1,7 @@
 import Button from "../common/Button/Button";
 import Moya from "../common/Moya/Moya";
 import WordChip from "./WordChip";
+import { getCurrentLook } from "../../utils/currentLook";
 
 interface SongCompleteModalProps {
   /** 노래에 들어간 단어 */
@@ -33,7 +34,7 @@ export default function SongCompleteModal({
           border-4 border-white bg-cream p-6"
       >
         <div className="flex flex-col items-center gap-3">
-          <Moya look="default" mood="excited" size={150} />
+          <Moya look={getCurrentLook()} mood="excited" size={150} />
 
           <strong className="font-jua text-[34px] leading-[1.25] font-normal text-ink">
             노래가 생겼어!

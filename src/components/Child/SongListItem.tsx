@@ -1,6 +1,6 @@
 import type { Song } from "../../types/song";
 import { findWord } from "../../mocks/words";
-import play from "../../assets/icons/play_icon.svg";
+import play from "../../assets/icons/play.svg";
 
 interface SongListItemProps {
   song: Song;

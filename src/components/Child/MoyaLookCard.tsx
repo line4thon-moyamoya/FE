@@ -1,4 +1,4 @@
-import check from "../../assets/icons/check_icon.svg";
+import check from "../../assets/icons/check.svg";
 import Moya from "../common/Moya/Moya";
 import { MOYA_LOOK_INFO } from "../../constants/moyaLook";
 import type { MoyaLook } from "../../types/moya";

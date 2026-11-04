@@ -1,6 +1,6 @@
 import type { MissingWord } from "../../types/guardian";
 import mailbox from "../../assets/images/mailbox.svg";
-import right from "../../assets/icons/right_icon.svg";
+import right from "../../assets/icons/chevron-right.svg";
 
 interface MissingWordCardProps {
   missingWords: MissingWord[];

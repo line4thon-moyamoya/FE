@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { MissingWord } from "../../types/guardian";
 import { formatDateTime } from "../../utils/formatDate";
 import speaker from "../../assets/icons/speaker.svg";
-import check from "../../assets/icons/missing_check.svg";
+import check from "../../assets/icons/missing-check.svg";
 
 interface MissingWordItemProps {
   word: MissingWord;

@@ -1,4 +1,4 @@
-import title from "../../assets/images/moyamoya_title.svg";
+import title from "../../assets/images/moyamoya-title.svg";
 import highlight from "../../assets/images/highlight.svg";
 import moya from "../../assets/images/moya/default/moya_greeting.png";
 import wondering from "../../assets/images/wondering.svg";

@@ -5,7 +5,7 @@ import WordRecordItem from "../../components/Guardian/WordRecordItem";
 import ConversationTipCard from "../../components/Guardian/ConversationTipCard";
 import { MOCK_CHILD_LIST } from "../../mocks/guardian";
 import { formatDateRange } from "../../utils/formatDate";
-import mic from "../../assets/icons/mic_icon.svg";
+import mic from "../../assets/icons/mic.svg";
 
 export default function WeeklyReport() {
   const { childId } = useParams();

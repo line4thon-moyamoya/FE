@@ -1,7 +1,7 @@
-import check from "../../../assets/icons/check_icon.svg";
-import speaker from "../../../assets/icons/speaker_modal.svg";
-import wordBook from "../../../assets/icons/word_book.svg";
-import arrow from "../../../assets/images/arrow.svg";
+import check from "../../../assets/icons/check.svg";
+import speaker from "../../../assets/icons/speaker-lg.svg";
+import wordBook from "../../../assets/icons/word-book.svg";
+import arrow from "../../../assets/icons/arrow.svg";
 
 /** 주요(보라) / 보조(흰 테두리) / 점선 */
 type ButtonVariant = "primary" | "secondary" | "dashed";

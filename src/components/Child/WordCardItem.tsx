@@ -1,6 +1,6 @@
 import type { Word } from "../../types/word";
-import stickerFilled from "../../assets/images/sticker_filled.svg";
-import stickerEmpty from "../../assets/images/sticker_empty.svg";
+import stickerFilled from "../../assets/icons/sticker-filled.svg";
+import stickerEmpty from "../../assets/icons/sticker-empty.svg";
 
 interface WordCardItemProps {
   word: Word;

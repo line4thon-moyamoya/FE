@@ -1,6 +1,6 @@
 import type { Word } from "../../types/word";
 import { iya } from "../../utils/josa";
-import notebookCard from "../../assets/icons/word_book.svg";
+import notebookCard from "../../assets/icons/word-book.svg";
 
 export default function WordCardDetailView({ word }: { word: Word }) {
   return (

@@ -1,6 +1,6 @@
 import moyaConfused from "../../assets/images/moya/default/moya_confused.png";
 import speaker from "../../assets/icons/speaker.svg";
-import check from "../../assets/icons/check_icon.svg";
+import check from "../../assets/icons/check.svg";
 
 const LINE = "지금은 모야가\n네 목소리를 못 들어!";
 

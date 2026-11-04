@@ -1,7 +1,7 @@
 import moyaConfused from "../../assets/images/moya/default/moya_confused.png";
 import speaker from "../../assets/icons/speaker.svg";
-import reset from "../../assets/icons/reset_white.svg";
-import home from "../../assets/icons/home_icon.svg";
+import reset from "../../assets/icons/reset.svg";
+import home from "../../assets/icons/home.svg";
 import { speak } from "../../utils/speak";
 
 const LINE = "앗, 모야 우주선 신호가 약해!\n다시 해 볼까?";

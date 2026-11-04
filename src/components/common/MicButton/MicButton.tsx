@@ -1,4 +1,4 @@
-import soundwaveMic from "../../../assets/icons/soundwave_mic.svg";
+import soundwaveMic from "../../../assets/icons/soundwave-mic.svg";
 
 export type MicState = "idle" | "listening" | "thinking";
 

@@ -1,4 +1,4 @@
-import right from "../../assets/icons/right_icon.svg";
+import right from "../../assets/icons/chevron-right.svg";
 
 type SettingItemVariant = "default" | "primary" | "danger" | "muted";
 

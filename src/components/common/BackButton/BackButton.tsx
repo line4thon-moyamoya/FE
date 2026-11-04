@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import backButton from "../../../assets/images/back_button.svg";
-import closeButton from "../../../assets/icons/close_icon.svg";
+import backButton from "../../../assets/icons/back.svg";
+import closeButton from "../../../assets/icons/close.svg";
 
 interface BackButtonProps {
   variant?: "back" | "close";

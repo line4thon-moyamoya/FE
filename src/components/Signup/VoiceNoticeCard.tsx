@@ -1,4 +1,4 @@
-import voice from "../../assets/icons/voice.svg";
+import voice from "../../assets/icons/mic.svg";
 import lock from "../../assets/icons/lock.svg";
 import settings from "../../assets/icons/settings.svg";
 

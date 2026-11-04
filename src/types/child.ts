@@ -35,7 +35,8 @@ export type TalkStage =
   | "repeat"
   | "repeatSuccess"
   | "repeatRetry"
-  | "askLater";
+  | "askLater"
+  | "card";
 
 /** 아이가 단어를 들은 곳 */
 export interface HeardPlace {
@@ -76,4 +77,14 @@ export interface WordLessonData {
   successLine: string;
   /** 따라 말하기가 잘 안 됐을 때 대사 */
   retryLine: string;
+}
+
+/** 다 모으면 노래가 생기는 쿠폰 장수 */
+export const COUPON_GOAL = 5;
+
+/** 카드 획득 화면에 올라가는 단어 */
+export interface EarnedCard {
+  word: string;
+  /** 카드 아래 설명 */
+  description: string;
 }

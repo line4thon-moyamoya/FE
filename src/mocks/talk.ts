@@ -1,5 +1,6 @@
 import type {
   ConfirmQuiz,
+  EarnedCard,
   HeardPlace,
   WordCandidate,
   WordLessonData,
@@ -58,3 +59,12 @@ export const MOCK_WORD_LESSON: WordLessonData = {
   successLine: "우와! 적금!\n잘했어!",
   retryLine: "적금! 적금!\n다음에 또 해보자!",
 };
+
+/** 따라 말하기를 마치면 받는 카드 */
+export const MOCK_EARNED_CARD: EarnedCard = {
+  word: "적금",
+  description: "돈을 조금씩 꾸준히 모으는 거야. 큰돈이 돼!",
+};
+
+/** 쿠폰을 다 모았을 때 노래에 들어가는 단어 */
+export const MOCK_SONG_WORDS = ["영수증", "소방차", "용기", "적금", "통장"];

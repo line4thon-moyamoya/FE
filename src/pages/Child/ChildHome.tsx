@@ -259,10 +259,7 @@ export default function ChildHome() {
 
     if (stage === "sayAgain") {
       return (
-        <SayAgain
-          onRetry={tryStartListening}
-          onPickCard={() => setStage("place")}
-        />
+        <SayAgain onRetry={tryStartListening} />
       );
     }
 

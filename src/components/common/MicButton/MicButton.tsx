@@ -1,3 +1,5 @@
+import soundwaveMic from "../../../assets/icons/soundwave_mic.svg";
+
 export type MicState = "idle" | "listening" | "thinking";
 
 interface MicButtonProps {
@@ -21,34 +23,6 @@ function MicIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-    </svg>
-  );
-}
-
-/* 듣는 중일 때 마이크 자리에 들어가는 음성 파형 */
-function WaveIcon() {
-  const bars = [26, 44, 62, 40, 24];
-
-  return (
-    <svg
-      aria-hidden
-      width="48"
-      height="67"
-      viewBox="0 0 48 67"
-      fill="none"
-      className="relative"
-    >
-      {bars.map((height, index) => (
-        <rect
-          key={index}
-          x={2 + index * 10}
-          y={(67 - height) / 2}
-          width="6"
-          height={height}
-          rx="3"
-          fill="#FFFFFF"
-        />
-      ))}
     </svg>
   );
 }
@@ -123,9 +97,11 @@ export default function MicButton({
 
         {/* 아이콘은 24x24 안에 가운데 정렬돼 있어 88px 로 키우면 그림이 48x67 이 됨 */}
         {listening ? (
-          <span className="absolute top-6 left-[35px]">
-            <WaveIcon />
-          </span>
+          <img
+            src={soundwaveMic}
+            alt=""
+            className="absolute top-6 left-[35px] h-[67px] w-12"
+          />
         ) : (
           <span className="absolute inset-0 m-auto h-[88px] w-[88px] text-white">
             <MicIcon />

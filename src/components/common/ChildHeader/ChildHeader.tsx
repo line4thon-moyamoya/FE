@@ -1,5 +1,6 @@
 import avatarDefault from "../../../assets/icons/avatar.png";
 import lock from "../../../assets/icons/lock.svg";
+import NoteIcon from "../NoteIcon/NoteIcon";
 
 /** 쿠폰 도장 칸 수. 다 채우면 노래가 열림 */
 const STAMP_SLOTS = 4;
@@ -11,30 +12,6 @@ interface ChildHeaderProps {
   coupons?: number;
   onCouponClick?: () => void;
   onGuardianClick?: () => void;
-}
-
-/* note.svg */
-function NoteIcon({ size }: { size: number }) {
-  return (
-    <svg
-      aria-hidden
-      width={size}
-      height={size}
-      viewBox="0 0 20 20"
-      fill="none"
-      className="text-current"
-    >
-      <path
-        d="M7.5 14.5835V5.16683L15.8333 3.3335V12.7502"
-        stroke="currentColor"
-        strokeWidth="2.16667"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <ellipse cx="5.333" cy="14.833" rx="2.75" ry="2.333" fill="currentColor" />
-      <ellipse cx="13.667" cy="12.833" rx="2.75" ry="2.333" fill="currentColor" />
-    </svg>
-  );
 }
 
 export default function ChildHeader({

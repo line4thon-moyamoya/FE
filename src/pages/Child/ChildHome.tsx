@@ -5,6 +5,9 @@ import ChildHeader from "../../components/common/ChildHeader/ChildHeader";
 import Footer from "../../components/common/Footer/Footer";
 import AskLater from "../../components/Child/AskLater";
 import CandidatePick from "../../components/Child/CandidatePick";
+import CardEarned from "../../components/Child/CardEarned";
+import CouponSheet from "../../components/Child/CouponSheet";
+import SongCompleteModal from "../../components/Child/SongCompleteModal";
 import ConfirmQuestion from "../../components/Child/ConfirmQuestion";
 import HeardPlacePick from "../../components/Child/HeardPlacePick";
 import MoyaStageView from "../../components/Child/MoyaStageView";
@@ -15,7 +18,13 @@ import ConnectionLost from "../../components/Error/ConnectionLost";
 import MicPermissionOff from "../../components/Error/MicPermissionOff";
 import VoiceConsentOff from "../../components/Error/VoiceConsentOff";
 import { findChildProfile } from "../../mocks/child";
-import { MOCK_CONFIRM_QUIZZES, MOCK_WORD_LESSON } from "../../mocks/talk";
+import {
+  MOCK_CONFIRM_QUIZZES,
+  MOCK_EARNED_CARD,
+  MOCK_SONG_WORDS,
+  MOCK_WORD_LESSON,
+} from "../../mocks/talk";
+import { COUPON_GOAL } from "../../types/child";
 import type { ChildErrorType, MoyaStage, TalkStage } from "../../types/child";
 import { getCurrentChildId } from "../../utils/currentChild";
 import { getVoiceConsent, setVoiceConsent } from "../../utils/voiceConsent";
@@ -35,6 +44,9 @@ export default function ChildHome() {
   const [quizIndex, setQuizIndex] = useState(0);
   // 음성 인식이 없어 따라 말하기 결과를 번갈아 보여 줌
   const [repeatCount, setRepeatCount] = useState(0);
+  const [coupons, setCoupons] = useState(child.coupons);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [songModalOpen, setSongModalOpen] = useState(false);
   const quiz = MOCK_CONFIRM_QUIZZES[quizIndex];
 
   // 음성 수집 동의 여부 (설정에서 철회하면 false)
@@ -61,6 +73,15 @@ export default function ChildHome() {
   const startListening = () => {
     setQuizIndex((index) => (index + 1) % MOCK_CONFIRM_QUIZZES.length);
     setStage("listening");
+  };
+
+  // 수업을 마치면 쿠폰이 한 장 쌓이고 카드 획득 화면으로
+  const finishLesson = () => {
+    const next = Math.min(coupons + 1, COUPON_GOAL);
+    setCoupons(next);
+    setStage("card");
+    // 마지막 한 장을 채우면 노래 완성 카드가 뜸
+    if (next >= COUPON_GOAL) setSongModalOpen(true);
   };
 
   // 연결과 마이크를 확인한 뒤 듣기 시작
@@ -198,7 +219,7 @@ export default function ChildHome() {
           mood="excited"
           buttonLabel="좋아!"
           sticker
-          onNext={() => alert("카드 획득 화면은 준비 중이에요")}
+          onNext={finishLesson}
         />
       );
     }
@@ -210,7 +231,19 @@ export default function ChildHome() {
           line={MOCK_WORD_LESSON.retryLine}
           mood="explain"
           buttonLabel="알았어!"
-          onNext={() => alert("카드 획득 화면은 준비 중이에요")}
+          onNext={finishLesson}
+        />
+      );
+    }
+
+    if (stage === "card") {
+      return (
+        <CardEarned
+          word={MOCK_EARNED_CARD.word}
+          description={MOCK_EARNED_CARD.description}
+          coupons={coupons}
+          onAskAnother={tryStartListening}
+          onOpenNotebook={() => alert("단어 수첩은 준비 중이에요")}
         />
       );
     }
@@ -243,17 +276,36 @@ export default function ChildHome() {
   };
 
   return (
-    <main className="flex h-full flex-col bg-cream pt-[62px] pb-[113px]">
+    <main className="relative flex h-full flex-col overflow-hidden bg-cream pt-[62px] pb-[113px]">
       <ChildHeader
         childName={child.name}
-        coupons={child.coupons}
-        onCouponClick={() => alert("노래 쿠폰은 준비 중이에요")}
+        coupons={coupons}
+        onCouponClick={() => setSheetOpen(true)}
         onGuardianClick={() => navigate("/guardian/password")}
       />
 
       {renderMain()}
 
       <Footer />
+
+      {songModalOpen && (
+        <SongCompleteModal
+          words={MOCK_SONG_WORDS}
+          onPlay={() => alert("단어 노래는 준비 중이에요")}
+          onClose={() => setSongModalOpen(false)}
+        />
+      )}
+
+      {sheetOpen && (
+        <CouponSheet
+          coupons={coupons}
+          onStart={() => {
+            setSheetOpen(false);
+            tryStartListening();
+          }}
+          onClose={() => setSheetOpen(false)}
+        />
+      )}
     </main>
   );
 }

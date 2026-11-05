@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import ChildHeader from "../../components/common/ChildHeader/ChildHeader";
 import Footer from "../../components/common/Footer/Footer";
@@ -26,7 +26,9 @@ import {
 } from "../../mocks/talk";
 import { COUPON_GOAL } from "../../types/child";
 import type { ChildErrorType, MoyaStage, TalkStage } from "../../types/child";
+import { MOYA_LOOK_INFO } from "../../constants/moyaLook";
 import { getCurrentChildId } from "../../utils/currentChild";
+import { getCurrentLook } from "../../utils/currentLook";
 import { getVoiceConsent, setVoiceConsent } from "../../utils/voiceConsent";
 import { requestMicPermission } from "../../utils/micPermission";
 import { isOnline } from "../../utils/network";
@@ -35,9 +37,20 @@ import { getDebugError } from "../../utils/debugError";
 /** 생각 중에서 되묻기로 넘어가기까지 기다리는 시간 */
 const THINKING_MS = 1600;
 
+/** 모야를 막 고르고 들어왔을 때 첫인사를 건네는 시간 */
+const INTRO_MS = 1500;
+
 export default function ChildHome() {
   const navigate = useNavigate();
+  const location = useLocation();
   const child = findChildProfile(getCurrentChildId());
+  const look = getCurrentLook();
+
+  // 모야를 막 고르고 들어왔으면 그 모야다운 첫인사를 먼저 건넴
+  const justPicked = Boolean(
+    (location.state as { justPicked?: boolean } | null)?.justPicked,
+  );
+  const [intro, setIntro] = useState(justPicked);
 
   const [stage, setStage] = useState<TalkStage>("idle");
   // 음성 인식이 붙기 전까지는 목데이터를 순서대로 돌려 씀
@@ -61,6 +74,18 @@ export default function ChildHome() {
     if (stage !== "thinking") return;
     const timer = window.setTimeout(() => setStage("confirm"), THINKING_MS);
     return () => window.clearTimeout(timer);
+  }, [stage]);
+
+  // 첫인사가 끝나면 평소 모습으로 돌아감
+  useEffect(() => {
+    if (!intro) return;
+    const timer = window.setTimeout(() => setIntro(false), INTRO_MS);
+    return () => window.clearTimeout(timer);
+  }, [intro]);
+
+  // 말을 걸기 시작하면 첫인사는 바로 끝냄
+  useEffect(() => {
+    if (stage !== "idle") setIntro(false);
   }, [stage]);
 
   // 대화 중 인터넷이 끊기면 연결 끊김 화면
@@ -266,7 +291,8 @@ export default function ChildHome() {
     return (
       <MoyaStageView
         stage={stage as MoyaStage}
-        greeting={child.greeting}
+        greeting={intro ? MOYA_LOOK_INFO[look].greeting : child.greeting}
+        mood={intro ? MOYA_LOOK_INFO[look].mood : undefined}
         onMicClick={handleMicClick}
       />
     );

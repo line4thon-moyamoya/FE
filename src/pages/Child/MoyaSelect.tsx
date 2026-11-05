@@ -6,7 +6,7 @@ import SpeechBubble from "../../components/common/SpeechBubble/SpeechBubble";
 import { setCurrentLook } from "../../utils/currentLook";
 import { MOYA_LOOKS, type MoyaLook } from "../../types/moya";
 
-/** 고른 모야를 보여 주다가 미리보기로 넘어가기까지 */
+/** 고른 모야를 보여 주다가 홈으로 넘어가기까지 */
 const MOVE_DELAY_MS = 700;
 
 export default function MoyaSelect() {
@@ -18,8 +18,12 @@ export default function MoyaSelect() {
 
     setPicked(look);
     setCurrentLook(look);
-    // 고른 모야가 신나하는 모습을 잠깐 보여 준 뒤 넘어감
-    window.setTimeout(() => navigate("/home-preview"), MOVE_DELAY_MS);
+    // 고른 모야가 신나하는 모습을 잠깐 보여 준 뒤 홈으로.
+    // 방금 골랐다고 알려 주면 홈이 첫인사를 먼저 건넨다
+    window.setTimeout(
+      () => navigate("/home", { replace: true, state: { justPicked: true } }),
+      MOVE_DELAY_MS,
+    );
   };
 
   return (

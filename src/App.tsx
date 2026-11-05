@@ -10,7 +10,6 @@ import MissingWords from "./pages/Guardian/MissingWords";
 import WeeklyReport from "./pages/Guardian/WeeklyReport";
 import ChildHome from "./pages/Child/ChildHome";
 import MoyaSelect from "./pages/Child/MoyaSelect";
-import HomePreview from "./pages/Child/HomePreview";
 import Settings from "./pages/Guardian/Settings";
 import ChildProfileEdit from "./pages/Guardian/ChildProfileEdit";
 import ChildAdd from "./pages/Guardian/ChildAdd";
@@ -29,7 +28,6 @@ export default function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/ready" element={<Ready />} />
           <Route path="/moya-select" element={<MoyaSelect />} />
-          <Route path="/home-preview" element={<HomePreview />} />
           <Route path="/home" element={<ChildHome />} />
           <Route path="/guardian/password" element={<GuardianPassword />} />
           <Route path="/guardian" element={<GuardianHome />} />

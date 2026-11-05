@@ -4,6 +4,7 @@ import Moya from "../common/Moya/Moya";
 import SpeechBubble from "../common/SpeechBubble/SpeechBubble";
 import { TALK_STAGE_VIEW } from "../../constants/talkStage";
 import type { MoyaStage } from "../../types/child";
+import type { MoyaMood } from "../../types/moya";
 import { getCurrentLook } from "../../utils/currentLook";
 import Sparkle from "./Sparkle";
 
@@ -24,12 +25,19 @@ function SoundWave({ side }: { side: "left" | "right" }) {
 
 interface MoyaStageViewProps {
   stage: MoyaStage;
-  /** 기다리는 중일 때 쓰는 아이별 인사말 */
+  /** 기다리는 중일 때 쓰는 인사말 */
   greeting: string;
+  /** 단계가 정한 표정 대신 쓸 표정 */
+  mood?: MoyaMood;
   onMicClick: () => void;
 }
 
-export default function MoyaStageView({ stage, greeting, onMicClick }: MoyaStageViewProps) {
+export default function MoyaStageView({
+  stage,
+  greeting,
+  mood,
+  onMicClick,
+}: MoyaStageViewProps) {
   const view = TALK_STAGE_VIEW[stage];
 
   return (
@@ -49,7 +57,7 @@ export default function MoyaStageView({ stage, greeting, onMicClick }: MoyaStage
 
         <Moya
           look={getCurrentLook()}
-          mood={view.mood}
+          mood={mood ?? view.mood}
           size={290}
           glow
           className="absolute -top-[14px] left-[5px]"

@@ -1,18 +1,16 @@
-import { Navigate, useParams } from "react-router-dom";
+
 import BackButton from "../../components/common/BackButton/BackButton";
 import StatGrid from "../../components/Guardian/StatGrid";
 import WordRecordItem from "../../components/Guardian/WordRecordItem";
 import ConversationTipCard from "../../components/Guardian/ConversationTipCard";
-import { MOCK_CHILD_LIST } from "../../mocks/guardian";
 import { formatDateRange } from "../../utils/formatDate";
 import mic from "../../assets/icons/mic.svg";
+import useChildByParam from "../../hooks/useChildByParam";
 
 export default function WeeklyReport() {
-  const { childId } = useParams();
-  const child = MOCK_CHILD_LIST.find((c) => c.id === Number(childId));
+  const { child, redirect } = useChildByParam();
 
-  // 없는 아이 id로 들어오면 보호자 홈으로
-  if (!child) return <Navigate to="/guardian" replace />;
+  if (redirect) return redirect;
 
   const { weeklyReport, weeklySummary, missingWords } = child;
   const pendingWords = missingWords.filter((w) => w.correctedText === null);

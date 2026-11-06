@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/common/BackButton/BackButton";
 import Button from "../../components/common/Button/Button";
 import Toast from "../../components/common/Toast/Toast";
 import ChildProfileForm from "../../components/Guardian/ChildProfileForm";
-import { MOCK_CHILD_LIST, updateMockChild } from "../../mocks/guardian";
+import { updateMockChild } from "../../mocks/guardian";
 import type { AgeGroup } from "../../types/signup";
 import type { MoyaLook } from "../../types/moya";
+import useChildByParam from "../../hooks/useChildByParam";
 
 export default function ChildProfileEdit() {
   const navigate = useNavigate();
-  const { childId } = useParams();
-  const child = MOCK_CHILD_LIST.find((c) => c.id === Number(childId));
+  const { child, redirect } = useChildByParam("/guardian/settings");
 
   // 저장된 값으로 초기화
   const [name, setName] = useState(child?.name ?? "");
@@ -24,8 +24,7 @@ export default function ChildProfileEdit() {
   const [toast, setToast] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  // 없는 아이 id로 들어오면 설정으로
-  if (!child) return <Navigate to="/guardian/settings" replace />;
+  if (redirect) return redirect;
 
   const trimmedName = name.trim();
   const canSave = trimmedName.length > 0 && ageGroup !== null && !isSaving;

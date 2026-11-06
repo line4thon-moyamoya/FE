@@ -1,24 +1,20 @@
 import { useEffect } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import ChildHeader from "../../components/common/ChildHeader/ChildHeader";
-import Footer from "../../components/common/Footer/Footer";
+import { useChildMode } from "../../contexts/ChildModeContext";
+import { Navigate, useParams } from "react-router-dom";
 import BackButton from "../../components/common/BackButton/BackButton";
 import SongNowPlaying from "../../components/Child/SongNowPlaying";
 import SongProgress from "../../components/Child/SongProgress";
 import SongWordChips from "../../components/Child/SongWordChips";
 import useSongPlayer from "../../hooks/useSongPlayer";
-import { findChildProfile } from "../../mocks/child";
 import { findSong } from "../../mocks/songs";
 import { findWord } from "../../mocks/words";
-import { getCurrentChildId } from "../../utils/currentChild";
 import pauseIcon from "../../assets/icons/pause.svg";
 import playIcon from "../../assets/icons/play.svg";
 import replayIcon from "../../assets/icons/replay.svg";
 
 export default function SongPlayer() {
-  const navigate = useNavigate();
   const { songId } = useParams();
-  const child = findChildProfile(getCurrentChildId());
+  const { child } = useChildMode();
   const song = songId ? findSong(child.id, songId) : undefined;
 
   // 훅은 return보다 먼저 불러야 해서 song이 없어도 호출
@@ -64,13 +60,7 @@ export default function SongPlayer() {
   };
 
   return (
-    <main className="flex h-full flex-col bg-cream pt-[62px] pb-[113px]">
-      <ChildHeader
-        childName={child.name}
-        coupons={child.coupons}
-        onGuardianClick={() => navigate("/guardian/password")}
-      />
-
+    <>
       <header className="flex items-center gap-2.5 pl-6 pt-4">
         <BackButton />
         <h1 className="font-jua text-xl leading-7 text-[#241F48]">
@@ -126,7 +116,6 @@ export default function SongPlayer() {
         </div>
       </div>
 
-      <Footer />
-    </main>
+    </>
   );
 }

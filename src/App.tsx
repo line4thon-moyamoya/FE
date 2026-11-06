@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RootLayout from "./layout/RootLayout";
+import ChildLayout from "./layout/ChildLayout";
 import Onboarding from "./pages/Onboarding/Onboarding";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
@@ -28,7 +29,16 @@ export default function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/ready" element={<Ready />} />
           <Route path="/moya-select" element={<MoyaSelect />} />
-          <Route path="/home" element={<ChildHome />} />
+
+          {/* 헤더 · 탭바 · 노래 쿠폰 시트를 함께 쓰는 아이 모드 화면들 */}
+          <Route element={<ChildLayout />}>
+            <Route path="/home" element={<ChildHome />} />
+            <Route path="/notebook" element={<WordNotebook />} />
+            <Route path="/notebook/:wordId" element={<WordCardDetail />} />
+            <Route path="/song" element={<WordSong />} />
+            <Route path="/song/:songId" element={<SongPlayer />} />
+          </Route>
+
           <Route path="/guardian/password" element={<GuardianPassword />} />
           <Route path="/guardian" element={<GuardianHome />} />
           <Route
@@ -42,10 +52,6 @@ export default function App() {
             element={<ChildProfileEdit />}
           />
           <Route path="/guardian/settings/child/new" element={<ChildAdd />} />
-          <Route path="/notebook" element={<WordNotebook />} />
-          <Route path="/notebook/:wordId" element={<WordCardDetail />} />
-          <Route path="/song" element={<WordSong />} />
-          <Route path="/song/:songId" element={<SongPlayer />} />
         </Route>
       </Routes>
     </BrowserRouter>

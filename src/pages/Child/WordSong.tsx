@@ -1,20 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import ChildHeader from "../../components/common/ChildHeader/ChildHeader";
-import Footer from "../../components/common/Footer/Footer";
 import SongCouponCard from "../../components/Child/SongCouponCard";
 import SongListItem from "../../components/Child/SongListItem";
-import { findChildProfile } from "../../mocks/child";
 import {
   COUPONS_PER_SONG,
   getCollectedCards,
   getRemainingForNextCoupon,
 } from "../../mocks/notebook";
 import { getSongs } from "../../mocks/songs";
-import { getCurrentChildId } from "../../utils/currentChild";
+import { useChildMode } from "../../contexts/ChildModeContext";
 
 export default function WordSong() {
   const navigate = useNavigate();
-  const child = findChildProfile(getCurrentChildId());
+  const { child, coupons } = useChildMode();
 
   const songs = getSongs(child.id);
   const remainingWords = getRemainingForNextCoupon(
@@ -22,18 +19,12 @@ export default function WordSong() {
   );
 
   return (
-    <main className="flex h-full flex-col bg-cream pt-[62px] pb-[113px]">
-      <ChildHeader
-        childName={child.name}
-        coupons={child.coupons}
-        onGuardianClick={() => navigate("/guardian/password")}
-      />
-
+    <>
       <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-6 pt-6 pb-6">
         <h1 className="font-jua text-2xl leading-9 text-[#241F48]">단어 노래</h1>
 
         <SongCouponCard
-          coupons={child.coupons}
+          coupons={coupons}
           total={COUPONS_PER_SONG}
           remainingWords={remainingWords}
         />
@@ -61,7 +52,6 @@ export default function WordSong() {
         </section>
       </div>
 
-      <Footer />
-    </main>
+    </>
   );
 }

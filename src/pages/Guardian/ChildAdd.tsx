@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BackButton from "../../components/common/BackButton/BackButton";
 import Button from "../../components/common/Button/Button";
 import Toast from "../../components/common/Toast/Toast";
 import ChildProfileForm from "../../components/Guardian/ChildProfileForm";
 import { addMockChild } from "../../mocks/guardian";
 import type { AgeGroup } from "../../types/signup";
 import type { MoyaLook } from "../../types/moya";
+import GuardianPage from "../../layout/GuardianPage";
 
 export default function ChildAdd() {
   const navigate = useNavigate();
@@ -43,14 +43,7 @@ export default function ChildAdd() {
   };
 
   return (
-    <main className="min-h-full w-full bg-[#FBFBFB] flex flex-col">
-      <header className="flex gap-2.5 items-center pl-6 pt-12">
-        <BackButton />
-        <h1 className="font-jua leading-7 font-normal text-xl text-[#241F48]">
-          아이 추가
-        </h1>
-      </header>
-
+    <GuardianPage title="아이 추가">
       <div className="flex flex-1 flex-col px-6 pt-6">
         <ChildProfileForm
           name={name}
@@ -67,6 +60,6 @@ export default function ChildAdd() {
       </div>
 
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-    </main>
+    </GuardianPage>
   );
 }

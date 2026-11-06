@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/*
+  상태바 자리. 화면이 자기 배경으로 이 영역까지 칠하도록 안쪽 여백으로 둔다.
+  나중에 실제 기기에 맞출 때 이 값만 env(safe-area-inset-top) 으로 바꾸면 된다.
+*/
+@utility pt-status {
+  padding-top: 62px;
+}
+
 @theme {
   /* ---------------------------------------------------------------
    * 색
@@ -9,6 +17,7 @@
   /* 배경 */
   --color-cream: #fdf9ed; /* Surface/Cream */
   --color-lavender: #eeeaff; /* Surface/Lavender */
+  --color-guardian: #fbfbfb; /* Surface/Guardian, 보호자 모드 배경 */
 
   /* 글자 */
   --color-ink: #241f48; /* Text/Primary */

@@ -45,8 +45,8 @@ export default function GuardianPassword() {
   };
 
   return (
-    <main className="min-h-full w-full bg-[#FBFBFB] flex flex-col">
-      <div className="flex pl-6 pt-13">
+    <main className="pt-status min-h-full w-full bg-guardian flex flex-col">
+      <div className="flex pl-6 pt-1.5">
         <BackButton variant="close" />
       </div>
 

@@ -68,3 +68,11 @@ export const MOCK_EARNED_CARD: EarnedCard = {
 
 /** 쿠폰을 다 모았을 때 노래에 들어가는 단어 */
 export const MOCK_SONG_WORDS = ["영수증", "소방차", "용기", "적금", "통장"];
+
+/**
+ * 음성 인식 결과를 흉내 냄.
+ * 네 번에 한 번은 빈 글자를 돌려줘서 "아무 말도 안 들린" 경우를 확인할 수 있게 함.
+ */
+export function mockRecognize(attempt: number): string {
+  return attempt % 4 === 3 ? "" : "적금";
+}

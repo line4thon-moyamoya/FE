@@ -7,7 +7,7 @@ interface SongCompleteModalProps {
   /** 노래에 들어간 단어 */
   words: string[];
   /** 노래 재생 */
-  onPlay: () => void;
+  onPlay?: () => void;
   /** 나중에 들을래 */
   onClose: () => void;
 }

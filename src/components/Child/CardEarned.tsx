@@ -14,7 +14,7 @@ interface CardEarnedProps {
   /** 또 물어볼래 */
   onAskAnother: () => void;
   /** 단어 수첩 버튼 */
-  onOpenNotebook: () => void;
+  onOpenNotebook?: () => void;
 }
 
 /**

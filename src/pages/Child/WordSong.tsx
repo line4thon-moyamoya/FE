@@ -26,7 +26,6 @@ export default function WordSong() {
       <ChildHeader
         childName={child.name}
         coupons={child.coupons}
-        onCouponClick={() => alert("노래 쿠폰은 준비 중이에요")}
         onGuardianClick={() => navigate("/guardian/password")}
       />
 
@@ -37,7 +36,6 @@ export default function WordSong() {
           coupons={child.coupons}
           total={COUPONS_PER_SONG}
           remainingWords={remainingWords}
-          onPlay={() => alert("새 노래 만들기는 준비 중이에요")}
         />
 
         <section className="flex flex-col gap-3">

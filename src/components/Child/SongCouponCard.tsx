@@ -5,7 +5,7 @@ interface SongCouponCardProps {
   coupons: number;
   total: number;
   remainingWords: number;
-  onPlay: () => void;
+  onPlay?: () => void;
 }
 
 export default function SongCouponCard({

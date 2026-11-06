@@ -71,9 +71,7 @@ export default function Settings() {
 
         <SettingSection title="계정">
           <SettingItem label="보호자 비밀번호 변경" onClick={comingSoon} />
-          <SettingItem
-            label="구독 관리"
-          />
+          <SettingItem label="구독 관리" onClick={comingSoon} />
           <SettingItem label="로그아웃" onClick={() => navigate("/")} />
           <SettingItem label="회원 탈퇴" variant="muted" onClick={comingSoon} />
         </SettingSection>

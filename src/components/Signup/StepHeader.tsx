@@ -13,7 +13,7 @@ export default function StepHeader({
 }: StepHeaderProps) {
   return (
     <div className="relative flex items-center ">
-      <div className="flex pl-6 pt-12">
+      <div className="flex pl-6 pt-[68px]">
         <BackButton onClick={onBack} />
       </div>
 

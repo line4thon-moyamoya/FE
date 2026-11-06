@@ -27,7 +27,7 @@ export default function MoyaSelect() {
   };
 
   return (
-    <main className="flex h-full flex-col bg-cream pt-[62px] pb-[34px]">
+    <main className="pt-status flex h-full flex-col bg-cream pb-[34px]">
       <div className="flex flex-1 flex-col items-center gap-[22px] px-6 pt-6">
         <SpeechBubble text={"어떤 모야랑 놀까?\n하나 골라줘!"} />
 

@@ -27,7 +27,7 @@ export default function ChildLayout() {
         openCouponSheet: () => setSheetOpen(true),
       }}
     >
-      <main className="relative flex h-full flex-col overflow-hidden bg-cream pt-[62px] pb-[113px]">
+      <main className="pt-status flex h-full flex-col bg-cream pb-[113px]">
         <ChildHeader
           childName={child.name}
           coupons={coupons}

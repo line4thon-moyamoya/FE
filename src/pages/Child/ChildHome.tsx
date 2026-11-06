@@ -17,11 +17,13 @@ import SayAgain from "../../components/Child/SayAgain";
 import ConnectionLost from "../../components/Error/ConnectionLost";
 import MicPermissionOff from "../../components/Error/MicPermissionOff";
 import VoiceConsentOff from "../../components/Error/VoiceConsentOff";
+import useVoiceRecording, { MIN_RECORD_MS } from "../../hooks/useVoiceRecording";
 import { findChildProfile } from "../../mocks/child";
 import {
   MOCK_CONFIRM_QUIZZES,
   MOCK_EARNED_CARD,
   MOCK_SONG_WORDS,
+  mockRecognize,
   MOCK_WORD_LESSON,
 } from "../../mocks/talk";
 import { COUPON_GOAL } from "../../types/child";
@@ -60,6 +62,10 @@ export default function ChildHome() {
   const [coupons, setCoupons] = useState(child.coupons);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [songModalOpen, setSongModalOpen] = useState(false);
+  // 몇 번째로 말해 봤는지. 목 인식 결과를 돌려 쓰는 데 씀
+  const [attempt, setAttempt] = useState(0);
+  // 들은 말이 비어 있으면 생각 중을 거쳐 다시 말해줄래로
+  const [heardNothing, setHeardNothing] = useState(false);
   const quiz = MOCK_CONFIRM_QUIZZES[quizIndex];
 
   // 음성 수집 동의 여부 (설정에서 철회하면 false)
@@ -72,9 +78,13 @@ export default function ChildHome() {
   // 생각이 끝나면 되묻기로 넘어감
   useEffect(() => {
     if (stage !== "thinking") return;
-    const timer = window.setTimeout(() => setStage("confirm"), THINKING_MS);
+    // 아무 말도 못 들었으면 생각 중을 거친 뒤 다시 말해줄래로
+    const timer = window.setTimeout(
+      () => setStage(heardNothing ? "sayAgain" : "confirm"),
+      THINKING_MS,
+    );
     return () => window.clearTimeout(timer);
-  }, [stage]);
+  }, [stage, heardNothing]);
 
   // 첫인사가 끝나면 평소 모습으로 돌아감
   useEffect(() => {
@@ -95,9 +105,40 @@ export default function ChildHome() {
     return () => window.removeEventListener("offline", handleOffline);
   }, []);
 
+  /**
+   * 녹음이 끝났을 때. 스스로 멈췄든 버튼으로 멈췄든 같은 길을 탄다.
+   *   너무 짧다      -> 말한 것으로 치지 않고 바로 다시 말해줄래
+   *   들은 말이 없다 -> 생각 중을 거친 뒤 다시 말해줄래
+   *   글자가 나왔다  -> 생각 중을 거친 뒤 되묻기
+   */
+  const handleRecordingStop = (durationMs: number) => {
+    if (durationMs < MIN_RECORD_MS) {
+      setStage("sayAgain");
+      return;
+    }
+
+    setHeardNothing(mockRecognize(attempt) === "");
+    setStage("thinking");
+  };
+
+  const {
+    start: startRecording,
+    stop: stopRecording,
+    cancel: cancelRecording,
+  } = useVoiceRecording({ onStop: handleRecordingStop });
+
+  // 듣는 중이 아니게 되거나 에러 화면이 뜨면 녹음을 접음.
+  // 그냥 두면 타이머가 살아남아 엉뚱한 때에 다음 화면으로 넘어감
+  useEffect(() => {
+    if (stage !== "listening" || errorType) cancelRecording();
+  }, [stage, errorType, cancelRecording]);
+
   const startListening = () => {
     setQuizIndex((index) => (index + 1) % MOCK_CONFIRM_QUIZZES.length);
+    setAttempt((count) => count + 1);
+    setHeardNothing(false);
     setStage("listening");
+    startRecording();
   };
 
   // 수업을 마치면 쿠폰이 한 장 쌓이고 카드 획득 화면으로
@@ -126,10 +167,10 @@ export default function ChildHome() {
   };
 
   const handleMicClick = () => {
-    // 기다리는 중 -> 듣는 중 -> 생각 중.
-    // 생각 중에는 버튼이 비활성이라 여기로 들어오지 않음
-    if (stage === "idle") tryStartListening();
-    else setStage("thinking");
+    // 듣는 중에 다시 누르면 그 자리에서 녹음을 멈춤.
+    // 멈추는 방식과 상관없이 인식 과정은 똑같이 거친다
+    if (stage === "listening") stopRecording();
+    else tryStartListening();
   };
 
   const handleAgreeAgain = () => {

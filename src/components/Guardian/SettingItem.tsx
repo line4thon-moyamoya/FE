@@ -25,9 +25,9 @@ export default function SettingItem({
       <button
         type="button"
         onClick={onClick}
-        className="cursor-pointer flex w-full items-center justify-between px-[18px] py-5 text-left"
+        className="flex w-full cursor-pointer items-center justify-between px-4 py-[15px] text-left"
       >
-        <span className={`font-jua text-base font-normal leading-6 ${TEXT_COLORS[variant]}`}>
+        <span className={`font-jua text-[15px] leading-[1.55] font-normal ${TEXT_COLORS[variant]}`}>
           {label}
         </span>
         <img src={right} className="w-[18px] h-[18px]" />

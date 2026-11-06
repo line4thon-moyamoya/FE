@@ -29,9 +29,9 @@ export default function GuardianHome() {
   };
 
   return (
-    <main className="min-h-full w-full bg-[#FBFBFB] flex flex-col px-6">
-      <header className="flex justify-between items-center w-full py-[10px] mt-[50px] mb-[18px]">
-        <h1 className="text-[#241F48] text-2xl font-normal font-jua leading-9">
+    <main className="pt-status flex min-h-full w-full flex-col bg-guardian">
+      <header className="flex w-full items-center justify-between px-6 py-2.5">
+        <h1 className="font-jua text-[26px] leading-[1.35] font-normal text-ink">
           보호자님
         </h1>
         <button
@@ -43,7 +43,7 @@ export default function GuardianHome() {
           <img src={settings} alt="" className="w-[26px] h-[26px]" />
         </button>
       </header>
-      <div className="flex flex-col gap-4 mb-[154px]">
+      <div className="flex flex-1 flex-col gap-4 px-6 pt-[18px] pb-3">
         <ChildTab
           childList={childList}
           selectedId={selectedChild.id}
@@ -64,11 +64,15 @@ export default function GuardianHome() {
           freeTrial={selectedChild.freeTrial}
         />
       </div>
-      <Button
-        text={`${selectedChild.name} 아이 모드로 가기`}
-        showArrow
-        onClick={goToChildMode}
-      />
+      {/* 하단 패널 */}
+      <div className="px-6 pt-3 pb-14">
+        <Button
+          text={`${selectedChild.name} 아이 모드로 가기`}
+          showArrow
+          fullWidth
+          onClick={goToChildMode}
+        />
+      </div>
     </main>
   );
 }

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BackButton from "../../components/common/BackButton/BackButton";
 import SettingSection from "../../components/Guardian/SettingSection";
 import SettingItem from "../../components/Guardian/SettingItem";
 import { MOCK_CHILD_LIST } from "../../mocks/guardian";
@@ -9,6 +8,7 @@ import { AGE_GROUP_LABEL } from "../../types/signup";
 import { MOYA_LOOK_INFO } from "../../constants/moyaLook";
 import VoiceConsentWithdrawSheet from "../../components/Guardian/VoiceConsentWithdrawSheet";
 import { setVoiceConsent } from "../../utils/voiceConsent";
+import GuardianPage from "../../layout/GuardianPage";
 
 const getChildProfileLabel = (child: Child) => {
   const parts = [child.name, AGE_GROUP_LABEL[child.ageGroup]];
@@ -33,14 +33,7 @@ export default function Settings() {
   };
 
   return (
-    <main className="min-h-full w-full bg-[#FBFBFB] flex flex-col">
-      <header className="flex gap-2.5 items-center pl-6 pt-8">
-        <BackButton />
-        <h1 className="font-jua leading-7 font-normal text-xl text-[#241F48]">
-          설정
-        </h1>
-      </header>
-
+    <GuardianPage title="설정">
       <div className="flex flex-col gap-6 px-6 pt-[18px] pb-4">
         <SettingSection title="아이 프로필">
           {childList.map((child) => (
@@ -81,6 +74,6 @@ export default function Settings() {
         onClose={() => setIsWithdrawSheetOpen(false)}
         onWithdraw={handleWithdraw}
       />
-    </main>
+    </GuardianPage>
   );
 }

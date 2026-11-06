@@ -1,11 +1,11 @@
 
-import BackButton from "../../components/common/BackButton/BackButton";
 import StatGrid from "../../components/Guardian/StatGrid";
 import WordRecordItem from "../../components/Guardian/WordRecordItem";
 import ConversationTipCard from "../../components/Guardian/ConversationTipCard";
 import { formatDateRange } from "../../utils/formatDate";
 import mic from "../../assets/icons/mic.svg";
 import useChildByParam from "../../hooks/useChildByParam";
+import GuardianPage from "../../layout/GuardianPage";
 
 export default function WeeklyReport() {
   const { child, redirect } = useChildByParam();
@@ -16,14 +16,7 @@ export default function WeeklyReport() {
   const pendingWords = missingWords.filter((w) => w.correctedText === null);
 
   return (
-    <main className="min-h-full w-full bg-[#FBFBFB] flex flex-col">
-      <header className="flex gap-2.5 items-center pl-6 pt-12">
-        <BackButton />
-        <h1 className="font-jua leading-7 font-normal text-xl text-[#241F48]">
-          주간 리포트
-        </h1>
-      </header>
-
+    <GuardianPage title="주간 리포트">
       <section className="flex flex-col pt-[18px] px-6 pb-10 gap-6">
         {/* 제목 */}
         <div className="flex flex-col gap-1">
@@ -70,6 +63,6 @@ export default function WeeklyReport() {
         {/* 오늘 저녁 대화거리 */}
         <ConversationTipCard tip={weeklyReport.conversationTip} />
       </section>
-    </main>
+    </GuardianPage>
   );
 }

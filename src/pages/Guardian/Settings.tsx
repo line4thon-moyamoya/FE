@@ -6,13 +6,13 @@ import SettingItem from "../../components/Guardian/SettingItem";
 import { MOCK_CHILD_LIST } from "../../mocks/guardian";
 import type { Child } from "../../types/guardian";
 import { AGE_GROUP_LABEL } from "../../types/signup";
-import { MOYA_LOOK_LABEL } from "../../types/moya";
+import { MOYA_LOOK_INFO } from "../../constants/moyaLook";
 import VoiceConsentWithdrawSheet from "../../components/Guardian/VoiceConsentWithdrawSheet";
 import { setVoiceConsent } from "../../utils/voiceConsent";
 
 const getChildProfileLabel = (child: Child) => {
   const parts = [child.name, AGE_GROUP_LABEL[child.ageGroup]];
-  if (child.moyaLook) parts.push(MOYA_LOOK_LABEL[child.moyaLook]);
+  if (child.moyaLook) parts.push(MOYA_LOOK_INFO[child.moyaLook].label);
   return parts.join(" · ");
 };
 

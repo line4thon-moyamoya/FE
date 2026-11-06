@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import ChildHeader from "../../components/common/ChildHeader/ChildHeader";
-import Footer from "../../components/common/Footer/Footer";
 import AskLater from "../../components/Child/AskLater";
 import CandidatePick from "../../components/Child/CandidatePick";
 import CardEarned from "../../components/Child/CardEarned";
-import CouponSheet from "../../components/Child/CouponSheet";
 import SongCompleteModal from "../../components/Child/SongCompleteModal";
 import ConfirmQuestion from "../../components/Child/ConfirmQuestion";
 import HeardPlacePick from "../../components/Child/HeardPlacePick";
@@ -18,7 +15,6 @@ import ConnectionLost from "../../components/Error/ConnectionLost";
 import MicPermissionOff from "../../components/Error/MicPermissionOff";
 import VoiceConsentOff from "../../components/Error/VoiceConsentOff";
 import useVoiceRecording, { MIN_RECORD_MS } from "../../hooks/useVoiceRecording";
-import { findChildProfile } from "../../mocks/child";
 import {
   MOCK_CONFIRM_QUIZZES,
   MOCK_EARNED_CARD,
@@ -29,12 +25,12 @@ import {
 import { COUPON_GOAL } from "../../types/child";
 import type { ChildErrorType, MoyaStage, TalkStage } from "../../types/child";
 import { MOYA_LOOK_INFO } from "../../constants/moyaLook";
-import { getCurrentChildId } from "../../utils/currentChild";
 import { getCurrentLook } from "../../utils/currentLook";
 import { getVoiceConsent, setVoiceConsent } from "../../utils/voiceConsent";
 import { requestMicPermission } from "../../utils/micPermission";
 import { isOnline } from "../../utils/network";
 import { getDebugError } from "../../utils/debugError";
+import { useChildMode } from "../../contexts/ChildModeContext";
 
 /** 생각 중에서 되묻기로 넘어가기까지 기다리는 시간 */
 const THINKING_MS = 1600;
@@ -45,13 +41,15 @@ const INTRO_MS = 1500;
 export default function ChildHome() {
   const navigate = useNavigate();
   const location = useLocation();
-  const child = findChildProfile(getCurrentChildId());
+  const { child, coupons, setCoupons } = useChildMode();
   const look = getCurrentLook();
 
   // 모야를 막 고르고 들어왔으면 그 모야다운 첫인사를 먼저 건넴
-  const justPicked = Boolean(
-    (location.state as { justPicked?: boolean } | null)?.justPicked,
-  );
+  const navState = location.state as {
+    justPicked?: boolean;
+    startListening?: boolean;
+  } | null;
+  const justPicked = Boolean(navState?.justPicked);
   const [intro, setIntro] = useState(justPicked);
 
   const [stage, setStage] = useState<TalkStage>("idle");
@@ -59,8 +57,6 @@ export default function ChildHome() {
   const [quizIndex, setQuizIndex] = useState(0);
   // 음성 인식이 없어 따라 말하기 결과를 번갈아 보여 줌
   const [repeatCount, setRepeatCount] = useState(0);
-  const [coupons, setCoupons] = useState(child.coupons);
-  const [sheetOpen, setSheetOpen] = useState(false);
   const [songModalOpen, setSongModalOpen] = useState(false);
   // 몇 번째로 말해 봤는지. 목 인식 결과를 돌려 쓰는 데 씀
   const [attempt, setAttempt] = useState(0);
@@ -85,6 +81,16 @@ export default function ChildHome() {
     );
     return () => window.clearTimeout(timer);
   }, [stage, heardNothing]);
+
+  // 다른 화면의 쿠폰 시트에서 "지금 물어볼래" 를 누르고 넘어온 경우
+  useEffect(() => {
+    if (!navState?.startListening) return;
+    // 같은 자리에 머무르되 표시만 지워 뒤로 가기나 새로고침에 다시 걸리지 않게 함
+    navigate(".", { replace: true, state: null });
+    void tryStartListening();
+    // 들어올 때 한 번만 실행
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // 첫인사가 끝나면 평소 모습으로 돌아감
   useEffect(() => {
@@ -340,17 +346,8 @@ export default function ChildHome() {
   };
 
   return (
-    <main className="relative flex h-full flex-col overflow-hidden bg-cream pt-[62px] pb-[113px]">
-      <ChildHeader
-        childName={child.name}
-        coupons={coupons}
-        onCouponClick={() => setSheetOpen(true)}
-        onGuardianClick={() => navigate("/guardian/password")}
-      />
-
+    <>
       {renderMain()}
-
-      <Footer />
 
       {songModalOpen && (
         <SongCompleteModal
@@ -360,16 +357,6 @@ export default function ChildHome() {
         />
       )}
 
-      {sheetOpen && (
-        <CouponSheet
-          coupons={coupons}
-          onStart={() => {
-            setSheetOpen(false);
-            tryStartListening();
-          }}
-          onClose={() => setSheetOpen(false)}
-        />
-      )}
-    </main>
+    </>
   );
 }

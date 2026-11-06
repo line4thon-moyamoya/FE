@@ -1,20 +1,16 @@
 import { useEffect } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
-import ChildHeader from "../../components/common/ChildHeader/ChildHeader";
-import Footer from "../../components/common/Footer/Footer";
+import { useChildMode } from "../../contexts/ChildModeContext";
+import { Navigate, useParams } from "react-router-dom";
 import BackButton from "../../components/common/BackButton/BackButton";
 import WordCardDetailView from "../../components/Child/WordCardDetailView";
-import { findChildProfile } from "../../mocks/child";
 import { findWord } from "../../mocks/words";
 import { getCollectedCards, markCardAsSeen } from "../../mocks/notebook";
-import { getCurrentChildId } from "../../utils/currentChild";
 import { iya } from "../../utils/josa";
 import speaker from "../../assets/icons/speaker.svg";
 
 export default function WordCardDetail() {
-  const navigate = useNavigate();
   const { wordId } = useParams();
-  const child = findChildProfile(getCurrentChildId());
+  const { child } = useChildMode();
 
   const word = wordId ? findWord(wordId) : undefined;
   const hasCard = getCollectedCards(child.id).some((c) => c.wordId === wordId);
@@ -43,13 +39,7 @@ export default function WordCardDetail() {
   };
 
   return (
-    <main className="flex h-full flex-col bg-cream pt-[62px] pb-[113px]">
-      <ChildHeader
-        childName={child.name}
-        coupons={child.coupons}
-        onGuardianClick={() => navigate("/guardian/password")}
-      />
-
+    <>
       <header className="flex items-center gap-2.5 pl-6 pt-[18px]">
         <BackButton />
         <h1 className="font-jua text-xl leading-7 text-[#241F48]">
@@ -70,7 +60,6 @@ export default function WordCardDetail() {
         </button>
       </div>
 
-      <Footer />
-    </main>
+    </>
   );
 }

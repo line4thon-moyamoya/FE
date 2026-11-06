@@ -1,22 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import ChildHeader from "../../components/common/ChildHeader/ChildHeader";
-import Footer from "../../components/common/Footer/Footer";
 import SongProgressBanner from "../../components/Child/SongProgressBanner";
 import WordCardItem from "../../components/Child/WordCardItem";
-import { findChildProfile } from "../../mocks/child";
 import { findWord } from "../../mocks/words";
 import {
   getCollectedCards,
   getRemainingForNextCoupon,
 } from "../../mocks/notebook";
 import type { CollectedCard, Word } from "../../types/word";
-import { getCurrentChildId } from "../../utils/currentChild";
+import { useChildMode } from "../../contexts/ChildModeContext";
 
 type CardWithWord = { card: CollectedCard; word: Word };
 
 export default function WordNotebook() {
   const navigate = useNavigate();
-  const child = findChildProfile(getCurrentChildId());
+  const { child } = useChildMode();
 
   // 모은 카드에 단어 정보(그림, 배경색) 붙이기
   const cards = getCollectedCards(child.id)
@@ -27,13 +24,7 @@ export default function WordNotebook() {
   const remaining = getRemainingForNextCoupon(cards.length);
 
   return (
-    <main className="flex h-full flex-col bg-cream pt-[62px] pb-[113px]">
-      <ChildHeader
-        childName={child.name}
-        coupons={child.coupons}
-        onGuardianClick={() => navigate("/guardian/password")}
-      />
-
+    <>
       <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-6 pt-6 pb-6">
         <h1 className="font-jua text-2xl leading-9 text-[#241F48]">
           단어 수첩
@@ -65,7 +56,6 @@ export default function WordNotebook() {
         )}
       </div>
 
-      <Footer />
-    </main>
+    </>
   );
 }

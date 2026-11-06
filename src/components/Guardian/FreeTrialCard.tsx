@@ -3,7 +3,7 @@ import right from "../../assets/icons/chevron-right.svg";
 
 interface FreeTrialCardProps {
   freeTrial: FreeTrial;
-  onSubscribeClick: () => void;
+  onSubscribeClick?: () => void;
 }
 
 export default function FreeTrialCard({

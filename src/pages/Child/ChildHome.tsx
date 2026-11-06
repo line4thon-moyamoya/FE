@@ -309,7 +309,7 @@ export default function ChildHome() {
           description={MOCK_EARNED_CARD.description}
           coupons={coupons}
           onAskAnother={tryStartListening}
-          onOpenNotebook={() => alert("단어 수첩은 준비 중이에요")}
+          onOpenNotebook={() => navigate("/notebook")}
         />
       );
     }
@@ -355,7 +355,7 @@ export default function ChildHome() {
       {songModalOpen && (
         <SongCompleteModal
           words={MOCK_SONG_WORDS}
-          onPlay={() => alert("단어 노래는 준비 중이에요")}
+          onPlay={() => navigate("/song")}
           onClose={() => setSongModalOpen(false)}
         />
       )}

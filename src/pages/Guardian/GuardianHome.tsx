@@ -62,7 +62,6 @@ export default function GuardianHome() {
         />
         <FreeTrialCard
           freeTrial={selectedChild.freeTrial}
-          onSubscribeClick={() => alert("구독 기능은 준비 중이에요")}
         />
       </div>
       <Button

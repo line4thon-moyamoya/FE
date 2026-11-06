@@ -10,7 +10,9 @@ const PIN_LENGTH = 4;
 export default function GuardianPassword() {
   const navigate = useNavigate();
   const [pin, setPin] = useState("");
-  const [error, setError] = useState(false);
+  // 틀릴 때마다 올려서 흔들림을 다시 재생시킴
+  const [wrongCount, setWrongCount] = useState(0);
+  const isWrong = wrongCount > 0;
 
   // 임시 비밀번호
   const verifyPin = async (inputPin: string) => {
@@ -22,7 +24,7 @@ export default function GuardianPassword() {
 
     const newPin = pin + num;
     setPin(newPin);
-    setError(false);
+    setWrongCount(0);
 
     // 4자리를 다 입력하면 잠깐 보여준 뒤 확인
     if (newPin.length === PIN_LENGTH) {
@@ -31,7 +33,7 @@ export default function GuardianPassword() {
         if (isValid) {
           navigate("/guardian");
         } else {
-          setError(true);
+          setWrongCount((count) => count + 1);
           setPin("");
         }
       }, 300);
@@ -56,12 +58,18 @@ export default function GuardianPassword() {
         <h1 className="text-2xl text-[#241F48] font-jua font-normal leading-9 text-center">
           보호자 비밀번호를
           <br />
-          입력해 주세요
+          {/* 틀리면 아랫줄만 바뀌면서 색이 들어감 */}
+          {isWrong ? (
+            <span className="text-brand-action">다시 확인해주세요</span>
+          ) : (
+            "입력해 주세요"
+          )}
         </h1>
-        <PinDots length={pin.length} total={PIN_LENGTH} />
-        {error && (
-          <p className="text-sm text-[#E5484D]">비밀번호가 맞지 않아요</p>
-        )}
+
+        {/* key 가 바뀌어야 흔들림이 매번 다시 재생됨 */}
+        <div key={wrongCount} className={isWrong ? "animate-shake" : undefined}>
+          <PinDots length={pin.length} total={PIN_LENGTH} />
+        </div>
       </div>
       <button
         type="button"

@@ -17,7 +17,8 @@ const getChildProfileLabel = (child: Child) => {
 };
 
 // 상세 페이지가 생기기 전까지 쓰는 임시 안내
-const comingSoon = () => alert("준비 중인 기능이에요");
+// 아직 없는 화면으로 가는 항목은 눌러도 아무 일도 일어나지 않음
+const comingSoon = () => {};
 
 export default function Settings() {
   const navigate = useNavigate();
@@ -72,7 +73,6 @@ export default function Settings() {
           <SettingItem label="보호자 비밀번호 변경" onClick={comingSoon} />
           <SettingItem
             label="구독 관리"
-            onClick={() => alert("구독 기능은 준비 중이에요")}
           />
           <SettingItem label="로그아웃" onClick={() => navigate("/")} />
           <SettingItem label="회원 탈퇴" variant="muted" onClick={comingSoon} />

@@ -68,7 +68,6 @@ export default function SongPlayer() {
       <ChildHeader
         childName={child.name}
         coupons={child.coupons}
-        onCouponClick={() => alert("노래 쿠폰은 준비 중이에요")}
         onGuardianClick={() => navigate("/guardian/password")}
       />
 

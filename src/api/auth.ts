@@ -6,7 +6,13 @@ export const AGE_GROUP_MAP: Record<AgeGroup, string> = {
   "5": "AGE_5",
 };
 
-// 화면 데이터 → 서버 요청 형식
+const CONSENT_ID = {
+  TERMS_OF_SERVICE: 1,
+  PRIVACY_POLICY: 2,
+  LEGAL_GUARDIAN: 3,
+  VOICE_PROCESSING: 4,
+} as const;
+
 const toSignupRequest = (data: SignupData) => ({
   email: data.email.trim(),
   password: data.password,
@@ -16,10 +22,10 @@ const toSignupRequest = (data: SignupData) => ({
     ageGroup: data.childAge ? AGE_GROUP_MAP[data.childAge] : null,
   },
   consents: [
-    { consentId: 1, isAgreed: data.agreeTerms },
-    { consentId: 2, isAgreed: data.agreePrivacy },
-    { consentId: 3, isAgreed: data.agreeGuardian },
-    { consentId: 4, isAgreed: data.agreeVoice },
+    { consentId: CONSENT_ID.TERMS_OF_SERVICE, isAgreed: data.agreeTerms },
+    { consentId: CONSENT_ID.PRIVACY_POLICY, isAgreed: data.agreePrivacy },
+    { consentId: CONSENT_ID.LEGAL_GUARDIAN, isAgreed: data.agreeGuardian },
+    { consentId: CONSENT_ID.VOICE_PROCESSING, isAgreed: data.agreeVoice },
   ],
 });
 

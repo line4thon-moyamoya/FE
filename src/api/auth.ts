@@ -35,3 +35,18 @@ export const login = async (email: string, password: string) => {
   });
   return response.data.data; 
 };
+
+// 저장된 인증 정보 삭제
+export const clearAuth = () => {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
+  localStorage.removeItem("childId");
+};
+
+export const logout = async () => {
+  try {
+    await api.post("/api/v1/auth/logout");
+  } finally {
+    clearAuth(); // 서버 요청이 실패해도 클라이언트 토큰은 삭제
+  }
+};

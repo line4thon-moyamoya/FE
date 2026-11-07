@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SettingSection from "../../components/Guardian/SettingSection";
 import SettingItem from "../../components/Guardian/SettingItem";
@@ -9,6 +9,7 @@ import { MOYA_LOOK_INFO } from "../../constants/moyaLook";
 import VoiceConsentWithdrawSheet from "../../components/Guardian/VoiceConsentWithdrawSheet";
 import { setVoiceConsent } from "../../utils/voiceConsent";
 import GuardianPage from "../../layout/GuardianPage";
+import { logout } from "../../api/auth";
 
 const getChildProfileLabel = (child: Child) => {
   const parts = [child.name, AGE_GROUP_LABEL[child.ageGroup]];
@@ -25,11 +26,25 @@ export default function Settings() {
   const childList = MOCK_CHILD_LIST; // API 연동 시 교체
 
   const [isWithdrawSheetOpen, setIsWithdrawSheetOpen] = useState(false);
+  const isLoggingOutRef = useRef(false);
 
   const handleWithdraw = () => {
     setVoiceConsent(false);
     setIsWithdrawSheetOpen(false);
     navigate("/home");
+  };
+
+  const handleLogout = async () => {
+    if (isLoggingOutRef.current) return;
+    isLoggingOutRef.current = true;
+
+    try {
+      await logout();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      navigate("/", { replace: true });
+    }
   };
 
   return (
@@ -65,7 +80,7 @@ export default function Settings() {
         <SettingSection title="계정">
           <SettingItem label="보호자 비밀번호 변경" onClick={comingSoon} />
           <SettingItem label="구독 관리" onClick={comingSoon} />
-          <SettingItem label="로그아웃" onClick={() => navigate("/")} />
+          <SettingItem label="로그아웃" onClick={handleLogout} />
           <SettingItem label="회원 탈퇴" variant="muted" onClick={comingSoon} />
         </SettingSection>
       </div>

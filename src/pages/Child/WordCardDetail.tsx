@@ -11,7 +11,7 @@ import { speak } from "../../utils/speak";
 
 export default function WordCardDetail() {
   const { wordId } = useParams();
-  const { child } = useChildMode();
+  const { child, childPath } = useChildMode();
 
   const word = wordId ? findWord(wordId) : undefined;
   const hasCard = getCollectedCards(child.childId).some((c) => c.wordId === wordId);
@@ -27,7 +27,7 @@ export default function WordCardDetail() {
   }, []);
 
   // 없는 단어이거나 아직 안 모은 카드면 수첩으로
-  if (!word || !hasCard) return <Navigate to="/notebook" replace />;
+  if (!word || !hasCard) return <Navigate to={childPath("notebook")} replace />;
 
   const handleListen = () =>
     speak(`${word.word}${iya(word.word)}. ${word.meaning}`);

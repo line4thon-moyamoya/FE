@@ -30,7 +30,7 @@ export default function Login() {
       localStorage.setItem("accessToken", result.accessToken);
       localStorage.setItem("refreshToken", result.refreshToken);
       localStorage.setItem("childId", String(result.selectedChildId));
-      navigate("/home");
+      navigate(`/children/${result.selectedChildId}/home`);
     } catch (error) {
       const message = axios.isAxiosError(error)
         ? error.response?.data?.message

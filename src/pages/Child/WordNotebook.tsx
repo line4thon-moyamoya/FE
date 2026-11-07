@@ -13,7 +13,7 @@ type CardWithWord = { card: CollectedCard; word: Word };
 
 export default function WordNotebook() {
   const navigate = useNavigate();
-  const { child } = useChildMode();
+  const { child, childPath } = useChildMode();
 
   // 모은 카드에 단어 정보(그림, 배경색) 붙이기
   const cards = getCollectedCards(child.childId)
@@ -32,7 +32,7 @@ export default function WordNotebook() {
 
         <SongProgressBanner
           remaining={remaining}
-          onClick={() => navigate("/song")}
+          onClick={() => navigate(childPath("song"))}
         />
 
         {cards.length === 0 ? (

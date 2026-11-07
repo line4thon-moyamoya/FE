@@ -31,12 +31,12 @@ export default function App() {
           <Route path="/moya-select" element={<MoyaSelect />} />
 
           {/* 헤더 · 탭바 · 노래 쿠폰 시트를 함께 쓰는 아이 모드 화면들 */}
-          <Route element={<ChildLayout />}>
-            <Route path="/home" element={<ChildHome />} />
-            <Route path="/notebook" element={<WordNotebook />} />
-            <Route path="/notebook/:wordId" element={<WordCardDetail />} />
-            <Route path="/song" element={<WordSong />} />
-            <Route path="/song/:songId" element={<SongPlayer />} />
+          <Route path="/children/:childId" element={<ChildLayout />}>
+            <Route path="home" element={<ChildHome />} />
+            <Route path="notebook" element={<WordNotebook />} />
+            <Route path="notebook/:learnedWordId" element={<WordCardDetail />} />
+            <Route path="song" element={<WordSong />} />
+            <Route path="song/:songId" element={<SongPlayer />} />
           </Route>
 
           <Route path="/guardian/password" element={<GuardianPassword />} />

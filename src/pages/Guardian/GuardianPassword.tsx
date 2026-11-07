@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/common/BackButton/BackButton";
 import lock from "../../assets/icons/lock.svg";
 import PinDots from "../../components/Signup/PinDots";
 import Keypad from "../../components/Signup/Keypad";
+import { verifyParentPin } from "../../api/auth";
 
 const PIN_LENGTH = 4;
 
@@ -13,13 +14,22 @@ export default function GuardianPassword() {
   // 틀릴 때마다 올려서 흔들림을 다시 재생시킴
   const [wrongCount, setWrongCount] = useState(0);
   const isWrong = wrongCount > 0;
+  // 확인 중에는 입력 막기
+  const isVerifyingRef = useRef(false);
 
-  // 임시 비밀번호
+  // PIN 인증 API 호출
   const verifyPin = async (inputPin: string) => {
-    return inputPin === "0000";
+    try {
+      await verifyParentPin(inputPin);
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
   };
 
-  const handleNumber = async (num: string) => {
+  const handleNumber = (num: string) => {
+    if (isVerifyingRef.current) return;
     if (pin.length >= PIN_LENGTH) return;
 
     const newPin = pin + num;
@@ -28,8 +38,12 @@ export default function GuardianPassword() {
 
     // 4자리를 다 입력하면 잠깐 보여준 뒤 확인
     if (newPin.length === PIN_LENGTH) {
+      isVerifyingRef.current = true;
+
       setTimeout(async () => {
         const isValid = await verifyPin(newPin);
+        isVerifyingRef.current = false;
+
         if (isValid) {
           navigate("/guardian");
         } else {
@@ -41,6 +55,7 @@ export default function GuardianPassword() {
   };
 
   const handleDelete = () => {
+    if (isVerifyingRef.current) return;
     setPin((prev) => prev.slice(0, -1));
   };
 

@@ -33,7 +33,7 @@ export const login = async (email: string, password: string) => {
     email: email.trim(),
     password,
   });
-  return response.data.data; 
+  return response.data.data;
 };
 
 // 저장된 인증 정보 삭제
@@ -41,6 +41,7 @@ export const clearAuth = () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("childId");
+  sessionStorage.removeItem("parentModeToken");
 };
 
 export const logout = async () => {
@@ -49,4 +50,13 @@ export const logout = async () => {
   } finally {
     clearAuth(); // 서버 요청이 실패해도 클라이언트 토큰은 삭제
   }
+};
+
+export const verifyParentPin = async (pin: string) => {
+  const response = await api.post("/api/v1/auth/parent-pin/verify", {
+    parentPin: pin,
+  });
+  const { parentModeToken } = response.data.data;
+  sessionStorage.setItem("parentModeToken", parentModeToken);
+  return parentModeToken;
 };

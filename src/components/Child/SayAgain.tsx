@@ -2,7 +2,7 @@ import MicButton from "../common/MicButton/MicButton";
 import Moya from "../common/Moya/Moya";
 import SpeechBubble from "../common/SpeechBubble/SpeechBubble";
 import Sparkle from "./Sparkle";
-import { getCurrentLook } from "../../utils/currentLook";
+import { useChildMode } from "../../contexts/ChildModeContext";
 
 interface SayAgainProps {
   /** 다시 말하기 버튼 */
@@ -10,6 +10,7 @@ interface SayAgainProps {
 }
 
 export default function SayAgain({ onRetry }: SayAgainProps) {
+  const { child } = useChildMode();
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-[22px] px-6 pt-[18px] pb-[14px]">
       <div className="flex h-[100px] w-[270px] flex-col justify-end">
@@ -18,7 +19,7 @@ export default function SayAgain({ onRetry }: SayAgainProps) {
 
       <div className="relative h-[276px] w-[300px]">
         <Moya
-          look={getCurrentLook()}
+          look={child.look}
           mood="confused"
           size={290}
           glow

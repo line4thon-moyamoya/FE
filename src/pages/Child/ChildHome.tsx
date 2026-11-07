@@ -25,15 +25,17 @@ import {
 import { COUPON_GOAL } from "../../types/child";
 import type { ChildErrorType, MoyaStage, TalkStage } from "../../types/child";
 import { MOYA_LOOK_INFO } from "../../constants/moyaLook";
-import { getCurrentLook } from "../../utils/currentLook";
+import { useChildMode } from "../../contexts/ChildModeContext";
 import { getVoiceConsent, setVoiceConsent } from "../../utils/voiceConsent";
 import { requestMicPermission } from "../../utils/micPermission";
 import { isOnline } from "../../utils/network";
 import { getDebugError } from "../../utils/debugError";
-import { useChildMode } from "../../contexts/ChildModeContext";
 
 /** 생각 중에서 되묻기로 넘어가기까지 기다리는 시간 */
 const THINKING_MS = 1600;
+
+/** 평소 홈에서 모야가 건네는 말 */
+const GREETING = "안녕! 나는 모야야.\n궁금한 말 물어봐!";
 
 /** 모야를 막 고르고 들어왔을 때 첫인사를 건네는 시간 */
 const INTRO_MS = 1500;
@@ -42,7 +44,7 @@ export default function ChildHome() {
   const navigate = useNavigate();
   const location = useLocation();
   const { child, coupons, setCoupons } = useChildMode();
-  const look = getCurrentLook();
+  const look = child.look;
 
   // 모야를 막 고르고 들어왔으면 그 모야다운 첫인사를 먼저 건넴
   const navState = location.state as {
@@ -338,7 +340,7 @@ export default function ChildHome() {
     return (
       <MoyaStageView
         stage={stage as MoyaStage}
-        greeting={intro ? MOYA_LOOK_INFO[look].greeting : child.greeting}
+        greeting={intro ? MOYA_LOOK_INFO[look].greeting : GREETING}
         mood={intro ? MOYA_LOOK_INFO[look].mood : undefined}
         onMicClick={handleMicClick}
       />

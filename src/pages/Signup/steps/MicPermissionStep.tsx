@@ -1,9 +1,12 @@
 import { useState } from "react";
 import type { StepProps } from "../../../types/signup";
-import speaker from "../../../assets/icons/speaker.svg";
-import moya from "../../../assets/images/moya/default/moya_greeting.png";
 import voice from "../../../assets/icons/mic.svg";
 import Button from "../../../components/common/Button/Button";
+import Moya from "../../../components/common/Moya/Moya";
+import SpeechBubble from "../../../components/common/SpeechBubble/SpeechBubble";
+import { speak } from "../../../utils/speak";
+
+const LINE = "모야가 네 목소리를 들으려면\n마이크가 필요해!";
 
 export default function MicPermissionStep({
   onNext,
@@ -25,32 +28,9 @@ export default function MicPermissionStep({
 
   return (
     <div className="mt-[75.5px] flex flex-col items-center gap-[22px]">
-      {/* 모야의 말풍선 */}
-      <div
-        className="relative flex h-25 w-[313px] items-center justify-start gap-3 rounded-3xl border-2 border-[#E0DDD7]
-          bg-white py-[18px] pr-[30px] pl-5 shadow-[0px_4px_0px_0px_rgba(241,228,200,1)]"
-      >
-        <p className="text-center font-jua text-xl leading-8 font-normal text-[#241F48]">
-          모야가 네 목소리를 들으려면
-          <br />
-          마이크가 필요해!
-        </p>
-        <div
-          className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-2xl border-2 border-white
-            bg-[#7B61F8] shadow-[0px_3px_8px_0px_rgba(106,79,243,0.28)]"
-        >
-          <img src={speaker} alt="" className="h-4 w-4" />
-        </div>
+      <SpeechBubble text={LINE} width={313} onReplay={() => speak(LINE)} />
 
-        {/* 말풍선 꼬리 */}
-        <div
-          className="absolute -bottom-[11px] left-1/2 h-5 w-5 -translate-x-1/2 rotate-45
-            border-r-2 border-b-2 border-[#E0DDD7] bg-white
-            shadow-[3px_3px_0px_0px_rgba(241,228,200,1)]"
-        />
-      </div>
-
-      <img src={moya} alt="손 흔드는 모야" className="h-60 w-60" />
+      <Moya look="default" mood="greeting" size={240} />
 
       {/* 허용 안내 */}
       <div className="mb-[75px] flex h-[50px] w-[270px] items-center justify-start gap-2.5 rounded-[999px] bg-white py-[10px] pr-4 pl-[10px]">

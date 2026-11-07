@@ -4,14 +4,6 @@ import savings from "../assets/icons/words/savings.svg";
 import brave from "../assets/icons/words/brave.svg";
 import recycling from "../assets/icons/words/separate-recycling.svg";
 import finedust from "../assets/icons/words/fine-dust.svg";
-import type { AgeGroup } from "../types/signup";
-import type { MoyaLook } from "../types/moya";
-
-interface NewChildInput {
-  name: string;
-  ageGroup: AgeGroup;
-  moyaLook: MoyaLook; 
-}
 
 export const MOCK_CHILD_LIST: Child[] = [
   {
@@ -145,30 +137,4 @@ export const MOCK_CHILD_LIST: Child[] = [
 export const updateMockChild = (id: number, patch: Partial<Child>) => {
   const child = MOCK_CHILD_LIST.find((c) => c.id === id);
   if (child) Object.assign(child, patch);
-};
-
-// API 연동 시 아이 추가 요청으로 교체
-export const addMockChild = ({ name, ageGroup, moyaLook }: NewChildInput) => {
-  const nextId = Math.max(0, ...MOCK_CHILD_LIST.map((c) => c.id)) + 1;
-
-  // 새 아이는 아직 기록이 없어서 빈 값으로 채움
-  const newChild: Child = {
-    id: nextId,
-    name,
-    ageGroup,
-    moyaLook,
-    weeklySummary: { askedCount: 0, reviewedCount: 0, missingCount: 0 },
-    missingWords: [],
-    freeTrial: { used: 0, total: 20 },
-    weeklyReport: {
-      weekLabel: "10월 2주",
-      startDate: "2026-10-06",
-      endDate: "2026-10-12",
-      wordRecords: [],
-      conversationTip: "",
-    },
-  };
-
-  MOCK_CHILD_LIST.push(newChild);
-  return newChild;
 };

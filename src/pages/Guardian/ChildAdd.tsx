@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Button from "../../components/common/Button/Button";
 import Toast from "../../components/common/Toast/Toast";
 import ChildProfileForm from "../../components/Guardian/ChildProfileForm";
-import { addMockChild } from "../../mocks/guardian";
+import { addChild } from "../../api/child";
 import type { AgeGroup } from "../../types/signup";
 import type { MoyaLook } from "../../types/moya";
 import GuardianPage from "../../layout/GuardianPage";
@@ -17,13 +18,10 @@ export default function ChildAdd() {
   const [moyaLook, setMoyaLook] = useState<MoyaLook | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const isSavingRef = useRef(false); // 빠른 연속 클릭 방지
 
   const trimmedName = name.trim();
-  const canSave =
-    trimmedName.length > 0 &&
-    ageGroup !== null &&
-    moyaLook !== null &&
-    !isSaving;
+  const canSave = trimmedName.length > 0 && ageGroup !== null && !isSaving;
 
   const goBack = () => {
     // 이전 기록이 있으면 뒤로, 주소로 바로 들어왔으면 설정으로
@@ -34,12 +32,25 @@ export default function ChildAdd() {
     }
   };
 
-  const handleAdd = () => {
-    if (!canSave || ageGroup === null || moyaLook === null) return;
-    setIsSaving(true); // 토스트가 떠 있는 동안 중복 추가 방지
-    addMockChild({ name: trimmedName, ageGroup, moyaLook });
-    setToast("아이를 추가했어요");
-    setTimeout(goBack, 1000); // 1초 보여 주고 설정으로
+  const handleAdd = async () => {
+    if (!canSave || ageGroup === null) return;
+    if (isSavingRef.current) return;
+
+    isSavingRef.current = true;
+    setIsSaving(true);
+
+    try {
+      await addChild({ nickname: trimmedName, ageGroup, moyaLook });
+      setToast("아이를 추가했어요");
+      setTimeout(goBack, 1000); // 1초 보여 주고 설정으로
+    } catch (error) {
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.message
+        : null;
+      setToast(message ?? "아이를 추가하지 못했어요. 다시 시도해 주세요.");
+      isSavingRef.current = false;
+      setIsSaving(false);
+    }
   };
 
   return (

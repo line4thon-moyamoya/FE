@@ -1,1 +1,185 @@
 @import "tailwindcss";
+
+/*
+  상태바 자리. 화면이 자기 배경으로 이 영역까지 칠하도록 안쪽 여백으로 둔다.
+  나중에 실제 기기에 맞출 때 이 값만 env(safe-area-inset-top) 으로 바꾸면 된다.
+*/
+@utility pt-status {
+  padding-top: 62px;
+}
+
+@theme {
+  /* ---------------------------------------------------------------
+   * 색
+   * 괄호 안 = Figma 변수 이름
+   * --------------------------------------------------------------- */
+
+  /* 배경 */
+  --color-cream: #fdf9ed; /* Surface/Cream */
+  --color-lavender: #eeeaff; /* Surface/Lavender */
+  --color-guardian: #fbfbfb; /* Surface/Guardian, 보호자 모드 배경 */
+
+  /* 글자 */
+  --color-ink: #241f48; /* Text/Primary */
+  --color-ink-soft: #6f6a8c; /* Text/Secondary */
+  --color-ink-muted: #9e98bf; /* Text/Muted */
+
+  /* 브랜드 */
+  --color-brand: #7b61f8; /* Brand/Primary */
+  --color-brand-action: #6a4ff3; /* Brand/Action, 눌린 상태 */
+  --color-brand-light: #a08dff; /* Brand/Light */
+  --color-brand-depth: #4c34c3; /* Brand/Depth, 버튼 입체 그림자 */
+  --color-lime: #d2ec7c; /* Brand/Lime, 쿠폰 도장 */
+  --color-lime-card: #e6f4c4; /* Surface/LimeCard, 새 카드 머리띠 */
+  --color-on-lime: #3a540a; /* Text/OnLime */
+
+  /* 비활성 */
+  --color-disabled-face: #dad6e4; /* State/DisabledFace */
+  --color-disabled-depth: #bfb9cf; /* State/DisabledDepth */
+
+  /* 테두리 */
+  --color-line: #e4dff5; /* Border/Soft */
+  --color-line-warm: #e0ddd7; /* Border/Warm */
+  --color-line-lavender: #d9d0ff; /* Border/Lavender */
+  --color-handle: #d9d3e6; /* System/Handle, 시트 손잡이 */
+  --color-dim: rgba(36, 31, 72, 0.5); /* Overlay/Dim50, 시트 뒤 어두운 배경 */
+  --color-line-cream: #efe6d3; /* Border/Beige */
+
+  /* ---------------------------------------------------------------
+   * 그림자
+   * 아래로 깔리는 입체 그림자(0 Npx 0 0)를 기본으로 사용
+   * --------------------------------------------------------------- */
+
+  /* Figma 효과 변수 */
+  --shadow-bubble: 0 4px 0 0 rgba(241, 228, 200, 1); /* 01 말풍선 */
+  --shadow-replay: 0 3px 8px 0 rgba(106, 79, 243, 0.28); /* 02 다시 듣기 */
+  --shadow-tabbar: 0 -6px 24px 0 rgba(91, 69, 200, 0.1),
+    0 -1px 0 0 rgba(185, 169, 138, 0.12); /* 04 탭바 */
+  --shadow-word-card: 0 6px 0 0 rgba(250, 237, 209, 1); /* 05 단어 카드 */
+  --shadow-button-secondary: 0 5px 0 0 rgba(228, 220, 255, 1); /* 06 버튼 · 아니야 */
+  --shadow-place-tile: 0 4px 0 0 rgba(250, 237, 209, 1); /* 08 들은 곳 */
+  --shadow-candidate: 0 5px 0 0 rgba(250, 237, 209, 1); /* 09 후보 */
+  --shadow-stamp: 0 3px 8px 0 rgba(86, 120, 20, 0.18); /* 10 노래 쿠폰 도장 */
+  --shadow-look-card: 0 6px 16px 0 rgba(106, 79, 243, 0.1); /* 18 변신 */
+  --shadow-button-primary: 0 5px 0 0 rgba(74, 53, 201, 1); /* 07 버튼 · 맞아! */
+  --shadow-picture-card: 0 4px 12px 0 rgba(106, 79, 243, 0.08); /* 11 그림 카드 · 길 */
+
+  /* Figma 효과 변수 미확인. 기존 코드 */
+  --shadow-card: 0 5px 0 0 rgba(231, 228, 243, 1); /* 보호자 모드 카드 */
+  --shadow-button: 0 6px 0 0 rgba(106, 79, 243, 1),
+    0 12px 16px 0 rgba(123, 97, 248, 0.16); /* 큰 보라 버튼 */
+  --shadow-pill: 0 4px 0 0 rgba(231, 228, 243, 1); /* 흰 원형 버튼 */
+  --shadow-key: 0 4px 0 0 rgba(250, 237, 209, 1); /* 키패드, 뒤로가기 */
+  --shadow-stat: 0 4px 12px 0 rgba(91, 69, 200, 0.06); /* 통계 칸 */
+
+  /* ---------------------------------------------------------------
+   * 글꼴
+   * --------------------------------------------------------------- */
+  --font-noto: "Noto Sans KR", sans-serif;
+  --font-jua: "Jua", sans-serif;
+
+  /* ---------------------------------------------------------------
+   * 움직임
+   * --------------------------------------------------------------- */
+  --animate-pulse-ring: pulse-ring 1.8s ease-out infinite;
+  --animate-think-dot: think-dot 1.2s ease-in-out infinite;
+  --animate-sticker-pop: sticker-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(0.82);
+      opacity: 0.9;
+    }
+    70% {
+      transform: scale(1.12);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1.12);
+      opacity: 0;
+    }
+  }
+
+  --animate-sheet-up: sheet-up 0.3s ease-out both;
+  --animate-shake: shake 0.4s ease-in-out;
+  --animate-stamp-pop: stamp-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    20% {
+      transform: translateX(-8px);
+    }
+    40% {
+      transform: translateX(8px);
+    }
+    60% {
+      transform: translateX(-5px);
+    }
+    80% {
+      transform: translateX(3px);
+    }
+  }
+
+  @keyframes sheet-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes stamp-pop {
+    0% {
+      transform: scale(0.3) rotate(30deg);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1) rotate(8deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes sticker-pop {
+    0% {
+      transform: scale(0.3) rotate(-18deg);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes think-dot {
+    0%,
+    60%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.55;
+    }
+    30% {
+      transform: translateY(-4px);
+      opacity: 1;
+    }
+  }
+}
+
+/* 움직임을 줄이도록 설정한 기기 */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse-ring,
+  .animate-think-dot,
+  .animate-sticker-pop,
+  .animate-stamp-pop,
+  .animate-sheet-up {
+    animation: none;
+    /* 애니메이션을 끄면 도장이 똑바로 서므로 기울기는 유지 */
+  }
+
+  .animate-stamp-pop {
+    transform: rotate(8deg);
+  }
+}

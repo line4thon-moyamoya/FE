@@ -1,0 +1,11 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 28H24L36 78H92L102 42H30" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" stroke="#7B61F8"/>
+<path d="M34 50H98L92 72H40L34 50Z" fill="#D9D0FF"/>
+<path d="M44 104C48.4183 104 52 100.418 52 96C52 91.5817 48.4183 88 44 88C39.5817 88 36 91.5817 36 96C36 100.418 39.5817 104 44 104Z" fill="#5B45C8"/>
+<path d="M84 104C88.4183 104 92 100.418 92 96C92 91.5817 88.4183 88 84 88C79.5817 88 76 91.5817 76 96C76 100.418 79.5817 104 84 104Z" fill="#5B45C8"/>
+<path d="M56 51C63.1797 51 69 45.1797 69 38C69 30.8203 63.1797 25 56 25C48.8203 25 43 30.8203 43 38C43 45.1797 48.8203 51 56 51Z" fill="#FFC83D" stroke-width="2.5" stroke="#F4A81D"/>
+<path d="M80 49C88.2843 49 95 42.2843 95 34C95 25.7157 88.2843 19 80 19C71.7157 19 65 25.7157 65 34C65 42.2843 71.7157 49 80 49Z" fill="#FFC83D" stroke-width="2.5" stroke="#F4A81D"/>
+<path d="M72.5 28L75.5 40L80 31L84.5 40L87.5 28" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke="#F4A81D"/>
+<path d="M71 33.2H89" stroke-width="2" stroke-linecap="round" stroke="#F4A81D"/>
+<path d="M56 32V38M56 38V44M56 38H51M56 38H61" stroke-width="3" stroke-linecap="round" stroke="#F4A81D"/>
+</svg>

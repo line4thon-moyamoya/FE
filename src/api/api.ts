@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "",
+  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -15,5 +17,52 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// 토큰 재발급 (interceptor가 안 걸리도록 기본 axios 사용)
+const refreshAccessToken = async () => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  if (!refreshToken) throw new Error("No refresh token");
+
+  const response = await axios.post(`${BASE_URL}/api/v1/auth/refresh`, {
+    refreshToken,
+  });
+
+  const { accessToken, refreshToken: newRefreshToken } = response.data.data;
+  localStorage.setItem("accessToken", accessToken);
+  if (newRefreshToken) {
+    localStorage.setItem("refreshToken", newRefreshToken);
+  }
+  return accessToken;
+};
+
+// 여러 요청이 동시에 401일 때 재발급은 한 번만
+let refreshPromise: Promise<string> | null = null;
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        refreshPromise ??= refreshAccessToken().finally(() => {
+          refreshPromise = null;
+        });
+        const newToken = await refreshPromise;
+
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        return api(originalRequest); // 실패했던 요청 다시 보내기
+      } catch {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        window.location.href = "/login";
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export default api;

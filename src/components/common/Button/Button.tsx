@@ -1,4 +1,7 @@
 import check from "../../../assets/icons/check.svg";
+import home from "../../../assets/icons/home.svg";
+import lock from "../../../assets/icons/lock.svg";
+import reset from "../../../assets/icons/reset.svg";
 import speaker from "../../../assets/icons/speaker-lg.svg";
 import wordBook from "../../../assets/icons/word-book.svg";
 import arrow from "../../../assets/icons/arrow.svg";
@@ -14,17 +17,21 @@ interface ButtonProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
   /** 라벨 앞에 붙는 아이콘 */
-  icon?: "check" | "wordBook" | "mic" | "speaker";
+  icon?: "check" | "wordBook" | "mic" | "speaker" | "reset" | "home" | "lock";
   showArrow?: boolean;
   /** 가로를 꽉 채움. 끄면 346px 고정 */
   fullWidth?: boolean;
   disabled?: boolean;
+  className?: string;
 }
 
 const ICON_SRC = {
   check,
   wordBook,
   speaker,
+  reset,
+  home,
+  lock,
 };
 
 /* 마이크는 버튼 종류에 따라 색이 달라서 인라인으로 그림 */
@@ -66,6 +73,7 @@ export default function Button({
   showArrow = false,
   fullWidth = false,
   disabled,
+  className = "",
 }: ButtonProps) {
   // 주요 버튼은 크기에 따라 입체 그림자가 다름
   const primaryShadow =
@@ -79,7 +87,7 @@ export default function Button({
       className={`relative flex cursor-pointer items-center justify-center gap-2 px-5
         font-jua font-normal disabled:opacity-40
         ${fullWidth ? "w-full" : "w-[346px]"}
-        ${SIZE_STYLE[size]} ${VARIANT_STYLE[variant]} ${primaryShadow}`}
+        ${SIZE_STYLE[size]} ${VARIANT_STYLE[variant]} ${primaryShadow} ${className}`}
     >
       {icon === "mic" ? (
         <MicIcon />

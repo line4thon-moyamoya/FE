@@ -26,6 +26,7 @@ import {
   type HeardContext,
 } from "../../api/question";
 import { sendRepetition, type RepetitionResult } from "../../api/word";
+import { getSongDetail, type SongDetail } from "../../api/song";
 import { playVoice, stopAudio } from "../../utils/playAudio";
 import type { ChildErrorType, MoyaStage, TalkStage } from "../../types/child";
 import { MOYA_LOOK_INFO } from "../../constants/moyaLook";
@@ -64,6 +65,8 @@ export default function ChildHome() {
   const [word, setWord] = useState<ConfirmResult | null>(null);
   /** 따라 말하기 결과 */
   const [repetition, setRepetition] = useState<RepetitionResult | null>(null);
+  /** 다섯 장을 채우면 만들어지는 노래 */
+  const [song, setSong] = useState<SongDetail | null>(null);
 
   // 음성 수집 동의 여부 (설정에서 철회하면 false)
   const [hasVoiceConsent, setHasVoiceConsent] = useState(getVoiceConsent());
@@ -93,6 +96,23 @@ export default function ChildHome() {
   useEffect(() => {
     if (stage !== "idle") setIntro(false);
   }, [stage]);
+
+  // 노래가 만들어질 때까지 1초마다 다시 물어본다
+  useEffect(() => {
+    const songId = repetition?.song?.songId;
+    if (!songId || song?.status === "READY" || song?.status === "FAILED") return;
+
+    const timer = window.setInterval(async () => {
+      try {
+        const detail = await getSongDetail(child.childId, songId);
+        setSong(detail);
+      } catch {
+        // 한 번 실패해도 다음 차례에 다시 물어본다
+      }
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, [repetition, song, child.childId]);
 
   // 대화 중 인터넷이 끊기면 연결 끊김 화면
   useEffect(() => {
@@ -468,10 +488,11 @@ export default function ChildHome() {
     <>
       {renderMain()}
 
-      {songModalOpen && (
+      {/* 노래가 다 만들어지면 완성 카드를 띄운다 */}
+      {songModalOpen && song?.status === "READY" && (
         <SongCompleteModal
-          words={[]}
-          onPlay={() => navigate(childPath("song"))}
+          words={song.words.map((w) => w.word)}
+          onPlay={() => navigate(childPath(`song/${song.songId}`))}
           onClose={() => setSongModalOpen(false)}
         />
       )}

@@ -11,7 +11,10 @@ export default function Login() {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col">
-      <BackButton />
+      <div className="flex pt-15 pl-6">
+        <BackButton />
+      </div>
+
       <div className="flex flex-col pl-6">
         <p className="text-2xl font-normal font-jua leading-9 text-[#241F48] mt-6">
           다시 만나서 반가워요

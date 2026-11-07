@@ -1,7 +1,7 @@
 import api from "./api";
 import type { AgeGroup, SignupData } from "../types/signup";
 
-const AGE_GROUP_MAP: Record<AgeGroup, string> = {
+export const AGE_GROUP_MAP: Record<AgeGroup, string> = {
   "3-4": "AGE_3_4",
   "5": "AGE_5",
 };

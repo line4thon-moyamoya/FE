@@ -21,7 +21,11 @@ export default function MoyaSelect() {
     // 고른 모야가 신나하는 모습을 잠깐 보여 준 뒤 홈으로.
     // 방금 골랐다고 알려 주면 홈이 첫인사를 먼저 건넨다
     window.setTimeout(
-      () => navigate("/home", { replace: true, state: { justPicked: true } }),
+      () =>
+        navigate(`/children/${localStorage.getItem("childId")}/home`, {
+          replace: true,
+          state: { justPicked: true },
+        }),
       MOVE_DELAY_MS,
     );
   };

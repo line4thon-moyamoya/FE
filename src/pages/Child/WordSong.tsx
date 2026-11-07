@@ -11,7 +11,7 @@ import { useChildMode } from "../../contexts/ChildModeContext";
 
 export default function WordSong() {
   const navigate = useNavigate();
-  const { child, coupons } = useChildMode();
+  const { child, coupons, childPath } = useChildMode();
 
   const songs = getSongs(child.childId);
   const remainingWords = getRemainingForNextCoupon(
@@ -44,7 +44,7 @@ export default function WordSong() {
                 <SongListItem
                   key={song.id}
                   song={song}
-                  onClick={() => navigate(`/song/${song.id}`)}
+                  onClick={() => navigate(childPath(`song/${song.id}`))}
                 />
               ))}
             </ul>

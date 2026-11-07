@@ -14,7 +14,7 @@ import replayIcon from "../../assets/icons/replay.svg";
 
 export default function SongPlayer() {
   const { songId } = useParams();
-  const { child } = useChildMode();
+  const { child, childPath } = useChildMode();
   const song = songId ? findSong(child.childId, songId) : undefined;
 
   // 훅은 return보다 먼저 불러야 해서 song이 없어도 호출
@@ -29,7 +29,7 @@ export default function SongPlayer() {
   }, [song, play, pause]);
 
   // 없는 노래면 단어 노래로
-  if (!song) return <Navigate to="/song" replace />;
+  if (!song) return <Navigate to={childPath("song")} replace />;
 
   const verse = song.verses[player.currentVerseIndex];
   const word = verse ? findWord(verse.wordId) : undefined;

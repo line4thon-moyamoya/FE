@@ -31,7 +31,7 @@ export default function Settings() {
   const handleWithdraw = () => {
     setVoiceConsent(false);
     setIsWithdrawSheetOpen(false);
-    navigate("/home");
+    navigate("/guardian");
   };
 
   const handleLogout = async () => {

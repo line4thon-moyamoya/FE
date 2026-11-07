@@ -16,13 +16,17 @@ import MicPermissionOff from "../../components/Error/MicPermissionOff";
 import VoiceConsentOff from "../../components/Error/VoiceConsentOff";
 import useVoiceRecording, { MIN_RECORD_MS } from "../../hooks/useVoiceRecording";
 import {
-  MOCK_CONFIRM_QUIZZES,
-  MOCK_EARNED_CARD,
-  MOCK_SONG_WORDS,
-  mockRecognize,
-  MOCK_WORD_LESSON,
-} from "../../mocks/talk";
-import { COUPON_GOAL } from "../../types/child";
+  analyzeQuestion,
+  clarifyQuestion,
+  confirmWord,
+  saveWordRequest,
+  type AnalyzeResult,
+  type ConfirmResult,
+  type Voice,
+  type HeardContext,
+} from "../../api/question";
+import { sendRepetition, type RepetitionResult } from "../../api/word";
+import { playVoice, stopAudio } from "../../utils/playAudio";
 import type { ChildErrorType, MoyaStage, TalkStage } from "../../types/child";
 import { MOYA_LOOK_INFO } from "../../constants/moyaLook";
 import { useChildMode } from "../../contexts/ChildModeContext";
@@ -30,9 +34,6 @@ import { getVoiceConsent, setVoiceConsent } from "../../utils/voiceConsent";
 import { requestMicPermission } from "../../utils/micPermission";
 import { isOnline } from "../../utils/network";
 import { getDebugError } from "../../utils/debugError";
-
-/** 생각 중에서 되묻기로 넘어가기까지 기다리는 시간 */
-const THINKING_MS = 1600;
 
 /** 평소 홈에서 모야가 건네는 말 */
 const GREETING = "안녕! 나는 모야야.\n궁금한 말 물어봐!";
@@ -43,7 +44,7 @@ const INTRO_MS = 1500;
 export default function ChildHome() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { child, coupons, setCoupons } = useChildMode();
+  const { child, coupons, setCoupons, childPath } = useChildMode();
   const look = child.look;
 
   // 모야를 막 고르고 들어왔으면 그 모야다운 첫인사를 먼저 건넴
@@ -55,16 +56,14 @@ export default function ChildHome() {
   const [intro, setIntro] = useState(justPicked);
 
   const [stage, setStage] = useState<TalkStage>("idle");
-  // 음성 인식이 붙기 전까지는 목데이터를 순서대로 돌려 씀
-  const [quizIndex, setQuizIndex] = useState(0);
-  // 음성 인식이 없어 따라 말하기 결과를 번갈아 보여 줌
-  const [repeatCount, setRepeatCount] = useState(0);
   const [songModalOpen, setSongModalOpen] = useState(false);
-  // 몇 번째로 말해 봤는지. 목 인식 결과를 돌려 쓰는 데 씀
-  const [attempt, setAttempt] = useState(0);
-  // 들은 말이 비어 있으면 생각 중을 거쳐 다시 말해줄래로
-  const [heardNothing, setHeardNothing] = useState(false);
-  const quiz = MOCK_CONFIRM_QUIZZES[quizIndex];
+
+  /** 질문 세션. 녹음을 보내면 채워진다 */
+  const [session, setSession] = useState<AnalyzeResult | null>(null);
+  /** 아이가 고른 뒤 확정된 단어 */
+  const [word, setWord] = useState<ConfirmResult | null>(null);
+  /** 따라 말하기 결과 */
+  const [repetition, setRepetition] = useState<RepetitionResult | null>(null);
 
   // 음성 수집 동의 여부 (설정에서 철회하면 false)
   const [hasVoiceConsent, setHasVoiceConsent] = useState(getVoiceConsent());
@@ -72,17 +71,6 @@ export default function ChildHome() {
   const [errorType, setErrorType] = useState<ChildErrorType | null>(() =>
     getDebugError(),
   );
-
-  // 생각이 끝나면 되묻기로 넘어감
-  useEffect(() => {
-    if (stage !== "thinking") return;
-    // 아무 말도 못 들었으면 생각 중을 거친 뒤 다시 말해줄래로
-    const timer = window.setTimeout(
-      () => setStage(heardNothing ? "sayAgain" : "confirm"),
-      THINKING_MS,
-    );
-    return () => window.clearTimeout(timer);
-  }, [stage, heardNothing]);
 
   // 다른 화면의 쿠폰 시트에서 "지금 물어볼래" 를 누르고 넘어온 경우
   useEffect(() => {
@@ -113,20 +101,74 @@ export default function ChildHome() {
     return () => window.removeEventListener("offline", handleOffline);
   }, []);
 
+  /** 확정된 단어를 한 글자씩 나눠 글자 칸에 올림 */
+  const letters = (word?.word ?? "").split("");
+
+  /**
+   * 서버 오류를 화면으로 옮긴다.
+   *   음성을 못 알아들음 -> 다시 말해줄래
+   *   세션 만료         -> 처음부터
+   *   그 밖의 통신 오류  -> 연결 끊김
+   */
+  const handleApiError = (error: unknown) => {
+    const status = (error as { response?: { status?: number } })?.response
+      ?.status;
+
+    if (status === 422) {
+      setStage("sayAgain");
+      return;
+    }
+    if (status === 404) {
+      setSession(null);
+      setStage("idle");
+      return;
+    }
+    setErrorType("connection");
+  };
+
+  /** 서버가 준 대사를 소리로 들려준다 */
+  const speakDialogue = (dialogue: Voice) => playVoice(dialogue);
+
   /**
    * 녹음이 끝났을 때. 스스로 멈췄든 버튼으로 멈췄든 같은 길을 탄다.
-   *   너무 짧다      -> 말한 것으로 치지 않고 바로 다시 말해줄래
-   *   들은 말이 없다 -> 생각 중을 거친 뒤 다시 말해줄래
-   *   글자가 나왔다  -> 생각 중을 거친 뒤 되묻기
+   *   너무 짧다     -> 서버로 보내지 않고 바로 다시 말해줄래
+   *   후보를 찾았다 -> 되묻기
+   *   못 찾았다     -> 어디서 들었어
    */
-  const handleRecordingStop = (durationMs: number) => {
-    if (durationMs < MIN_RECORD_MS) {
+  const handleRecordingStop = async ({
+    durationMs,
+    audio,
+  }: {
+    durationMs: number;
+    audio: Blob | null;
+  }) => {
+    // 따라 말하기 중이면 다른 곳으로 보낸다
+    if (stage === "repeat") {
+      if (audio && word) await sendRepetitionAudio(audio);
+      return;
+    }
+
+    if (durationMs < MIN_RECORD_MS || !audio) {
       setStage("sayAgain");
       return;
     }
 
-    setHeardNothing(mockRecognize(attempt) === "");
     setStage("thinking");
+
+    try {
+      const result = await analyzeQuestion(child.childId, audio);
+      setSession(result);
+
+      if (result.status === "NO_CANDIDATE") {
+        setStage("place");
+        return;
+      }
+
+      if (result.dialogue) speakDialogue(result.dialogue);
+      setStage("confirm");
+    } catch (error) {
+      handleApiError(error);
+    }
   };
 
   const {
@@ -142,20 +184,22 @@ export default function ChildHome() {
   }, [stage, errorType, cancelRecording]);
 
   const startListening = () => {
-    setQuizIndex((index) => (index + 1) % MOCK_CONFIRM_QUIZZES.length);
-    setAttempt((count) => count + 1);
-    setHeardNothing(false);
+    stopAudio();
+    setSession(null);
+    setWord(null);
+    setRepetition(null);
     setStage("listening");
-    startRecording();
+    void startRecording();
   };
 
-  // 수업을 마치면 쿠폰이 한 장 쌓이고 카드 획득 화면으로
+  /** 따라 말하기 결과 화면에서 카드 획득으로 */
   const finishLesson = () => {
-    const next = Math.min(coupons + 1, COUPON_GOAL);
-    setCoupons(next);
+    if (repetition?.acquisitionDialogue) {
+      speakDialogue(repetition.acquisitionDialogue);
+    }
     setStage("card");
-    // 마지막 한 장을 채우면 노래 완성 카드가 뜸
-    if (next >= COUPON_GOAL) setSongModalOpen(true);
+    // 다섯 장을 채우면 노래 생성이 시작되고 완성 카드가 뜸
+    if (repetition?.song) setSongModalOpen(true);
   };
 
   // 연결과 마이크를 확인한 뒤 듣기 시작
@@ -172,6 +216,75 @@ export default function ChildHome() {
     }
     setErrorType(null);
     startListening();
+  };
+
+  /** 따라 말한 음성을 보내고 결과와 카드 획득을 받는다 */
+  const sendRepetitionAudio = async (audio: Blob) => {
+    if (!word) return;
+
+    try {
+      const result = await sendRepetition(child.childId, word.wordId, audio);
+      setRepetition(result);
+      setCoupons(result.couponCount);
+      speakDialogue(result.repetitionDialogue);
+      setStage(result.isCorrect ? "repeatSuccess" : "repeatRetry");
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+
+  /** 아이가 고른 후보를 확정하고 뜻 알려주기로 */
+  const handleConfirm = async (candidateId: string) => {
+    if (!session) return;
+
+    try {
+      const result = await confirmWord(session.sessionId, candidateId);
+      setWord(result);
+      if (result.descriptionAudioUrl) {
+        playVoice({ audioUrl: result.descriptionAudioUrl });
+      }
+      setStage("meaning");
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+
+  /** 들은 곳을 알려 주고 2차 후보를 찾는다 */
+  const handleClarify = async (context: HeardContext) => {
+    if (!session) return;
+    setStage("thinking");
+
+    try {
+      const result = await clarifyQuestion(session.sessionId, context);
+      setSession({ ...result, dialogue: result.dialogue ?? session.dialogue });
+
+      // 2차에서도 못 찾으면 바로 물어볼 단어로 남긴다
+      if (result.status === "NO_CANDIDATE") {
+        await handleWordRequest(result.sessionId);
+        return;
+      }
+      setStage("candidates");
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+
+  /** 끝내 찾지 못한 말을 보호자에게 물어볼 단어로 남긴다 */
+  const handleWordRequest = async (sessionId?: string) => {
+    const id = sessionId ?? session?.sessionId;
+    if (!id) return;
+
+    try {
+      await saveWordRequest(id);
+      setStage("askLater");
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+
+  /** 따라 말하기 녹음 시작. 끝나면 handleRecordingStop 이 단계를 보고 갈라 준다 */
+  const startRepetition = () => {
+    if (word) void startRecording();
   };
 
   const handleMicClick = () => {
@@ -199,8 +312,7 @@ export default function ChildHome() {
       return;
     }
     setErrorType(null);
-    setQuizIndex((index) => (index + 1) % MOCK_CONFIRM_QUIZZES.length);
-    setStage("listening"); // 2-2 "응, 응, 듣고 있어!"
+    startListening();
   };
 
   const handleGoHome = () => {
@@ -230,13 +342,17 @@ export default function ChildHome() {
       );
     }
 
-    if (stage === "confirm") {
+    if (stage === "confirm" && session) {
       return (
         <ConfirmQuestion
-          quiz={quiz}
-          onConfirm={() => setStage("meaning")}
+          candidates={session.candidates}
+          line={session.dialogue?.text ?? ""}
+          onConfirm={handleConfirm}
           onDeny={() => setStage("place")}
           onRetry={tryStartListening}
+          onReplay={() =>
+            session.dialogue && speakDialogue(session.dialogue)
+          }
         />
       );
     }
@@ -244,8 +360,8 @@ export default function ChildHome() {
     if (stage === "place") {
       return (
         <HeardPlacePick
-          onPick={() => setStage("candidates")}
-          onSkip={() => setStage("askLater")}
+          onPick={handleClarify}
+          onSkip={() => handleClarify("UNKNOWN")}
         />
       );
     }
@@ -253,8 +369,9 @@ export default function ChildHome() {
     if (stage === "candidates") {
       return (
         <CandidatePick
-          onPick={() => setStage("meaning")}
-          onDeny={() => setStage("sayAgain")}
+          candidates={session?.candidates ?? []}
+          onPick={handleConfirm}
+          onDeny={handleWordRequest}
         />
       );
     }
@@ -262,12 +379,15 @@ export default function ChildHome() {
     if (stage === "meaning") {
       return (
         <WordLesson
-          letters={MOCK_WORD_LESSON.letters}
-          line={MOCK_WORD_LESSON.meaningLine}
+          letters={letters}
+          line={word?.description ?? ""}
           mood="explain"
           buttonLabel="알았어!"
           bubbleWidth={340}
           onNext={() => setStage("repeat")}
+          onReplay={() =>
+            word?.descriptionAudioUrl && playVoice({ audioUrl: word.descriptionAudioUrl })
+          }
         />
       );
     }
@@ -275,12 +395,9 @@ export default function ChildHome() {
     if (stage === "repeat") {
       return (
         <RepeatAfter
-          letters={MOCK_WORD_LESSON.letters}
-          word={MOCK_WORD_LESSON.word}
-          onSpeak={() => {
-            setRepeatCount((count) => count + 1);
-            setStage(repeatCount % 2 === 0 ? "repeatSuccess" : "repeatRetry");
-          }}
+          letters={letters}
+          word={word?.word ?? ""}
+          onSpeak={startRepetition}
         />
       );
     }
@@ -288,8 +405,8 @@ export default function ChildHome() {
     if (stage === "repeatSuccess") {
       return (
         <WordLesson
-          letters={MOCK_WORD_LESSON.letters}
-          line={MOCK_WORD_LESSON.successLine}
+          letters={letters}
+          line={repetition?.repetitionDialogue.text ?? ""}
           mood="excited"
           buttonLabel="좋아!"
           sticker
@@ -301,8 +418,8 @@ export default function ChildHome() {
     if (stage === "repeatRetry") {
       return (
         <WordLesson
-          letters={MOCK_WORD_LESSON.letters}
-          line={MOCK_WORD_LESSON.retryLine}
+          letters={letters}
+          line={repetition?.repetitionDialogue.text ?? ""}
           mood="explain"
           buttonLabel="알았어!"
           onNext={finishLesson}
@@ -313,11 +430,11 @@ export default function ChildHome() {
     if (stage === "card") {
       return (
         <CardEarned
-          word={MOCK_EARNED_CARD.word}
-          description={MOCK_EARNED_CARD.description}
+          word={word?.word ?? ""}
+          description={word?.description ?? ""}
           coupons={coupons}
           onAskAnother={tryStartListening}
-          onOpenNotebook={() => navigate("/notebook")}
+          onOpenNotebook={() => navigate(childPath("notebook"))}
         />
       );
     }
@@ -353,8 +470,8 @@ export default function ChildHome() {
 
       {songModalOpen && (
         <SongCompleteModal
-          words={MOCK_SONG_WORDS}
-          onPlay={() => navigate("/song")}
+          words={[]}
+          onPlay={() => navigate(childPath("song"))}
           onClose={() => setSongModalOpen(false)}
         />
       )}

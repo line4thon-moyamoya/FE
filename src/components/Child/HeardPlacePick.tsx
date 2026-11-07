@@ -2,13 +2,21 @@ import Button from "../common/Button/Button";
 import MoyaAside from "./MoyaAside";
 import PlaceTile from "./PlaceTile";
 import { MOCK_HEARD_PLACES } from "../../mocks/talk";
-import type { HeardPlace } from "../../types/child";
+import type { HeardContext } from "../../api/question";
 
 interface HeardPlacePickProps {
-  onPick: (place: HeardPlace) => void;
+  onPick: (context: HeardContext) => void;
   /** 잘 모르겠어 */
   onSkip: () => void;
 }
+
+/** 화면의 들은 곳을 서버가 쓰는 값으로 */
+const PLACE_CONTEXT: Record<string, HeardContext> = {
+  tv: "TV_YOUTUBE",
+  parents: "PARENTS",
+  book: "BOOK",
+  kindergarten: "KINDERGARTEN",
+};
 
 export default function HeardPlacePick({ onPick, onSkip }: HeardPlacePickProps) {
   return (
@@ -18,7 +26,7 @@ export default function HeardPlacePick({ onPick, onSkip }: HeardPlacePickProps) 
       <div className="flex flex-col gap-9">
         <div className="flex flex-wrap gap-3">
           {MOCK_HEARD_PLACES.map((place) => (
-            <PlaceTile key={place.id} place={place} onClick={() => onPick(place)} />
+            <PlaceTile key={place.id} place={place} onClick={() => onPick(PLACE_CONTEXT[place.id])} />
           ))}
         </div>
 

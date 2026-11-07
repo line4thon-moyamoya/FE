@@ -1,17 +1,13 @@
-import type { Song } from "../../types/song";
-import { findWord } from "../../mocks/words";
 import play from "../../assets/icons/play.svg";
+import type { SongSummary } from "../../api/song";
 
 interface SongListItemProps {
-  song: Song;
+  song: SongSummary;
   onClick: () => void;
 }
 
 export default function SongListItem({ song, onClick }: SongListItemProps) {
-  const wordNames = song.verses
-    .map((v) => findWord(v.wordId)?.word)
-    .filter(Boolean)
-    .join(", ");
+  const wordNames = song.words.join(", ");
 
   return (
     <li>

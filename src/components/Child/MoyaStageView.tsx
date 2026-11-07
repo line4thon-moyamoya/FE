@@ -5,7 +5,7 @@ import SpeechBubble from "../common/SpeechBubble/SpeechBubble";
 import { TALK_STAGE_VIEW } from "../../constants/talkStage";
 import type { MoyaStage } from "../../types/child";
 import type { MoyaMood } from "../../types/moya";
-import { getCurrentLook } from "../../utils/currentLook";
+import { useChildMode } from "../../contexts/ChildModeContext";
 import Sparkle from "./Sparkle";
 
 /* 듣는 중일 때 모야 양옆에서 퍼지는 소리 물결.
@@ -38,6 +38,7 @@ export default function MoyaStageView({
   mood,
   onMicClick,
 }: MoyaStageViewProps) {
+  const { child } = useChildMode();
   const view = TALK_STAGE_VIEW[stage];
 
   return (
@@ -56,7 +57,7 @@ export default function MoyaStageView({
         />
 
         <Moya
-          look={getCurrentLook()}
+          look={child.look}
           mood={mood ?? view.mood}
           size={290}
           glow

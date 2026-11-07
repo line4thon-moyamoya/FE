@@ -15,7 +15,7 @@ import replayIcon from "../../assets/icons/replay.svg";
 export default function SongPlayer() {
   const { songId } = useParams();
   const { child } = useChildMode();
-  const song = songId ? findSong(child.id, songId) : undefined;
+  const song = songId ? findSong(child.childId, songId) : undefined;
 
   // 훅은 return보다 먼저 불러야 해서 song이 없어도 호출
   const player = useSongPlayer(song);

@@ -8,12 +8,17 @@ import noteActive from "../../../assets/icons/footer/note_active.svg";
 import noteInactive from "../../../assets/icons/footer/note_inactive.svg";
 
 const OPTIONS = [
-  { label: "모야", path: "/home", activeIcon: moyaActive, inactiveIcon: moyaInactive },
-  { label: "단어 수첩", path: "/notebook", activeIcon: notebookActive, inactiveIcon: notebookInactive },
-  { label: "단어 노래", path: "/song", activeIcon: noteActive, inactiveIcon: noteInactive },
+  { label: "모야", path: "home", activeIcon: moyaActive, inactiveIcon: moyaInactive },
+  { label: "단어 수첩", path: "notebook", activeIcon: notebookActive, inactiveIcon: notebookInactive },
+  { label: "단어 노래", path: "song", activeIcon: noteActive, inactiveIcon: noteInactive },
 ];
 
-export default function Footer() {
+interface FooterProps {
+  /** 아이별 경로 앞부분. 예: /children/1 */
+  basePath: string;
+}
+
+export default function Footer({ basePath }: FooterProps) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -21,13 +26,14 @@ export default function Footer() {
     <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[402px] h-[113px] pt-3 px-5 pb-11 bg-white rounded-t-3xl shadow-[0px_-6px_24px_0px_rgba(91,69,200,0.10),0px_-1px_0px_0px_rgba(185,169,138,0.12)]">
       <ul className="flex justify-around items-start h-full">
         {OPTIONS.map(({ label, path, activeIcon, inactiveIcon }) => {
-          const isActive = pathname.startsWith(path);
+          const to = `${basePath}/${path}`;
+          const isActive = pathname.startsWith(to);
 
           return (
             <li key={path}>
               <button
                 type="button"
-                onClick={() => navigate(path)}
+                onClick={() => navigate(to)}
                 aria-current={isActive ? "page" : undefined}
                 className="flex flex-col items-center gap-2 cursor-pointer"
               >

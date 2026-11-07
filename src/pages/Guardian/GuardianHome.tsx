@@ -6,7 +6,6 @@ import WeeklySummaryCard from "../../components/Guardian/WeeklySummaryCard";
 import MissingWordCard from "../../components/Guardian/MissingWordCard";
 import FreeTrialCard from "../../components/Guardian/FreeTrialCard";
 import Button from "../../components/common/Button/Button";
-import { setCurrentChildId } from "../../utils/currentChild";
 
 export default function GuardianHome() {
   const navigate = useNavigate();
@@ -23,10 +22,8 @@ export default function GuardianHome() {
     setSearchParams({ child: String(id) }, { replace: true });
   };
 
-  const goToChildMode = () => {
-    setCurrentChildId(selectedChild.id);
-    navigate("/home");
-  };
+  // 고른 아이 id 를 주소에 실어 아이 모드로 보냄
+  const goToChildMode = () => navigate(`/children/${selectedChild.id}/home`);
 
   return (
     <main className="pt-status flex min-h-full w-full flex-col bg-guardian">

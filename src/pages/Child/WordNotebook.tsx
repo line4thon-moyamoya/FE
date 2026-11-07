@@ -16,7 +16,7 @@ export default function WordNotebook() {
   const { child } = useChildMode();
 
   // 모은 카드에 단어 정보(그림, 배경색) 붙이기
-  const cards = getCollectedCards(child.id)
+  const cards = getCollectedCards(child.childId)
     .map((card) => ({ card, word: findWord(card.wordId) }))
     // 단어 정보를 못 찾은 카드는 빼기
     .filter((item): item is CardWithWord => item.word !== undefined);

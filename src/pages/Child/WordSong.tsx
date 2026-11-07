@@ -13,9 +13,9 @@ export default function WordSong() {
   const navigate = useNavigate();
   const { child, coupons } = useChildMode();
 
-  const songs = getSongs(child.id);
+  const songs = getSongs(child.childId);
   const remainingWords = getRemainingForNextCoupon(
-    getCollectedCards(child.id).length,
+    getCollectedCards(child.childId).length,
   );
 
   return (

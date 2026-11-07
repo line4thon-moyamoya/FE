@@ -14,12 +14,12 @@ export default function WordCardDetail() {
   const { child } = useChildMode();
 
   const word = wordId ? findWord(wordId) : undefined;
-  const hasCard = getCollectedCards(child.id).some((c) => c.wordId === wordId);
+  const hasCard = getCollectedCards(child.childId).some((c) => c.wordId === wordId);
 
   // 상세를 보면 NEW 뱃지 제거
   useEffect(() => {
-    if (wordId && hasCard) markCardAsSeen(child.id, wordId);
-  }, [child.id, wordId, hasCard]);
+    if (wordId && hasCard) markCardAsSeen(child.childId, wordId);
+  }, [child.childId, wordId, hasCard]);
 
   // 페이지를 나가면 읽던 소리 멈추기
   useEffect(() => {

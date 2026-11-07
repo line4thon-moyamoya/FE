@@ -7,6 +7,7 @@ import { findWord } from "../../mocks/words";
 import { getCollectedCards, markCardAsSeen } from "../../mocks/notebook";
 import { iya } from "../../utils/josa";
 import speaker from "../../assets/icons/speaker.svg";
+import { speak } from "../../utils/speak";
 
 export default function WordCardDetail() {
   const { wordId } = useParams();
@@ -28,15 +29,8 @@ export default function WordCardDetail() {
   // 없는 단어이거나 아직 안 모은 카드면 수첩으로
   if (!word || !hasCard) return <Navigate to="/notebook" replace />;
 
-  const handleListen = () => {
-    if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(
-      `${word.word}${iya(word.word)}. ${word.meaning}`,
-    );
-    utterance.lang = "ko-KR";
-    window.speechSynthesis.speak(utterance);
-  };
+  const handleListen = () =>
+    speak(`${word.word}${iya(word.word)}. ${word.meaning}`);
 
   return (
     <>

@@ -25,5 +25,13 @@ const toSignupRequest = (data: SignupData) => ({
 
 export const signup = async (data: SignupData) => {
   const response = await api.post("/api/v1/auth/signup", toSignupRequest(data));
+  return response.data.data;
+};
+
+export const login = async (email: string, password: string) => {
+  const response = await api.post("/api/v1/auth/login", {
+    email: email.trim(),
+    password,
+  });
   return response.data.data; 
 };

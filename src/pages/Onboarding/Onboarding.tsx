@@ -1,6 +1,6 @@
 import title from "../../assets/images/moyamoya-title.svg";
 import highlight from "../../assets/images/highlight.svg";
-import moya from "../../assets/images/moya/default/moya_greeting.png";
+import moya from "../../assets/images/moya/default/moya_greeting.webp";
 import wondering from "../../assets/images/wondering.svg";
 import music from "../../assets/images/music.svg";
 import Button from "../../components/common/Button/Button";

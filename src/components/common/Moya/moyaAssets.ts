@@ -1,22 +1,22 @@
 import type { MoyaLook, MoyaMood } from "../../../types/moya";
 
-import defaultGreeting from "../../../assets/images/moya/default/moya_greeting.png";
-import defaultExplain from "../../../assets/images/moya/default/moya_explain.png";
-import defaultCurious from "../../../assets/images/moya/default/moya_curious.png";
-import defaultConfused from "../../../assets/images/moya/default/moya_confused.png";
-import defaultExcited from "../../../assets/images/moya/default/moya_excited.png";
+import defaultGreeting from "../../../assets/images/moya/default/moya_greeting.webp";
+import defaultExplain from "../../../assets/images/moya/default/moya_explain.webp";
+import defaultCurious from "../../../assets/images/moya/default/moya_curious.webp";
+import defaultConfused from "../../../assets/images/moya/default/moya_confused.webp";
+import defaultExcited from "../../../assets/images/moya/default/moya_excited.webp";
 
-import carGreeting from "../../../assets/images/moya/car/moya_car_greeting.png";
-import carExplain from "../../../assets/images/moya/car/moya_car_explain.png";
-import carCurious from "../../../assets/images/moya/car/moya_car_curious.png";
-import carConfused from "../../../assets/images/moya/car/moya_car_confused.png";
-import carExcited from "../../../assets/images/moya/car/moya_car_excited.png";
+import carGreeting from "../../../assets/images/moya/car/moya_car_greeting.webp";
+import carExplain from "../../../assets/images/moya/car/moya_car_explain.webp";
+import carCurious from "../../../assets/images/moya/car/moya_car_curious.webp";
+import carConfused from "../../../assets/images/moya/car/moya_car_confused.webp";
+import carExcited from "../../../assets/images/moya/car/moya_car_excited.webp";
 
-import princessGreeting from "../../../assets/images/moya/princess/moya_princess_greeting.png";
-import princessExplain from "../../../assets/images/moya/princess/moya_princess_explain.png";
-import princessCurious from "../../../assets/images/moya/princess/moya_princess_curious.png";
-import princessConfused from "../../../assets/images/moya/princess/moya_princess_confused.png";
-import princessExcited from "../../../assets/images/moya/princess/moya_princess_excited.png";
+import princessGreeting from "../../../assets/images/moya/princess/moya_princess_greeting.webp";
+import princessExplain from "../../../assets/images/moya/princess/moya_princess_explain.webp";
+import princessCurious from "../../../assets/images/moya/princess/moya_princess_curious.webp";
+import princessConfused from "../../../assets/images/moya/princess/moya_princess_confused.webp";
+import princessExcited from "../../../assets/images/moya/princess/moya_princess_excited.webp";
 
 export const MOYA_IMAGES: Record<MoyaLook, Record<MoyaMood, string>> = {
   default: {

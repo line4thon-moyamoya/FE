@@ -51,3 +51,20 @@ export const updateSelectedChild = async (childId: number) => {
   });
   return response.data.data;
 };
+
+export const resolveWordRequest = async (
+  wordRequestId: number,
+  word: string,
+) => {
+  const response = await api.patch(
+    `/api/v1/guardian/word-requests/${wordRequestId}/resolve`,
+    { word: word.trim() },
+  );
+  return response.data.data as {
+    wordRequestId: number;
+    recognizedText: string;
+    correctedWord: string;
+    status: "RESOLVED";
+    resolvedAt: string;
+  };
+};

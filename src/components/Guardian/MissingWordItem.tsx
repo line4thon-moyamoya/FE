@@ -6,7 +6,7 @@ import check from "../../assets/icons/missing-check.svg";
 
 interface MissingWordItemProps {
   word: MissingWord;
-  onSubmit: (id: number, correctedText: string) => void;
+  onSubmit: (id: number, correctedText: string) => Promise<boolean>;
 }
 
 export default function MissingWordItem({
@@ -19,6 +19,8 @@ export default function MissingWordItem({
 
   const isCorrected = word.correctedText !== null;
   const trimmed = input.trim();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handlePlay = () => {
     if (!word.audioUrl) return;
@@ -42,10 +44,14 @@ export default function MissingWordItem({
     };
   }, []);
 
-  const handleSubmit = () => {
-    if (!trimmed) return;
-    onSubmit(word.id, trimmed);
-    setInput("");
+  const handleSubmit = async () => {
+    if (!trimmed || isSubmitting) return;
+
+    setIsSubmitting(true);
+    const isSuccess = await onSubmit(word.id, trimmed);
+    setIsSubmitting(false);
+
+    if (isSuccess) setInput(""); // 성공했을 때만 입력값 비우기
   };
 
   return (
@@ -110,10 +116,10 @@ export default function MissingWordItem({
           />
           <button
             type="submit"
-            disabled={!trimmed}
-            className="cursor-pointer w-[322px] h-15 rounded-[20px] px-5 bg-white border-2 border-[#D9D0FF] shadow-[0px_5px_0px_0px_rgba(228,220,255,1.00)] font-jua text-xl font-normal leading-6 text-[#6A4FF3] disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={!trimmed || isSubmitting}
+            className="... 기존 className 그대로"
           >
-            모야에게 알려주기
+            {isSubmitting ? "알려주는 중..." : "모야에게 알려주기"}
           </button>
         </form>
       )}

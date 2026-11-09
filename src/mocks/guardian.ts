@@ -132,9 +132,3 @@ export const MOCK_CHILD_LIST: Child[] = [
     },
   },
 ];
-
-// API 연동 시 아이 정보 수정 요청으로 교체
-export const updateMockChild = (id: number, patch: Partial<Child>) => {
-  const child = MOCK_CHILD_LIST.find((c) => c.id === id);
-  if (child) Object.assign(child, patch);
-};

@@ -23,3 +23,9 @@ export const addChild = async ({ nickname, ageGroup, moyaLook }: AddChildData) =
   });
   return response.data.data;
 };
+
+export const toAgeGroup = (serverValue: string): AgeGroup =>
+  serverValue === "AGE_5" ? "5" : "3-4";
+
+export const toMoyaLook = (serverValue: string | null): MoyaLook =>
+  (serverValue?.toLowerCase() ?? "default") as MoyaLook;

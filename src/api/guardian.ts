@@ -44,3 +44,10 @@ export const getWordRequests = async (childId?: number) => {
   });
   return (response.data.data as WordRequest[]).map(toMissingWord);
 };
+
+export const updateSelectedChild = async (childId: number) => {
+  const response = await api.patch("/api/v1/guardian/home/selected-child", {
+    childId,
+  });
+  return response.data.data;
+};

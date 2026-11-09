@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import settings from "../../assets/icons/settings.svg";
 import ChildTab from "../../components/Guardian/ChildTab";
@@ -6,7 +6,11 @@ import WeeklySummaryCard from "../../components/Guardian/WeeklySummaryCard";
 import MissingWordCard from "../../components/Guardian/MissingWordCard";
 import FreeTrialCard from "../../components/Guardian/FreeTrialCard";
 import Button from "../../components/common/Button/Button";
-import { getGuardianHome, type GuardianHomeData } from "../../api/guardian";
+import {
+  getGuardianHome,
+  updateSelectedChild,
+  type GuardianHomeData,
+} from "../../api/guardian";
 
 const FREE_TRIAL_PLACEHOLDER = { used: 12, total: 20 };
 
@@ -19,8 +23,27 @@ export default function GuardianHome() {
 
   const childParam = Number(searchParams.get("child")) || undefined;
 
+  const latestSelectRef = useRef(0); // 마지막으로 누른 아이만 반영
+
+  const handleSelectChild = async (id: number) => {
+    if (id === home?.selectedChildId) return; // 같은 아이면 무시
+    latestSelectRef.current = id;
+
+    try {
+      await updateSelectedChild(id);
+      if (latestSelectRef.current !== id) return; // 그 사이 다른 아이를 눌렀으면 무시
+
+      localStorage.setItem("childId", String(id));
+      // replace: 아이를 바꿀 때마다 뒤로가기 기록이 쌓이지 않도록
+      setSearchParams({ child: String(id) }, { replace: true });
+    } catch (error) {
+      console.error(error);
+      alert("아이를 바꾸지 못했어요. 다시 시도해 주세요.");
+    }
+  };
+
   useEffect(() => {
-    let ignore = false; 
+    let ignore = false;
     setIsLoading(true);
     setIsError(false);
 
@@ -41,11 +64,6 @@ export default function GuardianHome() {
       ignore = true;
     };
   }, [childParam]);
-
-  const handleSelectChild = (id: number) => {
-    // replace: 아이를 바꿀 때마다 뒤로가기 기록이 쌓이지 않도록
-    setSearchParams({ child: String(id) }, { replace: true });
-  };
 
   if (isLoading && !home) {
     return <main className="pt-status min-h-full bg-guardian" />;

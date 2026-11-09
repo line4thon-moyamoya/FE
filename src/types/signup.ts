@@ -21,5 +21,5 @@ export interface StepProps {
 
 export const AGE_GROUP_LABEL: Record<AgeGroup, string> = {
   "3-4": "만 3~4세",
-  "5": "만 5세",
+  "5": "만 5세 이상",
 };

@@ -1,7 +1,7 @@
 import type { Child } from "../../types/guardian";
 
 interface ChildTabProps {
-  childList: Child[];
+  childList: Pick<Child, "id" | "name">[];
   selectedId: number;
   onSelect: (id: number) => void;
 }

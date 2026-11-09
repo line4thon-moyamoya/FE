@@ -31,7 +31,7 @@ export default function AgeSelect({ value, onChange }: AgeSelectProps) {
             value === "5" ? selectedStyle : defaultStyle
           }`}
         >
-          만 5세
+          만 5세 이상
         </button>
       </div>
     </div>

@@ -15,7 +15,17 @@ interface AddChildData {
   moyaLook: MoyaLook | null;
 }
 
-export const addChild = async ({ nickname, ageGroup, moyaLook }: AddChildData) => {
+interface UpdateChildData {
+  nickname?: string;
+  ageGroup?: AgeGroup;
+  moyaLook?: MoyaLook;
+}
+
+export const addChild = async ({
+  nickname,
+  ageGroup,
+  moyaLook,
+}: AddChildData) => {
   const response = await api.post("/api/v1/children", {
     nickname: nickname.trim(),
     ageGroup: AGE_GROUP_MAP[ageGroup],
@@ -29,3 +39,14 @@ export const toAgeGroup = (serverValue: string): AgeGroup =>
 
 export const toMoyaLook = (serverValue: string | null): MoyaLook =>
   (serverValue?.toLowerCase() ?? "default") as MoyaLook;
+
+export const updateChild = async (childId: number, data: UpdateChildData) => {
+  // 바뀐 필드만 담기 (null은 보내지 않는다)
+  const body: Record<string, string> = {};
+  if (data.nickname !== undefined) body.nickname = data.nickname.trim();
+  if (data.ageGroup !== undefined) body.ageGroup = AGE_GROUP_MAP[data.ageGroup];
+  if (data.moyaLook !== undefined) body.moyaType = MOYA_TYPE_MAP[data.moyaLook];
+
+  const response = await api.patch(`/api/v1/children/${childId}`, body);
+  return response.data.data;
+};

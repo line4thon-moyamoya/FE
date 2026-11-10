@@ -8,6 +8,7 @@ interface VoiceConsentWithdrawSheetProps {
   isOpen: boolean;
   onClose: () => void;
   onWithdraw: () => void;
+  isWithdrawing?: boolean;
 }
 
 const NOTICES = [
@@ -23,6 +24,7 @@ export default function VoiceConsentWithdrawSheet({
   isOpen,
   onClose,
   onWithdraw,
+  isWithdrawing = false,
 }: VoiceConsentWithdrawSheetProps) {
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose}>
@@ -48,9 +50,10 @@ export default function VoiceConsentWithdrawSheet({
         <button
           type="button"
           onClick={onWithdraw}
-          className="cursor-pointer w-[346px] h-[60px] rounded-[20px] px-5 border-2 border-dashed border-[#A08DFF] bg-white font-jua text-xl leading-6 text-[#6F6A8C]"
+          disabled={isWithdrawing}
+          className="cursor-pointer w-[346px] h-[60px] rounded-[20px] px-5 border-2 border-dashed border-[#A08DFF] bg-white font-jua text-xl leading-6 text-[#6F6A8C] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          철회하기
+          {isWithdrawing ? "철회하는 중..." : "철회하기"}
         </button>
       </div>
     </BottomSheet>

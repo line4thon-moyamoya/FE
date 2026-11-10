@@ -28,4 +28,15 @@ export const getSettings = async () => {
   };
 };
 
-export type SettingsChild = Awaited<ReturnType<typeof getSettings>>["children"][number];
+export type SettingsChild = Awaited<
+  ReturnType<typeof getSettings>
+>["children"][number];
+
+export const updateVoiceConsent = async (isAgreed: boolean) => {
+  const response = await api.patch(
+    "/api/v1/users/me/consents/VOICE_PROCESSING",
+    { isAgreed },
+  );
+  return (response.data.data as { consentType: string; isAgreed: boolean })
+    .isAgreed;
+};

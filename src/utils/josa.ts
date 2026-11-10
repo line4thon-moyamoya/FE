@@ -11,3 +11,6 @@ export const iraGo = (word: string) => (hasBatchim(word) ? "이라고" : "라고
 
 // "적금" → "이야", "모야" → "야"
 export const iya = (word: string) => (hasBatchim(word) ? "이야" : "야");
+
+// "윤정" → "이가", "윤서" → "가"
+export const iga = (word: string) => (hasBatchim(word) ? "이가" : "가");

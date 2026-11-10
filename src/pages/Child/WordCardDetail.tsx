@@ -1,59 +1,74 @@
-import { useEffect } from "react";
-import { useChildMode } from "../../contexts/ChildModeContext";
+import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
+
 import BackButton from "../../components/common/BackButton/BackButton";
 import WordCardDetailView from "../../components/Child/WordCardDetailView";
-import { findWord } from "../../mocks/words";
-import { getCollectedCards, markCardAsSeen } from "../../mocks/notebook";
-import { iya } from "../../utils/josa";
 import speaker from "../../assets/icons/speaker.svg";
-import { speak } from "../../utils/speak";
+import {
+  getLearnedWord,
+  markLearnedWordViewed,
+  type LearnedWordDetail,
+} from "../../api/wordbook";
+import { useChildMode } from "../../contexts/ChildModeContext";
+import { playAudio, stopAudio } from "../../utils/playAudio";
 
 export default function WordCardDetail() {
-  const { wordId } = useParams();
-  const { child } = useChildMode();
+  const { learnedWordId } = useParams();
+  const { child, childPath } = useChildMode();
+  const id = Number(learnedWordId);
 
-  const word = wordId ? findWord(wordId) : undefined;
-  const hasCard = getCollectedCards(child.id).some((c) => c.wordId === wordId);
+  const [card, setCard] = useState<LearnedWordDetail | null>(null);
+  const [failed, setFailed] = useState(false);
 
-  // 상세를 보면 NEW 뱃지 제거
   useEffect(() => {
-    if (wordId && hasCard) markCardAsSeen(child.id, wordId);
-  }, [child.id, wordId, hasCard]);
+    if (!Number.isInteger(id)) return;
 
-  // 페이지를 나가면 읽던 소리 멈추기
-  useEffect(() => {
-    return () => window.speechSynthesis?.cancel();
-  }, []);
+    let alive = true;
+    getLearnedWord(child.childId, id)
+      .then((data) => {
+        if (!alive) return;
+        setCard(data);
+        // 열어 봤으니 NEW 배지를 뗀다. 실패해도 화면은 그대로 둔다
+        void markLearnedWordViewed(child.childId, id).catch(() => {});
+      })
+      .catch(() => alive && setFailed(true));
 
-  // 없는 단어이거나 아직 안 모은 카드면 수첩으로
-  if (!word || !hasCard) return <Navigate to="/notebook" replace />;
+    return () => {
+      alive = false;
+    };
+  }, [child.childId, id]);
 
-  const handleListen = () =>
-    speak(`${word.word}${iya(word.word)}. ${word.meaning}`);
+  // 화면을 나가면 읽던 소리 멈추기
+  useEffect(() => stopAudio, []);
+
+  if (!Number.isInteger(id) || failed) {
+    return <Navigate to={childPath("notebook")} replace />;
+  }
 
   return (
     <>
-      <header className="flex items-center gap-2.5 pl-6 pt-[18px]">
+      <header className="flex items-center gap-2.5 pt-[18px] pl-6">
         <BackButton />
-        <h1 className="font-jua text-xl leading-7 text-[#241F48]">
-          단어 수첩
-        </h1>
+        <h1 className="font-jua text-xl leading-7 text-ink">단어 수첩</h1>
       </header>
 
-      <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-6 pt-[36px] pb-6">
-        <WordCardDetailView word={word} />
+      {card && (
+        <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-6 pt-[36px] pb-6">
+          <WordCardDetailView card={card} />
 
-        <button
-          type="button"
-          onClick={handleListen}
-          className="cursor-pointer flex w-full h-[60px] items-center justify-center gap-2 rounded-[20px] bg-[#7B61F8] font-jua text-xl text-white shadow-[0px_4px_0px_0px_rgba(74,53,201,1.00)]"
-        >
-          <img src={speaker} alt="" className="w-5 h-5" />
-          다시 들어볼래
-        </button>
-      </div>
-
+          <button
+            type="button"
+            onClick={() =>
+              card.descriptionAudioUrl && playAudio(card.descriptionAudioUrl)
+            }
+            className="flex h-[60px] w-full cursor-pointer items-center justify-center gap-2
+              rounded-[20px] bg-brand font-jua text-xl text-white shadow-button-primary"
+          >
+            <img src={speaker} alt="" className="h-5 w-5" />
+            다시 들어볼래
+          </button>
+        </div>
+      )}
     </>
   );
 }

@@ -4,7 +4,7 @@ import LetterTiles from "./LetterTiles";
 import Moya from "../common/Moya/Moya";
 import SpeechBubble from "../common/SpeechBubble/SpeechBubble";
 import type { MoyaMood } from "../../types/moya";
-import { getCurrentLook } from "../../utils/currentLook";
+import { useChildMode } from "../../contexts/ChildModeContext";
 
 interface WordLessonProps {
   letters: string[];
@@ -32,6 +32,7 @@ export default function WordLesson({
   onNext,
   onReplay,
 }: WordLessonProps) {
+  const { child } = useChildMode();
   return (
     <div className="relative flex flex-1 flex-col gap-[22px] px-6 pt-6 pb-[14px]">
       <div className="flex flex-col items-center gap-[60px]">
@@ -41,7 +42,7 @@ export default function WordLesson({
           <SpeechBubble text={line} width={bubbleWidth} onReplay={onReplay} />
 
           <div className="flex w-full flex-col items-center gap-9">
-            <Moya look={getCurrentLook()} mood={mood} size={210} />
+            <Moya look={child.look} mood={mood} size={210} />
             <Button
               text={buttonLabel}
               size="normal"

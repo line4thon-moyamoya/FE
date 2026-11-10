@@ -1,14 +1,16 @@
 import { createContext, use } from "react";
 
-import type { ChildProfile } from "../types/child";
+import type { ChildHome } from "../api/childHome";
 
 export interface ChildModeValue {
-  child: ChildProfile;
+  child: ChildHome;
   /** 모은 노래 쿠폰 수. 화면끼리 같은 값을 봄 */
   coupons: number;
   setCoupons: (next: number) => void;
   /** 노래 쿠폰 시트 열기 */
   openCouponSheet: () => void;
+  /** 아이 모드 안에서 쓰는 경로를 만들어 줌 */
+  childPath: (to: string) => string;
 }
 
 export const ChildModeContext = createContext<ChildModeValue | null>(null);

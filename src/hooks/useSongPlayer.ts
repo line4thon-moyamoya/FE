@@ -1,34 +1,62 @@
-import { useCallback, useEffect, useState } from "react";
-import type { Song } from "../types/song";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-const TICK_MS = 250;
+import type { SongDetail } from "../api/song";
 
-export default function useSongPlayer(song: Song | undefined) {
-  const duration = song?.durationSec ?? 0;
+/**
+ * 서버가 준 음원을 재생한다.
+ * 진행 상태는 오디오가 알려 주는 실제 시간을 따른다.
+ */
+export default function useSongPlayer(song: SongDetail | null) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [currentSec, setCurrentSec] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // 재생 중이면 시간 흘려보내기
-  useEffect(() => {
-    if (!isPlaying) return;
-    const timer = window.setInterval(() => {
-      setCurrentSec((sec) => Math.min(sec + TICK_MS / 1000, duration));
-    }, TICK_MS);
-    return () => window.clearInterval(timer);
-  }, [isPlaying, duration]);
+  const audioUrl = song?.audioUrl ?? null;
 
-  // 끝까지 가면 멈춤
   useEffect(() => {
-    if (duration > 0 && currentSec >= duration) setIsPlaying(false);
-  }, [currentSec, duration]);
+    if (!audioUrl) return;
+
+    const audio = new Audio(audioUrl);
+    audioRef.current = audio;
+
+    const syncTime = () => setCurrentSec(audio.currentTime);
+    const syncDuration = () =>
+      setDuration(Number.isFinite(audio.duration) ? audio.duration : 0);
+    const handleEnd = () => setIsPlaying(false);
+
+    audio.addEventListener("timeupdate", syncTime);
+    audio.addEventListener("loadedmetadata", syncDuration);
+    audio.addEventListener("ended", handleEnd);
+
+    return () => {
+      audio.pause();
+      audio.removeEventListener("timeupdate", syncTime);
+      audio.removeEventListener("loadedmetadata", syncDuration);
+      audio.removeEventListener("ended", handleEnd);
+      audioRef.current = null;
+      setCurrentSec(0);
+      setDuration(0);
+      setIsPlaying(false);
+    };
+  }, [audioUrl]);
 
   const play = useCallback(() => {
-    // 끝난 상태에서 누르면 처음부터
-    setCurrentSec((sec) => (sec >= duration ? 0 : sec));
-    setIsPlaying(true);
-  }, [duration]);
+    const audio = audioRef.current;
+    if (!audio) return;
 
-  const pause = useCallback(() => setIsPlaying(false), []);
+    // 끝난 상태에서 누르면 처음부터
+    if (audio.duration && audio.currentTime >= audio.duration) {
+      audio.currentTime = 0;
+    }
+    void audio.play().catch(() => {});
+    setIsPlaying(true);
+  }, []);
+
+  const pause = useCallback(() => {
+    audioRef.current?.pause();
+    setIsPlaying(false);
+  }, []);
 
   const togglePlay = useCallback(() => {
     if (isPlaying) pause();
@@ -36,28 +64,48 @@ export default function useSongPlayer(song: Song | undefined) {
   }, [isPlaying, play, pause]);
 
   const restart = useCallback(() => {
-    setCurrentSec(0);
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.currentTime = 0;
+    void audio.play().catch(() => {});
     setIsPlaying(true);
   }, []);
 
-  const seekTo = useCallback(
-    (sec: number) => setCurrentSec(Math.min(Math.max(sec, 0), duration)),
-    [duration],
+  const seekTo = useCallback((sec: number) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.currentTime = Math.min(Math.max(sec, 0), audio.duration || 0);
+    setCurrentSec(audio.currentTime);
+  }, []);
+
+  // 지금 부르는 구간 (startSec 이 현재 시간 이하인 마지막 구간)
+  const words = song?.words ?? [];
+  const currentWordIndex = Math.max(
+    0,
+    words.findLastIndex((w) => w.startSec <= currentSec),
   );
 
-  // 지금 부르는 구간 (startSec이 현재 시간 이하인 마지막 구간)
-  const verses = song?.verses ?? [];
-  const currentVerseIndex = Math.max(
-    0,
-    verses.findLastIndex((v) => v.startSec <= currentSec),
-  );
+  // 재생 중에는 화면을 그릴 때마다 시간 갱신 (막대 바가 부드럽게 움직이도록)
+useEffect(() => {
+  if (!isPlaying) return;
+
+  let frameId: number;
+  const tick = () => {
+    const audio = audioRef.current;
+    if (audio) setCurrentSec(audio.currentTime);
+    frameId = requestAnimationFrame(tick);
+  };
+  frameId = requestAnimationFrame(tick);
+
+  return () => cancelAnimationFrame(frameId);
+}, [isPlaying]);
 
   return {
     currentSec,
     duration,
     isPlaying,
-    progress: duration > 0 ? currentSec / duration : 0, // 0 ~ 1
-    currentVerseIndex,
+    progress: duration > 0 ? currentSec / duration : 0,
+    currentWordIndex,
     play,
     pause,
     togglePlay,

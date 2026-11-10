@@ -1,61 +1,72 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import SongProgressBanner from "../../components/Child/SongProgressBanner";
 import WordCardItem from "../../components/Child/WordCardItem";
-import { findWord } from "../../mocks/words";
-import {
-  getCollectedCards,
-  getRemainingForNextCoupon,
-} from "../../mocks/notebook";
-import type { CollectedCard, Word } from "../../types/word";
+import { getWordbook, type LearnedWord } from "../../api/wordbook";
 import { useChildMode } from "../../contexts/ChildModeContext";
 
-type CardWithWord = { card: CollectedCard; word: Word };
+/** 카드 몇 장마다 쿠폰 한 장 */
+const CARDS_PER_COUPON = 5;
 
 export default function WordNotebook() {
   const navigate = useNavigate();
-  const { child } = useChildMode();
+  const { child, childPath } = useChildMode();
 
-  // 모은 카드에 단어 정보(그림, 배경색) 붙이기
-  const cards = getCollectedCards(child.id)
-    .map((card) => ({ card, word: findWord(card.wordId) }))
-    // 단어 정보를 못 찾은 카드는 빼기
-    .filter((item): item is CardWithWord => item.word !== undefined);
+  const [cards, setCards] = useState<LearnedWord[] | null>(null);
+  const [failed, setFailed] = useState(false);
 
-  const remaining = getRemainingForNextCoupon(cards.length);
+  useEffect(() => {
+    let alive = true;
+    getWordbook(child.childId)
+      .then((data) => alive && setCards(data.learnedWords))
+      .catch(() => alive && setFailed(true));
+
+    return () => {
+      alive = false;
+    };
+  }, [child.childId]);
+
+  const remaining = cards
+    ? CARDS_PER_COUPON - (cards.length % CARDS_PER_COUPON)
+    : CARDS_PER_COUPON;
 
   return (
-    <>
-      <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-6 pt-6 pb-6">
-        <h1 className="font-jua text-2xl leading-9 text-[#241F48]">
-          단어 수첩
-        </h1>
+    <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-6 pt-6 pb-6">
+      <h1 className="font-jua text-2xl leading-9 text-ink">단어 수첩</h1>
 
-        <SongProgressBanner
-          remaining={remaining}
-          onClick={() => navigate("/song")}
-        />
+      <SongProgressBanner
+        remaining={remaining}
+        onClick={() => navigate(childPath("song"))}
+      />
 
-        {cards.length === 0 ? (
-          <p className="mt-10 text-center font-jua text-base leading-6 text-[#9E98BF]">
-            아직 모은 단어가 없어요.
-            <br />
-            모야한테 모르는 말을 물어봐!
-          </p>
-        ) : (
-          <ul className="grid grid-cols-3 gap-2.5">
-            {cards.map(({ card, word }) => (
-              <WordCardItem
-                key={card.wordId}
-                word={word}
-                isNew={card.isNew}
-                reviewed={card.reviewed}
-                onClick={() => navigate(`/notebook/${word.id}`)}
-              />
-            ))}
-          </ul>
-        )}
-      </div>
-
-    </>
+      {failed ? (
+        <p className="mt-10 text-center font-jua text-base leading-6 text-ink-muted">
+          수첩을 못 가져왔어.
+          <br />
+          다시 들어와 줄래?
+        </p>
+      ) : !cards ? (
+        <div aria-busy className="flex-1" />
+      ) : cards.length === 0 ? (
+        <p className="mt-10 text-center font-jua text-base leading-6 text-ink-muted">
+          아직 모은 단어가 없어요.
+          <br />
+          모야한테 모르는 말을 물어봐!
+        </p>
+      ) : (
+        <ul className="grid grid-cols-3 gap-2.5">
+          {cards.map((card) => (
+            <WordCardItem
+              key={card.learnedWordId}
+              card={card}
+              onClick={() =>
+                navigate(childPath(`notebook/${card.learnedWordId}`))
+              }
+            />
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }

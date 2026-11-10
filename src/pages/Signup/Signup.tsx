@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import type { SignupData } from "../../types/signup";
 import StepHeader from "../../components/Signup/StepHeader";
 import GuardianStep from "./steps/GuardianStep";
@@ -7,10 +8,13 @@ import ChildProfileStep from "./steps/ChildProfileStep";
 import VoiceConsentStep from "./steps/VoiceConsentStep";
 import PinStep from "./steps/PinStep";
 import MicPermissionStep from "./steps/MicPermissionStep";
+import { clearAuth, signup } from "../../api/auth";
+import { setCurrentChildId } from "../../utils/currentChild";
 
 export default function Signup() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<SignupData>({
     email: "",
     password: "",
@@ -23,14 +27,41 @@ export default function Signup() {
     pin: "",
   });
 
+  // 최신 입력값을 바로 읽기 위한 ref
+  const dataRef = useRef(data);
+
   // 일부 값만 바꿀 때 사용
   const updateData = (value: Partial<SignupData>) => {
+    dataRef.current = { ...dataRef.current, ...value };
     setData((prev) => ({ ...prev, ...value }));
   };
 
   const goNext = () => setStep((prev) => prev + 1);
   const goBack = () =>
     step === 1 ? navigate(-1) : setStep((prev) => prev - 1);
+
+  // PIN 입력 완료 후 회원가입 요청
+  const handleSignup = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+
+    try {
+      clearAuth(); // 이전 계정 정보 정리
+
+      const result = await signup(dataRef.current);
+      localStorage.setItem("accessToken", result.accessToken);
+      localStorage.setItem("refreshToken", result.refreshToken);
+      setCurrentChildId(result.childId);
+      goNext();
+    } catch (error) {
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.message
+        : null;
+      alert(message ?? "회원가입에 실패했어요. 다시 시도해 주세요.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col ">
@@ -46,7 +77,7 @@ export default function Signup() {
         <VoiceConsentStep data={data} updateData={updateData} onNext={goNext} />
       )}
       {step === 4 && (
-        <PinStep data={data} updateData={updateData} onNext={goNext} />
+        <PinStep data={data} updateData={updateData} onNext={handleSignup} />
       )}
       {step === 5 && (
         <MicPermissionStep

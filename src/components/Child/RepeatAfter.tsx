@@ -3,7 +3,7 @@ import LetterTiles from "./LetterTiles";
 import MicButton from "../common/MicButton/MicButton";
 import Moya from "../common/Moya/Moya";
 import SpeechBubble from "../common/SpeechBubble/SpeechBubble";
-import { getCurrentLook } from "../../utils/currentLook";
+import { useChildMode } from "../../contexts/ChildModeContext";
 
 interface RepeatAfterProps {
   letters: string[];
@@ -13,6 +13,7 @@ interface RepeatAfterProps {
 }
 
 export default function RepeatAfter({ letters, word, onSpeak }: RepeatAfterProps) {
+  const { child } = useChildMode();
   return (
     <div className="flex flex-1 flex-col items-center gap-[22px] px-6 pt-6 pb-[14px]">
       <LetterTiles letters={letters} />
@@ -21,7 +22,7 @@ export default function RepeatAfter({ letters, word, onSpeak }: RepeatAfterProps
 
       <div className="flex h-[210px] items-center">
         <img src={soundwave} alt="" aria-hidden className="h-11 w-[30px]" />
-        <Moya look={getCurrentLook()} mood="curious" size={210} />
+        <Moya look={child.look} mood="curious" size={210} />
         <img src={soundwave} alt="" aria-hidden className="h-11 w-[30px] -scale-x-100" />
       </div>
 

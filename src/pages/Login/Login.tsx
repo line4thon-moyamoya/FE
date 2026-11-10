@@ -1,14 +1,50 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import BackButton from "../../components/common/BackButton/BackButton";
 import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
+import { clearAuth, login } from "../../api/auth";
+import { setCurrentChildId } from "../../utils/currentChild";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const isSubmittingRef = useRef(false);
 
   const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    if (isSubmittingRef.current) return;
+
+    if (!email.trim() || !password) {
+      alert("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
+
+    isSubmittingRef.current = true;
+    setIsLoading(true);
+
+    try {
+      clearAuth(); // 이전 계정 정보 정리
+
+      const result = await login(email, password);
+      localStorage.setItem("accessToken", result.accessToken);
+      localStorage.setItem("refreshToken", result.refreshToken);
+      setCurrentChildId(result.selectedChildId);
+      navigate(`/children/${result.selectedChildId}/home`, { replace: true });
+    } catch (error) {
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.message
+        : null;
+      alert(message ?? "로그인에 실패했어요. 다시 시도해 주세요.");
+    } finally {
+      isSubmittingRef.current = false;
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="flex flex-col">
       <div className="flex pt-15 pl-6">
@@ -36,7 +72,10 @@ export default function Login() {
             placeholder="비밀번호를 입력해주세요."
           />
         </div>
-        <Button text="로그인" onClick={() => navigate("/home")} />
+        <Button
+          text={isLoading ? "로그인 중..." : "로그인"}
+          onClick={handleLogin}
+        />
       </div>
     </div>
   );

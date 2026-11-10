@@ -117,7 +117,7 @@ export default function MissingWordItem({
           <button
             type="submit"
             disabled={!trimmed || isSubmitting}
-            className="... 기존 className 그대로"
+            className="cursor-pointer w-[322px] h-15 rounded-[20px] px-5 bg-white border-2 border-[#D9D0FF] shadow-[0px_5px_0px_0px_rgba(228,220,255,1.00)] font-jua text-xl font-normal leading-6 text-[#6A4FF3] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isSubmitting ? "알려주는 중..." : "모야에게 알려주기"}
           </button>

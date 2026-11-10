@@ -20,7 +20,9 @@ export default function SongPlayer() {
   const [song, setSong] = useState<SongDetail | null>(null);
   const [failed, setFailed] = useState(false);
 
+  // 노래 정보 불러오기
   useEffect(() => {
+
     if (!Number.isInteger(id)) return;
 
     let alive = true;
@@ -49,16 +51,6 @@ export default function SongPlayer() {
 
   const words = song?.words ?? [];
   const current = words[player.currentWordIndex];
-
-  // 지금 단어 구간 기준 시간 (단어마다 0:00 부터 보이도록)
-  const start = current?.startSec ?? 0;
-  const next = words[player.currentWordIndex + 1];
-  const end = next ? next.startSec : player.duration;
-  const spanDuration = Math.max(end - start, 0);
-  const spanCurrent = Math.min(
-    Math.max(player.currentSec - start, 0),
-    spanDuration,
-  );
 
   /** 고른 단어 구간의 처음부터 재생 */
   const playFromWord = (index: number) => {
@@ -96,13 +88,15 @@ export default function SongPlayer() {
 
         {song?.status === "READY" && (
           <>
-            {current && <SongNowPlaying word={current} />}
+            {current && (
+              <SongNowPlaying word={current} isPlaying={player.isPlaying} />
+            )}
 
             <div className="flex w-full flex-col gap-4">
               <SongProgress
-                progress={spanDuration > 0 ? spanCurrent / spanDuration : 0}
-                currentSec={spanCurrent}
-                duration={spanDuration}
+                progress={player.progress}
+                currentSec={player.currentSec}
+                duration={player.duration}
               />
               <SongWordChips
                 words={words.map((w) => w.word)}

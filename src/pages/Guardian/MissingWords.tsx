@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 import MissingWordItem from "../../components/Guardian/MissingWordItem";
 import GuardianPage from "../../layout/GuardianPage";
-import { getWordRequests } from "../../api/guardian";
+import { getWordRequests, resolveWordRequest } from "../../api/guardian";
 
 type Word = Awaited<ReturnType<typeof getWordRequests>>[number];
 
 export default function MissingWords() {
-  const { childId } = useParams(); // 라우터의 파라미터 이름과 맞춰 주세요
+  const { childId } = useParams();
   const [words, setWords] = useState<Word[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const submittingIdsRef = useRef(new Set<number>()); // 단어별 중복 요청 방지
 
   useEffect(() => {
     let ignore = false;
@@ -38,13 +40,30 @@ export default function MissingWords() {
     (a, b) => new Date(b.askedAt).getTime() - new Date(a.askedAt).getTime()
   );
 
-  // 고친 단어 입력 (해결 API 연동 전까지 화면에서만 반영)
-  const handleSubmit = (id: number, correctedText: string) => {
-    setWords((prev) =>
-      prev.map((w) =>
-        w.id === id ? { ...w, correctedText, status: "RESOLVED" } : w
-      )
-    );
+  // 모야에게 알려주기 (성공하면 true, 실패하면 false)
+  const handleSubmit = async (id: number, correctedText: string) => {
+    if (submittingIdsRef.current.has(id)) return false;
+    submittingIdsRef.current.add(id);
+
+    try {
+      const result = await resolveWordRequest(id, correctedText);
+      setWords((prev) =>
+        prev.map((w) =>
+          w.id === id
+            ? { ...w, correctedText: result.correctedWord, status: result.status }
+            : w
+        )
+      );
+      return true;
+    } catch (error) {
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.message
+        : null;
+      alert(message ?? "단어를 저장하지 못했어요. 다시 시도해 주세요.");
+      return false;
+    } finally {
+      submittingIdsRef.current.delete(id);
+    }
   };
 
   return (

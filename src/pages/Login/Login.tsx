@@ -4,7 +4,8 @@ import axios from "axios";
 import BackButton from "../../components/common/BackButton/BackButton";
 import Input from "../../components/common/Input/Input";
 import Button from "../../components/common/Button/Button";
-import { login } from "../../api/auth";
+import { clearAuth, login } from "../../api/auth";
+import { setCurrentChildId } from "../../utils/currentChild";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -26,11 +27,13 @@ export default function Login() {
     setIsLoading(true);
 
     try {
+      clearAuth(); // 이전 계정 정보 정리
+
       const result = await login(email, password);
       localStorage.setItem("accessToken", result.accessToken);
       localStorage.setItem("refreshToken", result.refreshToken);
-      localStorage.setItem("childId", String(result.selectedChildId));
-      navigate(`/children/${result.selectedChildId}/home`);
+      setCurrentChildId(result.selectedChildId);
+      navigate(`/children/${result.selectedChildId}/home`, { replace: true });
     } catch (error) {
       const message = axios.isAxiosError(error)
         ? error.response?.data?.message

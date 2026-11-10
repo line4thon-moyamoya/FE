@@ -5,6 +5,7 @@ import MoyaLookCard from "../../components/Child/MoyaLookCard";
 import SpeechBubble from "../../components/common/SpeechBubble/SpeechBubble";
 import { setCurrentLook } from "../../utils/currentLook";
 import { MOYA_LOOKS, type MoyaLook } from "../../types/moya";
+import { getCurrentChildId } from "../../utils/currentChild";
 
 /** 고른 모야를 보여 주다가 홈으로 넘어가기까지 */
 const MOVE_DELAY_MS = 700;
@@ -22,7 +23,7 @@ export default function MoyaSelect() {
     // 방금 골랐다고 알려 주면 홈이 첫인사를 먼저 건넨다
     window.setTimeout(
       () =>
-        navigate(`/children/${localStorage.getItem("childId")}/home`, {
+        navigate(`/children/${getCurrentChildId()}/home`, {
           replace: true,
           state: { justPicked: true },
         }),

@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { updateVoiceConsent } from "../../api/user";
 
 import AskLater from "../../components/Child/AskLater";
 import CandidatePick from "../../components/Child/CandidatePick";
@@ -14,7 +16,9 @@ import SayAgain from "../../components/Child/SayAgain";
 import ConnectionLost from "../../components/Error/ConnectionLost";
 import MicPermissionOff from "../../components/Error/MicPermissionOff";
 import VoiceConsentOff from "../../components/Error/VoiceConsentOff";
-import useVoiceRecording, { MIN_RECORD_MS } from "../../hooks/useVoiceRecording";
+import useVoiceRecording, {
+  MIN_RECORD_MS,
+} from "../../hooks/useVoiceRecording";
 import {
   analyzeQuestion,
   clarifyQuestion,
@@ -100,7 +104,8 @@ export default function ChildHome() {
   // 노래가 만들어질 때까지 1초마다 다시 물어본다
   useEffect(() => {
     const songId = repetition?.song?.songId;
-    if (!songId || song?.status === "READY" || song?.status === "FAILED") return;
+    if (!songId || song?.status === "READY" || song?.status === "FAILED")
+      return;
 
     const timer = window.setInterval(async () => {
       try {
@@ -314,10 +319,31 @@ export default function ChildHome() {
     else tryStartListening();
   };
 
-  const handleAgreeAgain = () => {
-    setVoiceConsent(true);
-    setHasVoiceConsent(true);
-    setStage("idle"); // 처음 기다리는 화면부터 시작
+  const isAgreeingRef = useRef(false);
+
+  const handleAgreeAgain = async () => {
+    if (isAgreeingRef.current) return;
+    isAgreeingRef.current = true;
+
+    try {
+      await updateVoiceConsent(true);
+      setVoiceConsent(true);
+      setHasVoiceConsent(true);
+      setStage("idle"); // 처음 기다리는 화면부터 시작
+    } catch (error) {
+      const status = axios.isAxiosError(error)
+        ? error.response?.status
+        : undefined;
+
+      // 보호자 인증(PIN)이 없거나 만료됐으면 PIN 화면으로
+      if (status === 401 || status === 403) {
+        navigate("/guardian/password", { state: { from: childPath("home") } });
+        return;
+      }
+      alert("다시 동의하지 못했어요. 잠시 후 다시 시도해 주세요.");
+    } finally {
+      isAgreeingRef.current = false;
+    }
   };
 
   // 에러 화면 버튼
@@ -370,9 +396,7 @@ export default function ChildHome() {
           onConfirm={handleConfirm}
           onDeny={() => setStage("place")}
           onRetry={tryStartListening}
-          onReplay={() =>
-            session.dialogue && speakDialogue(session.dialogue)
-          }
+          onReplay={() => session.dialogue && speakDialogue(session.dialogue)}
         />
       );
     }
@@ -406,7 +430,8 @@ export default function ChildHome() {
           bubbleWidth={340}
           onNext={() => setStage("repeat")}
           onReplay={() =>
-            word?.descriptionAudioUrl && playVoice({ audioUrl: word.descriptionAudioUrl })
+            word?.descriptionAudioUrl &&
+            playVoice({ audioUrl: word.descriptionAudioUrl })
           }
         />
       );
@@ -469,9 +494,7 @@ export default function ChildHome() {
     }
 
     if (stage === "sayAgain") {
-      return (
-        <SayAgain onRetry={tryStartListening} />
-      );
+      return <SayAgain onRetry={tryStartListening} />;
     }
 
     return (
@@ -496,7 +519,6 @@ export default function ChildHome() {
           onClose={() => setSongModalOpen(false)}
         />
       )}
-
     </>
   );
 }

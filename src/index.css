@@ -181,5 +181,21 @@
 
   .animate-stamp-pop {
     transform: rotate(8deg);
+  } 
+}
+
+@theme {
+  --animate-note-sway: note-sway 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes note-sway {
+  0% {
+    transform: translate(-14px, -6px) rotate(-18deg);
+  }
+  50% {
+    transform: translate(0, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(14px, -6px) rotate(18deg);
   }
 }

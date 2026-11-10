@@ -1,5 +1,6 @@
 import api from "./api";
 import type { AgeGroup, SignupData } from "../types/signup";
+import { clearCurrentChildId } from "../utils/currentChild";
 
 export const AGE_GROUP_MAP: Record<AgeGroup, string> = {
   "3-4": "AGE_3_4",
@@ -46,7 +47,8 @@ export const login = async (email: string, password: string) => {
 export const clearAuth = () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
-  localStorage.removeItem("childId");
+  localStorage.removeItem("currentMoyaLook");
+  clearCurrentChildId();
   sessionStorage.removeItem("parentModeToken");
 };
 

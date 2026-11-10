@@ -11,6 +11,7 @@ import {
   updateSelectedChild,
   type GuardianHomeData,
 } from "../../api/guardian";
+import { setCurrentChildId } from "../../utils/currentChild";
 
 const FREE_TRIAL_PLACEHOLDER = { used: 12, total: 20 };
 
@@ -33,7 +34,7 @@ export default function GuardianHome() {
       await updateSelectedChild(id);
       if (latestSelectRef.current !== id) return; // 그 사이 다른 아이를 눌렀으면 무시
 
-      localStorage.setItem("childId", String(id));
+      setCurrentChildId(id);
       // replace: 아이를 바꿀 때마다 뒤로가기 기록이 쌓이지 않도록
       setSearchParams({ child: String(id) }, { replace: true });
     } catch (error) {
@@ -51,7 +52,7 @@ export default function GuardianHome() {
       .then((data) => {
         if (ignore) return;
         setHome(data);
-        localStorage.setItem("childId", String(data.selectedChildId));
+        setCurrentChildId(data.selectedChildId);
       })
       .catch(() => {
         if (!ignore) setIsError(true);

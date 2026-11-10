@@ -6,6 +6,7 @@ import { AGE_GROUP_LABEL } from "../../types/signup";
 import { MOYA_LOOK_INFO } from "../../constants/moyaLook";
 import VoiceConsentWithdrawSheet from "../../components/Guardian/VoiceConsentWithdrawSheet";
 import { setVoiceConsent } from "../../utils/voiceConsent";
+import { getCurrentChildId } from "../../utils/currentChild";
 import GuardianPage from "../../layout/GuardianPage";
 import { logout } from "../../api/auth";
 import {
@@ -59,6 +60,12 @@ export default function Settings() {
     };
   }, []);
 
+  // 아이 모드 E-3(음성 동의 꺼짐) 화면으로 이동
+  const goToVoiceConsentOff = () => {
+    const childId = getCurrentChildId() ?? childList[0]?.id;
+    navigate(childId ? `/children/${childId}/home` : "/guardian");
+  };
+
   const handleWithdraw = async () => {
     if (isWithdrawingRef.current) return;
     isWithdrawingRef.current = true;
@@ -69,9 +76,7 @@ export default function Settings() {
       setVoiceConsent(false);
       setIsVoiceAgreed(false);
       setIsWithdrawSheetOpen(false);
-
-      const childId = localStorage.getItem("childId") ?? childList[0]?.id;
-      navigate(childId ? `/children/${childId}/home` : "/guardian");
+      goToVoiceConsentOff();
     } catch (error) {
       console.error(error);
       alert("동의를 철회하지 못했어요. 다시 시도해 주세요.");
@@ -92,11 +97,6 @@ export default function Settings() {
     } finally {
       navigate("/", { replace: true });
     }
-  };
-
-  const goToVoiceConsentOff = () => {
-    const childId = localStorage.getItem("childId") ?? childList[0]?.id;
-    navigate(childId ? `/children/${childId}/home` : "/guardian");
   };
 
   return (

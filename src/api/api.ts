@@ -1,4 +1,5 @@
 import axios from "axios";
+import { clearCurrentChildId } from "../utils/currentChild";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 
@@ -68,7 +69,8 @@ api.interceptors.response.use(
         // 재발급 실패 시 인증 정보 전부 삭제
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        localStorage.removeItem("childId");
+        localStorage.removeItem("currentMoyaLook");
+        clearCurrentChildId();
         sessionStorage.removeItem("parentModeToken");
         window.location.href = "/login";
       }

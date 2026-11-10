@@ -2,13 +2,14 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import type { SignupData } from "../../types/signup";
-import { signup } from "../../api/auth";
 import StepHeader from "../../components/Signup/StepHeader";
 import GuardianStep from "./steps/GuardianStep";
 import ChildProfileStep from "./steps/ChildProfileStep";
 import VoiceConsentStep from "./steps/VoiceConsentStep";
 import PinStep from "./steps/PinStep";
 import MicPermissionStep from "./steps/MicPermissionStep";
+import { clearAuth, signup } from "../../api/auth";
+import { setCurrentChildId } from "../../utils/currentChild";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -45,9 +46,12 @@ export default function Signup() {
     setIsLoading(true);
 
     try {
+      clearAuth(); // 이전 계정 정보 정리
+
       const result = await signup(dataRef.current);
       localStorage.setItem("accessToken", result.accessToken);
       localStorage.setItem("refreshToken", result.refreshToken);
+      setCurrentChildId(result.childId);
       goNext();
     } catch (error) {
       const message = axios.isAxiosError(error)

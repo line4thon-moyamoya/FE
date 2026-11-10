@@ -81,22 +81,6 @@ export default function Settings() {
     }
   };
 
-  const handleReagree = async () => {
-    if (isWithdrawingRef.current) return;
-    isWithdrawingRef.current = true;
-
-    try {
-      await updateVoiceConsent(true);
-      setVoiceConsent(true);
-      setIsVoiceAgreed(true);
-    } catch (error) {
-      console.error(error);
-      alert("다시 동의하지 못했어요. 잠시 후 다시 시도해 주세요.");
-    } finally {
-      isWithdrawingRef.current = false;
-    }
-  };
-
   const handleLogout = async () => {
     if (isLoggingOutRef.current) return;
     isLoggingOutRef.current = true;

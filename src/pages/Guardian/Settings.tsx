@@ -8,7 +8,11 @@ import VoiceConsentWithdrawSheet from "../../components/Guardian/VoiceConsentWit
 import { setVoiceConsent } from "../../utils/voiceConsent";
 import GuardianPage from "../../layout/GuardianPage";
 import { logout } from "../../api/auth";
-import { getSettings, type SettingsChild } from "../../api/user";
+import {
+  getSettings,
+  updateVoiceConsent,
+  type SettingsChild,
+} from "../../api/user";
 
 const getChildProfileLabel = (child: SettingsChild) => {
   const parts = [child.name, AGE_GROUP_LABEL[child.ageGroup]];
@@ -29,6 +33,9 @@ export default function Settings() {
 
   const [isWithdrawSheetOpen, setIsWithdrawSheetOpen] = useState(false);
   const isLoggingOutRef = useRef(false);
+
+  const [isWithdrawing, setIsWithdrawing] = useState(false);
+  const isWithdrawingRef = useRef(false);
 
   useEffect(() => {
     let ignore = false;
@@ -52,11 +59,26 @@ export default function Settings() {
     };
   }, []);
 
-  const handleWithdraw = () => {
-    setVoiceConsent(false);
-    setIsVoiceAgreed(false);
-    setIsWithdrawSheetOpen(false);
-    navigate("/guardian");
+  const handleWithdraw = async () => {
+    if (isWithdrawingRef.current) return;
+    isWithdrawingRef.current = true;
+    setIsWithdrawing(true);
+
+    try {
+      await updateVoiceConsent(false);
+      setVoiceConsent(false);
+      setIsVoiceAgreed(false);
+      setIsWithdrawSheetOpen(false);
+
+      const childId = localStorage.getItem("childId") ?? childList[0]?.id;
+      navigate(childId ? `/children/${childId}/home` : "/guardian");
+    } catch (error) {
+      console.error(error);
+      alert("동의를 철회하지 못했어요. 다시 시도해 주세요.");
+    } finally {
+      isWithdrawingRef.current = false;
+      setIsWithdrawing(false);
+    }
   };
 
   const handleLogout = async () => {
@@ -70,6 +92,11 @@ export default function Settings() {
     } finally {
       navigate("/", { replace: true });
     }
+  };
+
+  const goToVoiceConsentOff = () => {
+    const childId = localStorage.getItem("childId") ?? childList[0]?.id;
+    navigate(childId ? `/children/${childId}/home` : "/guardian");
   };
 
   return (
@@ -101,11 +128,17 @@ export default function Settings() {
           description="아이 목소리는 알아들은 뒤 바로 지우고, 물어볼 단어 녹음만 7일 동안 보관해요."
         >
           <SettingItem label="음성 기록 삭제" onClick={comingSoon} />
-          {isVoiceAgreed && (
+          {isVoiceAgreed ? (
             <SettingItem
               label="음성 수집 동의 철회"
               variant="danger"
               onClick={() => setIsWithdrawSheetOpen(true)}
+            />
+          ) : (
+            <SettingItem
+              label="음성 수집 다시 동의하기"
+              variant="primary"
+              onClick={goToVoiceConsentOff}
             />
           )}
         </SettingSection>
@@ -121,6 +154,7 @@ export default function Settings() {
         isOpen={isWithdrawSheetOpen}
         onClose={() => setIsWithdrawSheetOpen(false)}
         onWithdraw={handleWithdraw}
+        isWithdrawing={isWithdrawing}
       />
     </GuardianPage>
   );

@@ -85,6 +85,21 @@ export default function useSongPlayer(song: SongDetail | null) {
     words.findLastIndex((w) => w.startSec <= currentSec),
   );
 
+  // 재생 중에는 화면을 그릴 때마다 시간 갱신 (막대 바가 부드럽게 움직이도록)
+useEffect(() => {
+  if (!isPlaying) return;
+
+  let frameId: number;
+  const tick = () => {
+    const audio = audioRef.current;
+    if (audio) setCurrentSec(audio.currentTime);
+    frameId = requestAnimationFrame(tick);
+  };
+  frameId = requestAnimationFrame(tick);
+
+  return () => cancelAnimationFrame(frameId);
+}, [isPlaying]);
+
   return {
     currentSec,
     duration,

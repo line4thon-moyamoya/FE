@@ -35,7 +35,7 @@ export default function BottomSheet({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center">
+    <div className="fixed inset-0 z-60 flex items-end justify-center">
       {/* 어두운 배경 (누르면 닫기) */}
       <div
         className="absolute inset-0 bg-[#241F48]/50 animate-fade-in"
@@ -47,7 +47,7 @@ export default function BottomSheet({
         role="dialog"
         aria-modal="true"
         aria-label={ariaLabel}
-        className="relative w-full max-w-[402px] rounded-t-[32px] bg-[#FBFBFB] px-6 pt-3 pb-12 animate-slide-up"
+        className="relative flex max-h-[90dvh] w-full max-w-content flex-col overflow-y-auto overscroll-contain rounded-t-[32px] bg-[#FBFBFB] px-6 pt-3 pb-12 animate-slide-up"
       >
         {/* 손잡이 */}
         <div className="mx-auto mb-5 h-[5px] w-11 rounded-full bg-[#D9D3E6]" />

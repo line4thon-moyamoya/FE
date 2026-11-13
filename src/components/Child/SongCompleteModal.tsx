@@ -20,7 +20,7 @@ export default function SongCompleteModal({
 }: SongCompleteModalProps) {
   const { child } = useChildMode();
   return (
-    <div className="absolute inset-0 z-60 flex items-center justify-center px-[31px]">
+    <div className="fixed inset-0 z-60 flex items-center justify-center px-[31px]">
       <button
         type="button"
         aria-label="닫기"
@@ -31,7 +31,7 @@ export default function SongCompleteModal({
       <div
         role="dialog"
         aria-label="노래가 생겼어!"
-        className="animate-sticker-pop relative flex w-[340px] flex-col gap-8 rounded-[32px]
+        className="animate-sticker-pop relative flex max-h-[90dvh] w-full max-w-[calc(var(--container-content)-62px)] flex-col gap-8 overflow-y-auto overscroll-contain rounded-[32px]
           border-4 border-white bg-cream p-6"
       >
         <div className="flex flex-col items-center gap-3">
@@ -41,7 +41,7 @@ export default function SongCompleteModal({
             노래가 생겼어!
           </strong>
 
-          <div className="flex w-[284px] flex-wrap justify-center gap-1.5">
+          <div className="flex w-full min-w-0 flex-wrap justify-center gap-1.5">
             {words.map((word) => (
               <WordChip key={word} word={word} />
             ))}

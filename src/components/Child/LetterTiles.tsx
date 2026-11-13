@@ -5,7 +5,7 @@ interface LetterTilesProps {
 
 export default function LetterTiles({ letters }: LetterTilesProps) {
   return (
-    <div className="flex justify-center gap-2.5">
+    <div className="flex flex-wrap justify-center gap-2.5">
       {letters.map((letter, index) => (
         <span
           key={`${letter}-${index}`}

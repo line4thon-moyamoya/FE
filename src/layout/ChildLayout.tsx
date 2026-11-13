@@ -77,8 +77,8 @@ export default function ChildLayout() {
           onGuardianClick={() => navigate("/guardian/password")}
         />
 
-        {/* 본문만 스크롤한다. 헤더와 탭바는 프레임에 붙어 있는다 */}
-        <div className="flex min-h-0 flex-1 flex-col">
+        {/* 본문만 스크롤한다. 헤더는 프레임 위에, 탭바는 화면 바닥에 붙어 있는다 */}
+        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pb-tabbar">
           <Outlet />
         </div>
 

@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 /*
-  상태바 자리. 화면이 자기 배경으로 이 영역까지 칠하도록 안쪽 여백으로 둔다.
-  노치가 더 깊은 기기에서만 그만큼 늘어난다.
+  화면 맨 위 여백.
+  피그마의 62px 은 iPhone 상태바 높이 그 자체라 브라우저에서는 비워 둘 이유가 없다.
+  실제로 가려지는 만큼(노치·상태바)만 비우고, 그런 영역이 없으면 숨 쉴 틈만 둔다.
 */
 @utility pt-status {
-  padding-top: max(62px, env(safe-area-inset-top, 0px));
+  padding-top: max(14px, env(safe-area-inset-top, 0px));
 }
 
 /* 탭바 안쪽의 홈 인디케이터 자리 */

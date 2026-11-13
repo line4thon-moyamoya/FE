@@ -40,6 +40,7 @@ export default function CardEarned({
       <MoyaAside line={line} mood="excited" moyaSize={88} />
 
       <div className="flex flex-col gap-9">
+        <div className="relative">
         <div className="flex flex-col items-center gap-2.5 overflow-hidden rounded-[28px] bg-white pb-[22px] shadow-word-card">
           {/* 머리띠 */}
           <div className="flex w-full items-center gap-1.5 bg-lime-card px-[18px] py-2.5">
@@ -82,9 +83,9 @@ export default function CardEarned({
             <img src={wordBook} alt="" className="h-[26px] w-[26px]" />
           </button>
         </div>
+          <CouponStamp label={complete ? `쿠폰 ${COUPON_GOAL}/${COUPON_GOAL}` : "쿠폰 +1"} />
+        </div>
       </div>
-
-      <CouponStamp label={complete ? `쿠폰 ${COUPON_GOAL}/${COUPON_GOAL}` : "쿠폰 +1"} />
     </div>
   );
 }

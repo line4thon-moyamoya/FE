@@ -86,8 +86,8 @@ export default function Button({
       disabled={disabled}
       className={`relative flex cursor-pointer items-center justify-center gap-2
         font-jua font-normal disabled:opacity-40
-        ${showArrow ? "pr-12 pl-5" : "px-5"}
-        ${fullWidth ? "w-full" : "w-full max-w-[346px]"}
+        ${showArrow ? "px-12" : "px-5"}
+        ${fullWidth ? "w-full" : "mx-auto w-full max-w-[346px]"}
         ${SIZE_STYLE[size]} ${VARIANT_STYLE[variant]} ${primaryShadow} ${className}`}
     >
       {icon === "mic" ? (

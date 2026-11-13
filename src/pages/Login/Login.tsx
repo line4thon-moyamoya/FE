@@ -46,17 +46,17 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex h-full flex-col">
       <div className="flex pt-15 pl-6">
         <BackButton />
       </div>
 
-      <div className="flex flex-col pl-6">
+      <div className="flex min-h-0 flex-1 flex-col px-6">
         <p className="text-2xl font-normal font-jua leading-9 text-[#241F48] mt-6">
           다시 만나서 반가워요
         </p>
         {/* 입력창 */}
-        <div className="flex flex-col gap-4 mt-6 mb-[387px]">
+        <div className="flex shrink-0 flex-col gap-4 mt-6">
           <Input
             label="이메일"
             type="email"
@@ -72,6 +72,7 @@ export default function Login() {
             placeholder="비밀번호를 입력해주세요."
           />
         </div>
+        <div aria-hidden className="min-h-0 w-full flex-1 max-h-[387px]" />
         <Button
           text={isLoading ? "로그인 중..." : "로그인"}
           onClick={handleLogin}

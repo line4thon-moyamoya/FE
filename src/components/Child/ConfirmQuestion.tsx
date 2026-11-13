@@ -38,7 +38,7 @@ export default function ConfirmQuestion({
         {single ? (
           <WordCard word={only.word} description={only.description} />
         ) : (
-          <div className="flex gap-3">
+          <div className="grid grid-cols-2 gap-3">
             {candidates.map((candidate) => (
               <PictureCard
                 key={candidate.candidateId}
@@ -52,7 +52,7 @@ export default function ConfirmQuestion({
 
         <div className="flex w-full flex-col gap-3">
           {single ? (
-            <div className="flex gap-3">
+            <div className="grid grid-cols-2 gap-3">
               <Button text="아니야" variant="secondary" size="normal" fullWidth onClick={onDeny} />
               <Button
                 text="맞아!"

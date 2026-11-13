@@ -24,7 +24,7 @@ export default function HeardPlacePick({ onPick, onSkip }: HeardPlacePickProps) 
       <MoyaAside line={"어디서 들었어?\n골라 줘!"} />
 
       <div className="flex flex-col gap-9">
-        <div className="flex flex-wrap gap-3">
+        <div className="grid grid-cols-2 gap-3">
           {MOCK_HEARD_PLACES.map((place) => (
             <PlaceTile key={place.id} place={place} onClick={() => onPick(PLACE_CONTEXT[place.id])} />
           ))}

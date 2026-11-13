@@ -39,6 +39,13 @@ import { getVoiceConsent, setVoiceConsent } from "../../utils/voiceConsent";
 import { requestMicPermission } from "../../utils/micPermission";
 import { isOnline } from "../../utils/network";
 import { getDebugError } from "../../utils/debugError";
+import {
+  DEBUG_REPETITION,
+  DEBUG_SESSION,
+  DEBUG_SONG,
+  DEBUG_WORD,
+  getDebugStage,
+} from "../../utils/debugStage";
 
 /** 평소 홈에서 모야가 건네는 말 */
 const GREETING = "안녕! 나는 모야야.\n궁금한 말 물어봐!";
@@ -60,17 +67,28 @@ export default function ChildHome() {
   const justPicked = Boolean(navState?.justPicked);
   const [intro, setIntro] = useState(justPicked);
 
-  const [stage, setStage] = useState<TalkStage>("idle");
+  // 테스트: /home?stage=meaning 처럼 마이크 없이 다음 화면을 바로 열어 본다 (개발 모드 전용)
+  const debugStage = getDebugStage();
+
+  const [stage, setStage] = useState<TalkStage>(debugStage ?? "idle");
   const [songModalOpen, setSongModalOpen] = useState(false);
 
   /** 질문 세션. 녹음을 보내면 채워진다 */
-  const [session, setSession] = useState<AnalyzeResult | null>(null);
+  const [session, setSession] = useState<AnalyzeResult | null>(
+    debugStage ? DEBUG_SESSION : null,
+  );
   /** 아이가 고른 뒤 확정된 단어 */
-  const [word, setWord] = useState<ConfirmResult | null>(null);
+  const [word, setWord] = useState<ConfirmResult | null>(
+    debugStage ? DEBUG_WORD : null,
+  );
   /** 따라 말하기 결과 */
-  const [repetition, setRepetition] = useState<RepetitionResult | null>(null);
+  const [repetition, setRepetition] = useState<RepetitionResult | null>(
+    debugStage ? DEBUG_REPETITION : null,
+  );
   /** 다섯 장을 채우면 만들어지는 노래 */
-  const [song, setSong] = useState<SongDetail | null>(null);
+  const [song, setSong] = useState<SongDetail | null>(
+    debugStage ? DEBUG_SONG : null,
+  );
 
   // 음성 수집 동의 여부 (설정에서 철회하면 false)
   const [hasVoiceConsent, setHasVoiceConsent] = useState(getVoiceConsent());

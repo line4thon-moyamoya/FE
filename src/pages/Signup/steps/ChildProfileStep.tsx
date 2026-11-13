@@ -21,7 +21,7 @@ export default function ChildProfileStep({
   const childName = data.childName.trim();
 
   return (
-    <div className="flex flex-col pl-6">
+    <div className="flex min-h-0 flex-1 flex-col px-6">
       <h1 className="mt-6 font-jua text-2xl leading-9 font-normal text-[#241F48]">
         아이 프로필을 만들어요
       </h1>

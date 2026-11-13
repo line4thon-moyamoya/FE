@@ -20,7 +20,7 @@ export default function MoyaAside({
 }: MoyaAsideProps) {
   const { child } = useChildMode();
   return (
-    <div className="flex h-[104px] w-full items-center gap-1">
+    <div className="flex min-h-[104px] w-full items-center gap-1">
       <Moya look={child.look} mood={mood} size={moyaSize} />
       <SpeechBubble text={line} tail="left" width="fill" onReplay={onReplay} />
     </div>

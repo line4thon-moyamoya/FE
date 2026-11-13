@@ -2,13 +2,26 @@
 
 /*
   상태바 자리. 화면이 자기 배경으로 이 영역까지 칠하도록 안쪽 여백으로 둔다.
-  나중에 실제 기기에 맞출 때 이 값만 env(safe-area-inset-top) 으로 바꾸면 된다.
+  노치가 더 깊은 기기에서만 그만큼 늘어난다.
 */
 @utility pt-status {
-  padding-top: 62px;
+  padding-top: max(62px, env(safe-area-inset-top, 0px));
+}
+
+/* 탭바 안쪽의 홈 인디케이터 자리 */
+@utility pb-home {
+  padding-bottom: max(44px, env(safe-area-inset-bottom, 0px));
+}
+
+/* 탭바에 가리지 않도록 화면이 비워 두는 아래 여백. 탭바 높이와 같이 움직인다 */
+@utility pb-tabbar {
+  padding-bottom: max(113px, calc(69px + env(safe-area-inset-bottom, 0px)));
 }
 
 @theme {
+  /* 콘텐츠 최대 너비. 배경은 화면을 꽉 채우고 이 안쪽만 제한한다 */
+  --container-content: 480px;
+
   /* ---------------------------------------------------------------
    * 색
    * 괄호 안 = Figma 변수 이름

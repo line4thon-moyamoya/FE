@@ -15,7 +15,7 @@ export default function WeeklySummaryCard({
   onReportClick,
 }: WeeklySummaryCardProps) {
   return (
-    <section className="w-[354px] h-[189px] bg-white rounded-3xl px-[18px] pt-[18px] pb-4 shadow-[0px_5px_0px_0px_rgba(231,228,243,1.00)]">
+    <section className="w-full min-h-[189px] bg-white rounded-3xl px-[18px] pt-[18px] pb-4 shadow-[0px_5px_0px_0px_rgba(231,228,243,1.00)]">
       <h2 className="font-jua text-xl leading-7 font-normal text-[#241F48]">
         이번 주 {childName}
         {iga(childName)} 물어본 말

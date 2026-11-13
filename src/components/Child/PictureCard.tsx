@@ -18,12 +18,12 @@ export default function PictureCard({ word, hint, onReplay, onClick }: PictureCa
       tabIndex={0}
       onClick={onClick}
       onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onClick?.()}
-      className="flex h-[236px] w-[171px] cursor-pointer flex-col items-center justify-center gap-1.5
+      className="flex min-h-[236px] w-full min-w-0 cursor-pointer flex-col items-center justify-center gap-1.5
         rounded-3xl bg-white shadow-picture-card transition-transform duration-100 active:scale-[0.97]"
     >
       {icon && <img src={icon} alt="" className="h-24 w-24" />}
 
-      <strong className="font-jua text-[40px] font-normal text-ink">{word}</strong>
+      <strong className="w-full text-center font-jua text-[40px] font-normal break-words text-ink">{word}</strong>
       <p className="font-noto text-[13px] font-bold text-ink-muted">{hint}</p>
 
       {/* 다시 듣기는 카드 선택과 별개로 동작 */}

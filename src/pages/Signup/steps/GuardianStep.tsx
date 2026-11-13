@@ -16,7 +16,7 @@ export default function GuardianStep({
     data.agreeGuardian;
 
   return (
-    <div className="flex flex-col pl-6">
+    <div className="flex min-h-0 flex-1 flex-col px-6">
       <h1 className="font-jua font-normal leading-9 mt-6 text-2xl text-[#241F48]">
         보호자 계정을 만들어 주세요
       </h1>
@@ -57,7 +57,8 @@ export default function GuardianStep({
       </div>
 
       {/* 다음 버튼 */}
-      <div className="mt-[268px]">
+      <div aria-hidden className="min-h-0 w-full flex-1 max-h-[268px]" />
+      <div>
         <Button text="다음" showArrow onClick={onNext} disabled={!canNext} />
       </div>
     </div>

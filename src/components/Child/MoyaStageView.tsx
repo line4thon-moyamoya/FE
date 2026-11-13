@@ -16,8 +16,8 @@ function SoundWave({ side }: { side: "left" | "right" }) {
       src={soundwave}
       alt=""
       aria-hidden
-      className={`absolute top-[109px] h-11 w-[30px] ${
-        side === "left" ? "left-[6px]" : "left-[264px] -scale-x-100"
+      className={`absolute top-[39.49%] h-[15.94%] w-[10%] ${
+        side === "left" ? "left-[2%]" : "left-[88%] -scale-x-100"
       }`}
     />
   );
@@ -44,31 +44,33 @@ export default function MoyaStageView({
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-[22px] px-6 pt-[18px] pb-[14px]">
       {/* 대사 줄 수가 바뀌어도 모야가 움직이지 않도록 높이를 고정 */}
-      <div className="flex h-[100px] w-[270px] flex-col justify-end">
+      <div className="flex h-[100px] w-full max-w-[270px] flex-col justify-end">
         <SpeechBubble text={view.line ?? greeting} />
       </div>
 
       {/* 모야 무대. 캐릭터가 위로 조금 삐져나오도록 둠 */}
-      <div className="relative h-[276px] w-[300px]">
+      <div
+        className="relative aspect-[300/276] w-[calc(73.9%+35px)] max-w-[300px] shrink-0"
+      >
         {/* 발밑 그림자. 단계가 바뀔 때 나타났다 사라지지 않도록 항상 깔아 둠 */}
         <span
           aria-hidden
-          className="absolute top-[252px] left-[65px] h-6 w-[170px] rounded-[50%] bg-line-warm blur-[2px]"
+          className="absolute top-[91.3%] left-[21.67%] h-[8.7%] w-[56.67%] rounded-[50%] bg-line-warm blur-[2px]"
         />
 
         <Moya
           look={child.look}
           mood={mood ?? view.mood}
-          size={290}
+          size="96.67%"
           glow
-          className="absolute -top-[14px] left-[5px]"
+          className="absolute -top-[5.07%] left-[1.67%]"
         />
 
         {view.sparkles && (
           <>
-            <Sparkle size={24} left={17} top={65} />
-            <Sparkle size={18} left={41} top={93} />
-            <Sparkle size={18} left={232} top={47} />
+            <Sparkle size="8%" left="5.67%" top="23.55%" />
+            <Sparkle size="6%" left="13.67%" top="33.7%" />
+            <Sparkle size="6%" left="77.33%" top="17.03%" />
           </>
         )}
 

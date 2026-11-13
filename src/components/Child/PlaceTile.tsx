@@ -21,7 +21,7 @@ export default function PlaceTile({ place, onClick }: PlaceTileProps) {
     <button
       type="button"
       onClick={onClick}
-      className="flex h-28 w-[171px] cursor-pointer flex-col items-center justify-center gap-2
+      className="flex h-full min-h-28 w-full min-w-0 cursor-pointer flex-col items-center justify-center gap-2
         rounded-[22px] bg-white shadow-place-tile transition-transform duration-100 active:scale-[0.97]"
     >
       <span className="flex h-12 w-12 items-center justify-center rounded-3xl bg-lavender">

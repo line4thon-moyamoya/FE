@@ -8,12 +8,12 @@ interface KeypadProps {
 const NUMBERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
 const keyStyle =
-  "flex h-[58px] w-[111.33334px] items-center justify-center rounded-2xl border-2 border-[#EFE6D3] bg-white " +
+  "flex h-[58px] w-full min-w-0 items-center justify-center rounded-2xl border-2 border-[#EFE6D3] bg-white " +
   "font-jua text-2xl text-[#241F48] font-normal leading-8 shadow-[0px_4px_0px_0px_rgba(250,237,209,1.00)] cursor-pointer";
 
 export default function Keypad({ onNumber, onDelete }: KeypadProps) {
   return (
-    <div className="grid w-full grid-cols-3 gap-[10px] pl-6">
+    <div className="grid w-full grid-cols-3 gap-[10px]">
       {NUMBERS.map((num) => (
         <button
           key={num}

@@ -23,7 +23,7 @@ export default function PinStep({ data, updateData, onNext }: StepProps) {
   };
 
   return (
-    <div className="flex flex-col pr-6">
+    <div className="flex min-h-0 flex-1 flex-col px-6">
       <div className="mt-6 flex flex-col items-center gap-6">
         <div className="flex h-18 w-18 items-center justify-center rounded-[36px] bg-[#EEEAFF]">
           <img src={lock} alt="" className="h-[38px] w-[38px]" />
@@ -35,7 +35,8 @@ export default function PinStep({ data, updateData, onNext }: StepProps) {
         </h1>
         <PinDots length={data.pin.length} total={PIN_LENGTH} />
       </div>
-      <div className="mt-[186px]">
+      <div aria-hidden className="min-h-0 w-full flex-1 max-h-[186px]" />
+      <div className="shrink-0 pb-10">
         <Keypad onNumber={handleNumber} onDelete={handleDelete} />
       </div>
     </div>

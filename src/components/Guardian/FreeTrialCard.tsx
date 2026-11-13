@@ -26,7 +26,7 @@ export default function FreeTrialCard({
       </div>
 
       {/* 진행 바 */}
-      <div className="h-2 w-[318px] rounded-sm bg-[#EEEAFF]">
+      <div className="h-2 w-full rounded-sm bg-[#EEEAFF]">
         <div
           className="h-full rounded-full bg-[#7B61F8] transition-[width] duration-300"
           style={{ width: `${percent}%` }}

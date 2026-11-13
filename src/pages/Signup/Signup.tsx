@@ -8,7 +8,7 @@ import ChildProfileStep from "./steps/ChildProfileStep";
 import VoiceConsentStep from "./steps/VoiceConsentStep";
 import PinStep from "./steps/PinStep";
 import MicPermissionStep from "./steps/MicPermissionStep";
-import { clearAuth, signup } from "../../api/auth";
+import { clearAuth, signup, verifyParentPin } from "../../api/auth";
 import { setCurrentChildId } from "../../utils/currentChild";
 
 export default function Signup() {
@@ -52,6 +52,11 @@ export default function Signup() {
       localStorage.setItem("accessToken", result.accessToken);
       localStorage.setItem("refreshToken", result.refreshToken);
       setCurrentChildId(result.childId);
+
+      // 모야 선택을 서버에 저장하려면 보호자 모드 토큰이 필요하다.
+      // 방금 만든 PIN 으로 미리 받아 두고, 저장이 끝나면 모야 고르기 화면에서 지운다
+      await verifyParentPin(dataRef.current.pin).catch(() => null);
+
       goNext();
     } catch (error) {
       const message = axios.isAxiosError(error)
@@ -64,7 +69,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex flex-col ">
+    <div className="flex h-full flex-col">
       <StepHeader step={step} totalSteps={5} onBack={goBack} />
 
       {step === 1 && (

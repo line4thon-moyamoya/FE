@@ -64,7 +64,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex flex-col ">
+    <div className="flex h-full flex-col">
       <StepHeader step={step} totalSteps={5} onBack={goBack} />
 
       {step === 1 && (

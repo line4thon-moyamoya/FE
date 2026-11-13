@@ -47,7 +47,7 @@ export default function Login() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex pt-15 pl-6">
+      <div className="pt-status flex pl-6">
         <BackButton />
       </div>
 

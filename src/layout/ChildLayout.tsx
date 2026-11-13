@@ -69,7 +69,7 @@ export default function ChildLayout() {
         childPath: (to) => `/children/${id}/${to}`,
       }}
     >
-      <main className="pt-status flex h-full flex-col bg-cream pb-[113px]">
+      <main className="pt-status flex h-full flex-col bg-cream">
         <ChildHeader
           childName={child.nickname}
           coupons={coupons}
@@ -77,7 +77,10 @@ export default function ChildLayout() {
           onGuardianClick={() => navigate("/guardian/password")}
         />
 
-        <Outlet />
+        {/* 본문만 스크롤한다. 헤더와 탭바는 프레임에 붙어 있는다 */}
+        <div className="flex min-h-0 flex-1 flex-col">
+          <Outlet />
+        </div>
 
         <Footer basePath={`/children/${id}`} />
 

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import MoyaLookCard from "../../components/Child/MoyaLookCard";
 import SpeechBubble from "../../components/common/SpeechBubble/SpeechBubble";
 import { setCurrentLook } from "../../utils/currentLook";
+import { updateChild } from "../../api/child";
 import { MOYA_LOOKS, type MoyaLook } from "../../types/moya";
 import { getCurrentChildId } from "../../utils/currentChild";
 

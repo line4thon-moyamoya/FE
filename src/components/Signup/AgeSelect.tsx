@@ -17,7 +17,7 @@ export default function AgeSelect({ value, onChange }: AgeSelectProps) {
         <button
           type="button"
           onClick={() => onChange("3-4")}
-          className={`h-[52px] w-[170px] rounded-2xl font-jua text-lg ${
+          className={`h-[52px] min-h-[52px] flex-1 min-w-0 rounded-2xl font-jua text-lg ${
             value === "3-4" ? selectedStyle : defaultStyle
           }`}
         >
@@ -27,7 +27,7 @@ export default function AgeSelect({ value, onChange }: AgeSelectProps) {
         <button
           type="button"
           onClick={() => onChange("5")}
-          className={`h-[52px] w-[170px] rounded-2xl font-jua text-lg ${
+          className={`h-[52px] min-h-[52px] flex-1 min-w-0 rounded-2xl font-jua text-lg ${
             value === "5" ? selectedStyle : defaultStyle
           }`}
         >

@@ -55,7 +55,7 @@ export default function MissingWordItem({
   };
 
   return (
-    <li className="w-[354px] justify-start items-start flex flex-col gap-3 bg-white rounded-3xl p-4 shadow-[0px_5px_0px_0px_rgba(231,228,243,1.00)]">
+    <li className="w-full justify-start items-start flex flex-col gap-3 bg-white rounded-3xl p-4 shadow-[0px_5px_0px_0px_rgba(231,228,243,1.00)]">
       {/* 상단: 스피커 + 들은 말 + 시간 */}
       <div className="flex items-center gap-3">
         <div className="relative flex shrink-0 w-10 h-10">
@@ -89,7 +89,7 @@ export default function MissingWordItem({
 
       {isCorrected ? (
         /* 이미 알려준 상태 */
-        <div className="w-[322px] h-[50px] flex items-center justify-between mt-4 rounded-2xl bg-[#F5F3FA] px-4">
+        <div className="w-full h-[50px] flex items-center justify-between mt-4 rounded-2xl bg-[#F5F3FA] px-4">
           <span className="font-jua text-base font-normal leading-6 text-[#241F48]">
             {word.correctedText}
           </span>
@@ -112,12 +112,12 @@ export default function MissingWordItem({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="아이가 말한 단어는?"
-            className="w-[322px] h-[50px] rounded-2xl bg-[#F6F5FA] px-4 font-noto font-bold text-base leading-6 text-[#241F48] placeholder:text-[#9E98BF] outline-none focus:ring-2 focus:ring-[#D9D2FF]"
+            className="w-full h-[50px] rounded-2xl bg-[#F6F5FA] px-4 font-noto font-bold text-base leading-6 text-[#241F48] placeholder:text-[#9E98BF] outline-none focus:ring-2 focus:ring-[#D9D2FF]"
           />
           <button
             type="submit"
             disabled={!trimmed || isSubmitting}
-            className="cursor-pointer w-[322px] h-15 rounded-[20px] px-5 bg-white border-2 border-[#D9D0FF] shadow-[0px_5px_0px_0px_rgba(228,220,255,1.00)] font-jua text-xl font-normal leading-6 text-[#6A4FF3] disabled:cursor-not-allowed disabled:opacity-50"
+            className="cursor-pointer w-full h-15 rounded-[20px] px-5 bg-white border-2 border-[#D9D0FF] shadow-[0px_5px_0px_0px_rgba(228,220,255,1.00)] font-jua text-xl font-normal leading-6 text-[#6A4FF3] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isSubmitting ? "알려주는 중..." : "모야에게 알려주기"}
           </button>

@@ -14,7 +14,7 @@ export default function SongProgress({ progress, currentSec, duration }: SongPro
         aria-valuenow={Math.floor(currentSec)}
         aria-valuemin={0}
         aria-valuemax={duration}
-        className="h-2 w-[354px] overflow-hidden rounded-full bg-[#E4DFF5]"
+        className="h-2 w-full overflow-hidden rounded-full bg-[#E4DFF5]"
       >
         <div
           className="h-full rounded-full bg-[#6A4FF3] transition-[width] duration-200"

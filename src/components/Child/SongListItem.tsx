@@ -14,7 +14,7 @@ export default function SongListItem({ song, onClick }: SongListItemProps) {
       <button
         type="button"
         onClick={onClick}
-        className="cursor-pointer flex w-[354px] h-20 items-center gap-[14px] py-[14px] pl-[14px] pr-4 rounded-[20px] bg-[#EEEAFF] text-left"
+        className="cursor-pointer flex w-full h-20 items-center gap-[14px] py-[14px] pl-[14px] pr-4 rounded-[20px] bg-[#EEEAFF] text-left"
       >
         <span className="flex w-[52px] h-[52px] items-center justify-center rounded-full bg-[#6A4FF3]">
           <img src={play} className="w-6 h-6" />

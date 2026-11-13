@@ -16,7 +16,7 @@ export default function SettingSection({
       <h2 className="font-noto text-xs font-bold leading-4 text-[#6F6A8C]">
         {title}
       </h2>
-      <ul className="w-[354px] bg-white rounded-3xl divide-y divide-[#EFE6D3] shadow-[0px_5px_0px_0px_rgba(231,228,243,1.00)]">
+      <ul className="w-full bg-white rounded-3xl divide-y divide-[#EFE6D3] shadow-[0px_5px_0px_0px_rgba(231,228,243,1.00)]">
         {children}
       </ul>
       {description && (

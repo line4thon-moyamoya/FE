@@ -16,7 +16,7 @@ export default function MoyaLookCard({ look, selected, onClick }: MoyaLookCardPr
       onClick={onClick}
       aria-pressed={selected}
       aria-label={MOYA_LOOK_INFO[look].label}
-      className={`relative flex h-[170px] w-[354px] cursor-pointer items-center justify-center
+      className={`relative flex h-[170px] min-h-0 w-full cursor-pointer items-center justify-center
         rounded-[28px] shadow-look-card transition-transform duration-100 active:scale-[0.98]
         ${selected ? "bg-line-lavender" : "bg-cream"}`}
     >

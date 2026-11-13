@@ -52,7 +52,7 @@ export default function WeeklyReport() {
               이번 주에 물어본 단어가 없어요
             </p>
           ) : (
-            <ul className="w-[354px] bg-white rounded-3xl divide-y divide-[#EFE6D3] shadow-[0px_5px_0px_0px_rgba(231,228,243,1.00)]">
+            <ul className="w-full bg-white rounded-3xl divide-y divide-[#EFE6D3] shadow-[0px_5px_0px_0px_rgba(231,228,243,1.00)]">
               {weeklyReport.wordRecords.map((record) => (
                 <WordRecordItem key={record.id} record={record} />
               ))}

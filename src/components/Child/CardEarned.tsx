@@ -56,9 +56,9 @@ export default function CardEarned({
             <span className="font-jua text-2xl font-normal text-ink-muted">{iya(word)}</span>
           </p>
 
-          <span className="h-0.5 w-[306px] bg-line-cream" />
+          <span className="h-0.5 w-[calc(100%-48px)] bg-line-cream" />
 
-          <p className="w-[306px] text-center font-noto text-[15px] leading-[1.55] font-bold text-ink">
+          <p className="w-[calc(100%-48px)] text-center font-noto text-[15px] leading-[1.55] font-bold text-ink">
             {description}
           </p>
         </div>

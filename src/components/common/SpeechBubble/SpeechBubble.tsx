@@ -51,11 +51,11 @@ export default function SpeechBubble({
 }: SpeechBubbleProps) {
   return (
     <div
-      style={width === "fill" ? undefined : { width }}
+      style={width === "fill" ? undefined : { width, maxWidth: "100%" }}
       className={`relative flex items-center gap-3 rounded-3xl border-2 border-line-warm
         bg-white py-[18px] pr-[30px] pl-5 shadow-bubble ${width === "fill" ? "flex-1" : ""} ${className}`}
     >
-      <p className="flex-1 text-center font-jua text-xl leading-[1.5] font-normal whitespace-pre-line text-ink">
+      <p className="min-w-0 flex-1 text-center font-jua break-words text-xl leading-[1.5] font-normal whitespace-pre-line text-ink">
         {text}
       </p>
 

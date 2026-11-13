@@ -54,8 +54,8 @@ function MicIcon() {
 }
 
 const SIZE_STYLE: Record<ButtonSize, string> = {
-  normal: "h-[60px] rounded-[20px] text-xl leading-[1.2]",
-  large: "h-[66px] rounded-3xl text-2xl leading-8",
+  normal: "min-h-[60px] py-2 rounded-[20px] text-xl leading-[1.2]",
+  large: "min-h-[66px] py-2 rounded-3xl text-2xl leading-8",
 };
 
 const VARIANT_STYLE: Record<ButtonVariant, string> = {
@@ -84,18 +84,19 @@ export default function Button({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`relative flex cursor-pointer items-center justify-center gap-2 px-5
+      className={`relative flex cursor-pointer items-center justify-center gap-2
         font-jua font-normal disabled:opacity-40
-        ${fullWidth ? "w-full" : "w-[346px]"}
+        ${showArrow ? "pr-12 pl-5" : "px-5"}
+        ${fullWidth ? "w-full" : "w-full max-w-[346px]"}
         ${SIZE_STYLE[size]} ${VARIANT_STYLE[variant]} ${primaryShadow} ${className}`}
     >
       {icon === "mic" ? (
         <MicIcon />
       ) : (
-        icon && <img src={ICON_SRC[icon]} alt="" className="h-6 w-6" />
+        icon && <img src={ICON_SRC[icon]} alt="" className="h-6 w-6 shrink-0" />
       )}
-      {text}
-      {showArrow && <img src={arrow} alt="" className="absolute right-4 h-6 w-6" />}
+      <span className="min-w-0 break-keep">{text}</span>
+      {showArrow && <img src={arrow} alt="" className="absolute right-4 h-6 w-6 shrink-0" />}
     </button>
   );
 }

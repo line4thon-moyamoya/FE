@@ -28,7 +28,7 @@ export interface WordRecord {
   spokenAs: string;  // 아이가 말한 표현 (예: 편니점)
   image?: string;    // 단어 아이콘 (없으면 첫 글자 표시)
   bgColor?: string;  // 아이콘 배경색 (없으면 기본 연보라)
-  stars: StarCount;  // 학습 정도 (0~3)
+  stars?: StarCount;  // 학습 정도 (0~3)
 }
 
 export interface WeeklyReport {

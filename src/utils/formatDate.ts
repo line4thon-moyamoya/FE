@@ -16,3 +16,18 @@ export const formatDateRange = (start: string, end: string) => {
   const e = new Date(end);
   return `${s.getMonth() + 1}.${s.getDate()} - ${e.getMonth() + 1}.${e.getDate()}`;
 };
+
+// weeksAgo=1 이면 지난주 월요일. toISOString() 금지 (UTC 변환 시 하루 밀림)
+export const getWeekStartDate = (weeksAgo = 0, base = new Date()) => {
+  const d = new Date(base);
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7) - weeksAgo * 7);
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${m}-${day}`;
+};
+
+// "2026-11-09" → "11월 2주"
+export const formatWeekLabel = (weekStartDate: string) => {
+  const [, m, d] = weekStartDate.split("-").map(Number);
+  return `${m}월 ${Math.ceil(d / 7)}주`;
+};

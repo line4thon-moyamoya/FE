@@ -5,10 +5,24 @@ import Keypad from "../../../components/Signup/Keypad";
 
 const PIN_LENGTH = 4;
 
-export default function PinStep({ data, updateData, onNext }: StepProps) {
+interface PinStepProps extends StepProps {
+  /** 가입에 실패했을 때 보여 줄 문구 */
+  error?: string | null;
+  /** 다시 입력하기 시작하면 문구를 지운다 */
+  onClearError?: () => void;
+}
+
+export default function PinStep({
+  data,
+  updateData,
+  onNext,
+  error,
+  onClearError,
+}: PinStepProps) {
   const handleNumber = (num: string) => {
     if (data.pin.length >= PIN_LENGTH) return;
 
+    onClearError?.();
     const newPin = data.pin + num;
     updateData({ pin: newPin });
 
@@ -19,6 +33,7 @@ export default function PinStep({ data, updateData, onNext }: StepProps) {
   };
 
   const handleDelete = () => {
+    onClearError?.();
     updateData({ pin: data.pin.slice(0, -1) });
   };
 
@@ -33,7 +48,17 @@ export default function PinStep({ data, updateData, onNext }: StepProps) {
           <br />
           비밀번호 4자리를 정해 주세요
         </h1>
-        <PinDots length={data.pin.length} total={PIN_LENGTH} />
+
+        {/* key 가 바뀌어야 흔들림이 매번 다시 재생됨 */}
+        <div key={error ?? ""} className={error ? "animate-shake" : undefined}>
+          <PinDots length={data.pin.length} total={PIN_LENGTH} />
+        </div>
+
+        {error && (
+          <p className="text-center font-jua text-base leading-6 font-normal text-brand-action">
+            {error}
+          </p>
+        )}
       </div>
       <div aria-hidden className="min-h-0 w-full flex-1 max-h-[186px]" />
       <div className="shrink-0 pb-10">

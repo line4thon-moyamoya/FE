@@ -44,6 +44,7 @@ export default function ConfirmQuestion({
                 key={candidate.candidateId}
                 word={candidate.word}
                 hint={candidate.description}
+                imageUrl={candidate.imageUrl}
                 onClick={() => onConfirm(candidate.candidateId)}
               />
             ))}

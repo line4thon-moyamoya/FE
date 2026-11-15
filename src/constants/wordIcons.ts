@@ -5,6 +5,11 @@
  * 아이콘을 추가할 때는 words/ 에 svg 를 넣고 아래 표에 한 줄만 더하면 됨.
  */
 
+import wordDefault from "../assets/icons/word-default.svg";
+
+/** 아이콘도 서버 이미지도 없는 단어에 쓰는 기본 그림 */
+export const WORD_DEFAULT_IMAGE = wordDefault;
+
 const ICON_URLS = import.meta.glob("../assets/icons/words/*.svg", {
   eager: true,
   query: "?url",

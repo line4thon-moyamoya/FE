@@ -2,7 +2,7 @@ import wordBook from "../../assets/icons/word-book.svg";
 import Button from "../common/Button/Button";
 import CouponStamp from "./CouponStamp";
 import MoyaAside from "./MoyaAside";
-import { getWordIcon } from "../../constants/wordIcons";
+import { getWordIcon, WORD_DEFAULT_IMAGE } from "../../constants/wordIcons";
 import { COUPON_GOAL } from "../../types/child";
 import { iya } from "../../utils/josa";
 
@@ -15,6 +15,8 @@ interface CardEarnedProps {
   onAskAnother: () => void;
   /** 단어 수첩 버튼 */
   onOpenNotebook?: () => void;
+  /** 서버가 준 단어 그림. 없으면 내장 아이콘을 쓴다 */
+  imageUrl?: string | null;
 }
 
 /**
@@ -27,9 +29,10 @@ export default function CardEarned({
   coupons,
   onAskAnother,
   onOpenNotebook,
+  imageUrl,
 }: CardEarnedProps) {
   const complete = coupons >= COUPON_GOAL;
-  const icon = getWordIcon(word);
+  const icon = imageUrl ?? getWordIcon(word) ?? WORD_DEFAULT_IMAGE;
 
   const line = complete
     ? "쿠폰 다섯 장!\n우리 노래가 생겼어!"

@@ -1,5 +1,5 @@
 import ReplayButton from "../common/ReplayButton/ReplayButton";
-import { getWordIcon } from "../../constants/wordIcons";
+import { getWordIcon, WORD_DEFAULT_IMAGE } from "../../constants/wordIcons";
 
 interface PictureCardProps {
   word: string;
@@ -7,10 +7,18 @@ interface PictureCardProps {
   hint: string;
   onReplay?: () => void;
   onClick?: () => void;
+  /** 서버가 준 단어 그림. 없으면 내장 아이콘을 쓴다 */
+  imageUrl?: string | null;
 }
 
-export default function PictureCard({ word, hint, onReplay, onClick }: PictureCardProps) {
-  const icon = getWordIcon(word);
+export default function PictureCard({
+  word,
+  hint,
+  onReplay,
+  onClick,
+  imageUrl,
+}: PictureCardProps) {
+  const icon = imageUrl ?? getWordIcon(word) ?? WORD_DEFAULT_IMAGE;
 
   return (
     <div

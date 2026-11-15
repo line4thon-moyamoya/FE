@@ -1,5 +1,5 @@
 import notebookCard from "../../assets/icons/word-book.svg";
-import { getWordIcon } from "../../constants/wordIcons";
+import { getWordIcon, WORD_DEFAULT_IMAGE } from "../../constants/wordIcons";
 import { iya } from "../../utils/josa";
 import type { LearnedWordDetail } from "../../api/wordbook";
 
@@ -9,7 +9,7 @@ export default function WordCardDetailView({
   card: LearnedWordDetail;
 }) {
   // 서버 그림이 없으면 단어 이름으로 로컬 아이콘을 찾는다
-  const image = card.imageUrl ?? getWordIcon(card.word);
+  const image = card.imageUrl ?? getWordIcon(card.word) ?? WORD_DEFAULT_IMAGE;
 
   return (
     <section className="min-h-[302px] w-full gap-2.5 rounded-3xl bg-white shadow-word-card">

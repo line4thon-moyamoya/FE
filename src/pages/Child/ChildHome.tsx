@@ -283,8 +283,8 @@ export default function ChildHome() {
     try {
       const result = await confirmWord(session.sessionId, candidateId);
       setWord(result);
-      if (result.descriptionAudioUrl) {
-        playVoice({ audioUrl: result.descriptionAudioUrl });
+      if (result.wordAudioUrl) {
+        playVoice({ audioUrl: result.wordAudioUrl });
       }
       setStage("meaning");
     } catch (error) {
@@ -448,8 +448,7 @@ export default function ChildHome() {
           bubbleWidth={340}
           onNext={() => setStage("repeat")}
           onReplay={() =>
-            word?.descriptionAudioUrl &&
-            playVoice({ audioUrl: word.descriptionAudioUrl })
+            word?.wordAudioUrl && playVoice({ audioUrl: word.wordAudioUrl })
           }
         />
       );
@@ -495,6 +494,7 @@ export default function ChildHome() {
         <CardEarned
           word={word?.word ?? ""}
           description={word?.description ?? ""}
+          imageUrl={word?.imageUrl}
           coupons={coupons}
           onAskAnother={tryStartListening}
           onOpenNotebook={() => navigate(childPath("notebook"))}

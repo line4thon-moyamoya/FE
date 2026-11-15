@@ -34,7 +34,7 @@ export interface LearnedWordDetail {
   word: string;
   description: string;
   imageUrl: string | null;
-  descriptionAudioUrl: string | null;
+  wordAudioUrl: string | null;
 }
 
 /** 카드 상세. 카드 획득 화면과 공용 */

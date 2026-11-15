@@ -1,15 +1,27 @@
 import type { StepProps } from "../../../types/signup";
+import { isValidEmail } from "../../../utils/email";
 import Input from "../../../components/common/Input/Input";
 import Button from "../../../components/common/Button/Button";
 import AgreeCheckbox from "../../../components/Signup/AgreeCheckBox";
+
+interface GuardianStepProps extends StepProps {
+  /** 가입 단계에서 서버가 돌려보낸 문구 */
+  error?: string | null;
+  onClearError?: () => void;
+}
 
 export default function GuardianStep({
   data,
   updateData,
   onNext,
-}: StepProps) {
+  error,
+  onClearError,
+}: GuardianStepProps) {
+  const emailTyped = data.email.trim().length > 0;
+  const emailOk = isValidEmail(data.email);
+
   const canNext =
-    data.email &&
+    emailOk &&
     data.password &&
     data.agreeTerms &&
     data.agreePrivacy &&
@@ -27,13 +39,24 @@ export default function GuardianStep({
           label="이메일"
           type="email"
           value={data.email}
-          onChange={(v) => updateData({ email: v })}
+          onChange={(v) => {
+            onClearError?.();
+            updateData({ email: v });
+          }}
+          placeholder="이메일을 입력해주세요."
+          error={
+            error ??
+            (emailTyped && !emailOk
+              ? "올바른 이메일 형식으로 입력해 주세요."
+              : null)
+          }
         />
         <Input
           label="비밀번호"
           type="password"
           value={data.password}
           onChange={(v) => updateData({ password: v })}
+          placeholder="비밀번호를 입력해주세요."
         />
       </div>
 

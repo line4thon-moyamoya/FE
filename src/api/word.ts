@@ -4,7 +4,7 @@ export interface WordDescription {
   wordId: number;
   word: string;
   description: string;
-  descriptionAudioUrl: string | null;
+  wordAudioUrl: string | null;
 }
 
 /** 확정된 단어의 연령별 설명을 가져온다 */

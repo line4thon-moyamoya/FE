@@ -22,9 +22,6 @@ export interface Candidate {
   wordAudioUrl: string | null;
   wordAudioBase64: string | null;
   wordAudioContentType: string | null;
-  descriptionAudioUrl: string | null;
-  descriptionAudioBase64: string | null;
-  descriptionAudioContentType: string | null;
 }
 
 export interface AnalyzeResult {
@@ -51,7 +48,6 @@ export interface ConfirmResult {
   description: string;
   imageUrl: string | null;
   wordAudioUrl: string | null;
-  descriptionAudioUrl: string | null;
   nextStep: string;
 }
 

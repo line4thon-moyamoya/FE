@@ -39,9 +39,6 @@ const candidate = (id: string, word: string, description: string): Candidate => 
   wordAudioUrl: null,
   wordAudioBase64: null,
   wordAudioContentType: null,
-  descriptionAudioUrl: null,
-  descriptionAudioBase64: null,
-  descriptionAudioContentType: null,
 });
 
 /** 단계를 그리는 데 필요한 최소한의 가짜 데이터 */
@@ -64,7 +61,6 @@ export const DEBUG_WORD: ConfirmResult = {
   description: "은행에 매달 정해진 돈을 넣어서 크게 모으는 거야.",
   imageUrl: null,
   wordAudioUrl: null,
-  descriptionAudioUrl: null,
   nextStep: "WORD_LEARNING",
 };
 

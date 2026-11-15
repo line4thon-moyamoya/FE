@@ -59,7 +59,7 @@ export default function WordCardDetail() {
           <button
             type="button"
             onClick={() =>
-              card.descriptionAudioUrl && playAudio(card.descriptionAudioUrl)
+              card.wordAudioUrl && playAudio(card.wordAudioUrl)
             }
             className="flex h-[60px] w-full cursor-pointer items-center justify-center gap-2
               rounded-[20px] bg-brand font-jua text-xl text-white shadow-button-primary"

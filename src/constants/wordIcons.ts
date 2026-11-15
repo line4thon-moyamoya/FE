@@ -5,11 +5,6 @@
  * 아이콘을 추가할 때는 words/ 에 svg 를 넣고 아래 표에 한 줄만 더하면 됨.
  */
 
-import wordDefault from "../assets/icons/word-default.svg";
-
-/** 아이콘도 서버 이미지도 없는 단어에 쓰는 기본 그림 */
-export const WORD_DEFAULT_IMAGE = wordDefault;
-
 const ICON_URLS = import.meta.glob("../assets/icons/words/*.svg", {
   eager: true,
   query: "?url",
@@ -19,6 +14,9 @@ const ICON_URLS = import.meta.glob("../assets/icons/words/*.svg", {
 function iconUrl(slug: string): string {
   return ICON_URLS[`../assets/icons/words/${slug}.svg`];
 }
+
+/** 아이콘도 서버 이미지도 없는 단어 */
+export const WORD_DEFAULT_IMAGE = iconUrl("basic");
 
 /** 한글 단어 -> 아이콘 파일 이름 */
 const WORD_SLUGS: Record<string, string> = {
@@ -30,7 +28,6 @@ const WORD_SLUGS: Record<string, string> = {
   국정감사: "state-audit",
   국회의원: "lawmaker",
   권리: "rights",
-  기본: "basic",
   기자: "reporter",
   단풍: "autumn-leaves",
   미세먼지: "fine-dust",

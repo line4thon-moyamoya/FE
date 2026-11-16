@@ -1,7 +1,7 @@
 import stickerFilled from "../../assets/icons/sticker-filled.svg";
 import stickerEmpty from "../../assets/icons/sticker-empty.svg";
 import { cardColor, type LearnedWord } from "../../api/wordbook";
-import { getWordIcon, WORD_DEFAULT_IMAGE } from "../../constants/wordIcons";
+import { getWordImage } from "../../constants/wordIcons";
 
 interface WordCardItemProps {
   card: LearnedWord;
@@ -11,7 +11,7 @@ interface WordCardItemProps {
 export default function WordCardItem({ card, onClick }: WordCardItemProps) {
   const { word, imageUrl, isNew, stickerEarned } = card;
   // 서버 그림이 없으면 단어 이름으로 로컬 아이콘을 찾는다
-  const image = imageUrl ?? getWordIcon(word) ?? WORD_DEFAULT_IMAGE;
+  const image = getWordImage(imageUrl, word);
   return (
     <li>
       <button

@@ -2,7 +2,7 @@ import wordBook from "../../assets/icons/word-book.svg";
 import Button from "../common/Button/Button";
 import CouponStamp from "./CouponStamp";
 import MoyaAside from "./MoyaAside";
-import { getWordIcon, WORD_DEFAULT_IMAGE } from "../../constants/wordIcons";
+import { getWordImage } from "../../constants/wordIcons";
 import { COUPON_GOAL } from "../../types/child";
 import { iya } from "../../utils/josa";
 
@@ -32,7 +32,7 @@ export default function CardEarned({
   imageUrl,
 }: CardEarnedProps) {
   const complete = coupons >= COUPON_GOAL;
-  const icon = imageUrl ?? getWordIcon(word) ?? WORD_DEFAULT_IMAGE;
+  const icon = getWordImage(imageUrl, word);
 
   const line = complete
     ? "쿠폰 다섯 장!\n우리 노래가 생겼어!"

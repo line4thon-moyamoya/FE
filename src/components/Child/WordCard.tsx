@@ -1,6 +1,6 @@
 import ReplayButton from "../common/ReplayButton/ReplayButton";
 import RetryButton from "../common/RetryButton/RetryButton";
-import { getWordIcon, WORD_DEFAULT_IMAGE } from "../../constants/wordIcons";
+import { getWordImage } from "../../constants/wordIcons";
 
 interface WordCardProps {
   word: string;
@@ -20,7 +20,7 @@ export default function WordCard({
   imageUrl,
   onRetry,
 }: WordCardProps) {
-  const icon = imageUrl ?? getWordIcon(word) ?? WORD_DEFAULT_IMAGE;
+  const icon = getWordImage(imageUrl, word);
 
   return (
     <div className="relative flex w-full flex-col items-center gap-2.5 rounded-[28px] bg-white py-[22px] shadow-word-card">

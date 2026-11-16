@@ -8,7 +8,7 @@ import ChildProfileStep from "./steps/ChildProfileStep";
 import VoiceConsentStep from "./steps/VoiceConsentStep";
 import PinStep from "./steps/PinStep";
 import MicPermissionStep from "./steps/MicPermissionStep";
-import { clearAuth, signup, verifyParentPin } from "../../api/auth";
+import { clearAuth, signup } from "../../api/auth";
 import { setCurrentChildId } from "../../utils/currentChild";
 
 /** 서버가 거부한 이유별로 돌아갈 단계. 없으면 PIN 단계에 머문다 */
@@ -63,10 +63,6 @@ export default function Signup() {
       localStorage.setItem("accessToken", result.accessToken);
       localStorage.setItem("refreshToken", result.refreshToken);
       setCurrentChildId(result.childId);
-
-      // 모야 선택을 서버에 저장하려면 보호자 모드 토큰이 필요하다.
-      // 방금 만든 PIN 으로 미리 받아 두고, 저장이 끝나면 모야 고르기 화면에서 지운다
-      await verifyParentPin(dataRef.current.pin).catch(() => null);
 
       goNext();
     } catch (error) {

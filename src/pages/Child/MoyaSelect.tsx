@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import MoyaLookCard from "../../components/Child/MoyaLookCard";
 import SpeechBubble from "../../components/common/SpeechBubble/SpeechBubble";
 import { setCurrentLook } from "../../utils/currentLook";
-import { updateChild } from "../../api/child";
+import { setInitialMoyaLook } from "../../api/child";
 import { MOYA_LOOKS, type MoyaLook } from "../../types/moya";
 import { getCurrentChildId } from "../../utils/currentChild";
 
@@ -26,9 +26,7 @@ export default function MoyaSelect() {
     // 홈은 서버에서 모야를 받아 오므로 저장이 끝난 뒤에 넘어가야 한다.
     // 저장에 실패해도 진행은 막지 않는다 (로컬 값으로 보여 준다)
     const saved = childId
-      ? updateChild(childId, { moyaLook: look })
-          .catch(() => null)
-          .finally(() => sessionStorage.removeItem("parentModeToken"))
+      ? setInitialMoyaLook(childId, look).catch(() => null)
       : Promise.resolve(null);
 
     // 고른 모야가 신나하는 모습을 잠깐 보여 준 뒤 홈으로.

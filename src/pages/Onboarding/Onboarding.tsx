@@ -12,7 +12,7 @@ export default function Onboarding() {
 
   return (
     <main className="relative h-full w-full flex flex-col items-center">
-      <div className="absolute inset-x-0 bottom-0 h-[25%] bg-lavender">
+      <div className="fixed inset-x-0 bottom-0 h-[25%] bg-lavender">
         <svg
           className="absolute bottom-full left-0 block h-10 w-full"
           viewBox="0 0 402 40"
@@ -30,14 +30,16 @@ export default function Onboarding() {
           />
         </svg>
       </div>
-      <div className="relative z-10 flex flex-col items-center">
+      <div className="relative z-10 flex h-full w-full flex-col items-center">
         {/* 제목 + 밑줄 */}
-        <div className="flex flex-col mt-[122px]">
+        <div aria-hidden className="min-h-0 w-full flex-1 max-h-[122px]" />
+        <div className="flex shrink-0 flex-col">
           <img src={title} className="w-[212px] h-[49px]" />
           <img src={highlight} className="w-[108px] h-[11px] ml-25" />
         </div>
-        <div className="relative w-full max-w-[390px] aspect-[390/410] mt-6">
-          <img src={moya} className="w-[390px] h-[410px] object-contain" />
+        <div aria-hidden className="min-h-0 w-full flex-1 max-h-[24px]" />
+        <div className="relative w-full max-w-[390px] shrink-0 aspect-[390/410]">
+          <img src={moya} className="h-full w-full object-contain" />
           <img
             src={wondering}
             aria-hidden="true"
@@ -49,13 +51,15 @@ export default function Onboarding() {
             className="absolute top-[45%] left-[82%] w-9 h-9"
           />
         </div>
-        <p className="text-[#6F6A8C] text-base font-bold font-noto leading-7 mt-17 mb-3">
+        <div aria-hidden className="min-h-0 w-full flex-1 max-h-[68px]" />
+        <p className="shrink-0 text-[#6F6A8C] text-base font-bold font-noto leading-7 mb-3">
           모르는 말, 모야한테 물어봐!
         </p>
         <Button onClick={() => navigate("/signup")} text="시작하기" showArrow />
+        <div aria-hidden className="min-h-0 w-full flex-1 max-h-[24px]" />
         <p
           onClick={() => navigate("/login")}
-          className="text-[#9A96B3] text-base font-normal font-jua leading-6 mt-6 cursor-pointer"
+          className="shrink-0 text-[#9A96B3] text-base font-normal font-jua leading-6 cursor-pointer"
         >
           이미 계정이 있어요
         </p>

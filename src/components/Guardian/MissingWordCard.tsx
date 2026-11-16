@@ -28,7 +28,7 @@ export default function MissingWordCard({
     >
       <div className="flex gap-3">
         <img src={mailbox} alt="" className="w-13 h-13" />
-        <div className="flex flex-col gap-1 w-[228px]">
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
           <p className="font-jua font-normal text-base leading-6 text-[#241F48]">
             모야가 못 찾은 말 {count}개
           </p>

@@ -5,10 +5,24 @@ import Keypad from "../../../components/Signup/Keypad";
 
 const PIN_LENGTH = 4;
 
-export default function PinStep({ data, updateData, onNext }: StepProps) {
+interface PinStepProps extends StepProps {
+  /** 가입에 실패했을 때 보여 줄 문구 */
+  error?: string | null;
+  /** 다시 입력하기 시작하면 문구를 지운다 */
+  onClearError?: () => void;
+}
+
+export default function PinStep({
+  data,
+  updateData,
+  onNext,
+  error,
+  onClearError,
+}: PinStepProps) {
   const handleNumber = (num: string) => {
     if (data.pin.length >= PIN_LENGTH) return;
 
+    onClearError?.();
     const newPin = data.pin + num;
     updateData({ pin: newPin });
 
@@ -19,11 +33,12 @@ export default function PinStep({ data, updateData, onNext }: StepProps) {
   };
 
   const handleDelete = () => {
+    onClearError?.();
     updateData({ pin: data.pin.slice(0, -1) });
   };
 
   return (
-    <div className="flex flex-col pr-6">
+    <div className="flex min-h-0 flex-1 flex-col px-6">
       <div className="mt-6 flex flex-col items-center gap-6">
         <div className="flex h-18 w-18 items-center justify-center rounded-[36px] bg-[#EEEAFF]">
           <img src={lock} alt="" className="h-[38px] w-[38px]" />
@@ -33,9 +48,20 @@ export default function PinStep({ data, updateData, onNext }: StepProps) {
           <br />
           비밀번호 4자리를 정해 주세요
         </h1>
-        <PinDots length={data.pin.length} total={PIN_LENGTH} />
+
+        {/* key 가 바뀌어야 흔들림이 매번 다시 재생됨 */}
+        <div key={error ?? ""} className={error ? "animate-shake" : undefined}>
+          <PinDots length={data.pin.length} total={PIN_LENGTH} />
+        </div>
+
+        {error && (
+          <p className="text-center font-jua text-base leading-6 font-normal text-brand-action">
+            {error}
+          </p>
+        )}
       </div>
-      <div className="mt-[186px]">
+      <div aria-hidden className="min-h-0 w-full flex-1 max-h-[186px]" />
+      <div className="shrink-0 pb-10">
         <Keypad onNumber={handleNumber} onDelete={handleDelete} />
       </div>
     </div>

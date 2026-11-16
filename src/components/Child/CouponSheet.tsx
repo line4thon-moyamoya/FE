@@ -13,7 +13,7 @@ interface CouponSheetProps {
 export default function CouponSheet({ coupons, onStart, onClose }: CouponSheetProps) {
   return (
     // 탭바가 z-50 이라 그 위로 올라오게 함
-    <div className="absolute inset-0 z-60 flex flex-col justify-end">
+    <div className="fixed inset-0 z-60 flex flex-col items-center justify-end">
       {/* 바깥을 누르면 닫힘 */}
       <button
         type="button"
@@ -22,7 +22,7 @@ export default function CouponSheet({ coupons, onStart, onClose }: CouponSheetPr
         className="absolute inset-0 cursor-default bg-dim"
       />
 
-      <div className="animate-sheet-up relative flex flex-col items-center gap-5 rounded-t-[32px] bg-cream px-6 pt-3 pb-12">
+      <div className="animate-sheet-up relative flex max-h-[90dvh] w-full max-w-content flex-col items-center gap-5 overflow-y-auto overscroll-contain rounded-t-[32px] bg-cream px-6 pt-3 pb-12">
         <span aria-hidden className="h-[5px] w-11 rounded-[3px] bg-handle" />
 
         <div className="flex w-full flex-col gap-9">

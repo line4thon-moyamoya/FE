@@ -4,7 +4,7 @@ import settings from "../../assets/icons/settings.svg";
 
 export default function VoiceNoticeCard() {
   return (
-    <div className="w-[354px] h-50 bg-white p-[18px] rounded-3xl flex flex-col justify-start items-start gap-5">
+    <div className="w-full h-50 bg-white p-[18px] rounded-3xl flex flex-col justify-start items-start gap-5">
       {/* 음성 */}
       <div className="flex items-center gap-3">
         <div className="w-8 h-8 rounded-2xl bg-[#EEEAFF] flex justify-center items-center">

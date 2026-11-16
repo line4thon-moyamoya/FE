@@ -1,5 +1,5 @@
 import notebookCard from "../../assets/icons/word-book.svg";
-import { getWordIcon } from "../../constants/wordIcons";
+import { getWordImage } from "../../constants/wordIcons";
 import { iya } from "../../utils/josa";
 import type { LearnedWordDetail } from "../../api/wordbook";
 
@@ -9,10 +9,10 @@ export default function WordCardDetailView({
   card: LearnedWordDetail;
 }) {
   // 서버 그림이 없으면 단어 이름으로 로컬 아이콘을 찾는다
-  const image = card.imageUrl ?? getWordIcon(card.word);
+  const image = getWordImage(card.imageUrl, card.word);
 
   return (
-    <section className="h-[302px] w-[354px] gap-2.5 rounded-3xl bg-white shadow-word-card">
+    <section className="min-h-[302px] w-full gap-2.5 rounded-3xl bg-white shadow-word-card">
       {/* 내 카드 라벨 */}
       <div className="flex items-center gap-2 rounded-t-3xl bg-lime-card px-[18px] py-2.5">
         <img src={notebookCard} className="h-5 w-5" />
@@ -31,7 +31,7 @@ export default function WordCardDetailView({
           </span>
         </p>
 
-        <hr className="h-[2px] w-[306px] border-line-cream" />
+        <hr className="h-[2px] w-[calc(100%-48px)] border-line-cream" />
 
         <p className="text-center font-noto text-base leading-6 font-bold text-ink">
           {card.description}

@@ -15,7 +15,7 @@ export default function Toast({ message, onClose, duration = 2000 }: ToastProps)
   return (
     <div
       role="status"
-      className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 rounded-full bg-[#241F48]/90 px-5 py-3 font-noto text-sm font-bold text-white shadow-lg"
+      className="fixed bottom-10 left-1/2 z-[70] w-[calc(100%-48px)] max-w-[calc(var(--container-content)-48px)] -translate-x-1/2 rounded-3xl bg-[#241F48]/90 px-5 py-3 text-center font-noto text-sm font-bold break-words text-white shadow-lg"
     >
       {message}
     </div>

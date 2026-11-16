@@ -55,7 +55,7 @@ export default function WordNotebook() {
           모야한테 모르는 말을 물어봐!
         </p>
       ) : (
-        <ul className="grid grid-cols-3 gap-2.5">
+        <ul className="grid grid-cols-2 gap-2.5 min-[398px]:grid-cols-3">
           {cards.map((card) => (
             <WordCardItem
               key={card.learnedWordId}

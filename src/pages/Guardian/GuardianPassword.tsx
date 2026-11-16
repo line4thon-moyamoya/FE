@@ -60,12 +60,13 @@ export default function GuardianPassword() {
   };
 
   return (
-    <main className="pt-status min-h-full w-full bg-guardian flex flex-col">
+    <main className="pt-status flex h-full w-full flex-col bg-guardian">
       <div className="flex pl-6 pt-1.5">
         <BackButton variant="close" />
       </div>
 
-      <div className="flex flex-col items-center gap-6 mt-[30px]">
+      <div aria-hidden className="min-h-0 w-full flex-1 max-h-[30px]" />
+      <div className="flex shrink-0 flex-col items-center gap-6">
         {/* 자물쇠 아이콘 */}
         <div className="w-20 h-20 bg-[#EEEAFF] rounded-[40px] flex justify-center items-center">
           <img src={lock} alt="" className="w-[42px] h-[42px]" />
@@ -86,13 +87,15 @@ export default function GuardianPassword() {
           <PinDots length={pin.length} total={PIN_LENGTH} />
         </div>
       </div>
+      <div aria-hidden className="min-h-0 w-full flex-1 max-h-[140px]" />
       <button
         type="button"
-        className="mt-[140px] text-base font-normal leading-6 font-jua text-[#D2C6AF]"
+        className="shrink-0 text-base font-normal leading-6 font-jua text-[#D2C6AF]"
       >
         비밀번호를 잊으셨나요?
       </button>
-      <div className="mt-[33px] pb-10 flex flex-col items-center gap-6 pr-6">
+      <div aria-hidden className="min-h-0 w-full flex-1 max-h-[33px]" />
+      <div className="flex shrink-0 flex-col items-center gap-6 px-6 pb-10">
         <Keypad onNumber={handleNumber} onDelete={handleDelete} />
       </div>
     </main>

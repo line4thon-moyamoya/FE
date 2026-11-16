@@ -10,7 +10,7 @@ export default function VoiceConsentStep({
 }: StepProps) {
   const canNext = data.agreeVoice;
   return (
-    <div className="flex flex-col gap-6 pl-6">
+    <div className="flex min-h-0 flex-1 flex-col gap-6 px-6">
       <h1 className="mt-6 font-jua text-2xl leading-9 font-normal text-[#241F48]">
         아이 목소리 사용에
         <br />

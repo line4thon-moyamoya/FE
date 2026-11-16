@@ -23,11 +23,13 @@ export type MoyaStage = "idle" | "listening" | "thinking";
 /**
  * 모야와 나누는 대화의 단계
  *   confirm   이 단어가 맞는지 되묻는 중
+ *   meanings  같은 단어의 다른 뜻 중에 맞는 걸 고르는 중
  *   sayAgain  못 알아들어서 다시 말해달라고 하는 중
  */
 export type TalkStage =
   | MoyaStage
   | "confirm"
+  | "meanings"
   | "sayAgain"
   | "place"
   | "candidates"

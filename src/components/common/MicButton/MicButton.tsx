@@ -60,7 +60,7 @@ export default function MicButton({
         {listening && (
           <span
             aria-hidden
-            className="animate-pulse-ring absolute -top-[32px] -left-[29px] h-[176px] w-[176px]
+            className="animate-pulse-ring absolute -top-[29.5px] -left-[29px] h-[176px] w-[176px]
               rounded-full bg-[rgba(160,141,255,0.12)]"
           />
         )}
@@ -69,7 +69,7 @@ export default function MicButton({
         {!thinking && (
           <span
             aria-hidden
-            className={`absolute -top-[14px] -left-[11px] h-[140px] w-[140px] rounded-full
+            className={`absolute -top-[11.5px] -left-[11px] h-[140px] w-[140px] rounded-full
               ${listening ? "bg-[rgba(160,141,255,0.24)]" : "bg-[rgba(160,141,255,0.16)]"}`}
           />
         )}
@@ -91,7 +91,7 @@ export default function MicButton({
         {/* 안쪽 면. 위쪽 테두리에 빛이 남도록 살짝 내려서 겹침 */}
         <span
           aria-hidden
-          className={`absolute top-[14.7px] left-[12.5px] h-[96.8px] w-[105.5px] rounded-[50%]
+          className={`absolute top-[14.7px] left-[6.25px] h-[96.8px] w-[105.5px] rounded-[50%]
             ${thinking ? "bg-[#CEC9DA]" : "bg-linear-to-b from-brand-action to-[#826CF2]"}`}
         />
 

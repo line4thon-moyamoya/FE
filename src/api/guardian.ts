@@ -12,6 +12,25 @@ export interface GuardianHomeData {
   pendingRequestPreview: { wordRequestId: number; recognizedText: string }[];
 }
 
+export interface WeeklyReportData {
+  reportId: number;
+  childId: number;
+  childName: string;
+  weekStartDate: string;
+  weekEndDate: string;
+  questionCount: number;
+  unrecognizedCount: number;
+  unrecognizedWords: { recognizedText: string }[];
+  words: {
+    wordId: number | null;
+    word: string;
+    recognizedTexts: string[];
+    imageUrl: string | null;
+  }[];
+  conversationTopic: string | null;
+  createdAt: string;
+}
+
 export const getGuardianHome = async (childId?: number) => {
   const response = await api.get("/api/v1/guardian/home", {
     params: childId ? { childId } : undefined,
@@ -67,4 +86,11 @@ export const resolveWordRequest = async (
     status: "RESOLVED";
     resolvedAt: string;
   };
+};
+
+export const getWeeklyReport = async (childId: number, weekStartDate: string) => {
+  const response = await api.get("/api/v1/guardian/weekly-reports", {
+    params: { childId, weekStartDate },
+  });
+  return response.data.data as WeeklyReportData;
 };

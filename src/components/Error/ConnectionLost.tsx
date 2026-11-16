@@ -23,7 +23,8 @@ export default function ConnectionLost({
 
       <Moya look="default" mood="confused" size={220} className="mt-6" />
 
-      <div className="mt-auto flex w-full flex-col gap-3 pt-6">
+      {/* 화면 아래로 밀지 않고 모야 바로 밑에 붙인다 */}
+      <div className="mt-10 flex w-full flex-col gap-3">
         <Button
           text="다시 해 볼래"
           size="normal"

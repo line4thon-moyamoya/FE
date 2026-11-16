@@ -9,7 +9,7 @@ interface AgreeCheckboxProps {
 
 export default function AgreeCheckbox({ text, checked, onChange }: AgreeCheckboxProps) {
   return (
-    <div className="flex w-full items-center justify-between pr-6">
+    <div className="flex w-full items-center justify-between">
       <label className="flex cursor-pointer items-center gap-3">
         <input
           type="checkbox"

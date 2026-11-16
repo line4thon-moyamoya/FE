@@ -51,7 +51,7 @@ export default function VoiceConsentWithdrawSheet({
           type="button"
           onClick={onWithdraw}
           disabled={isWithdrawing}
-          className="cursor-pointer w-[346px] h-[60px] rounded-[20px] px-5 border-2 border-dashed border-[#A08DFF] bg-white font-jua text-xl leading-6 text-[#6F6A8C] disabled:cursor-not-allowed disabled:opacity-50"
+          className="cursor-pointer w-full max-w-[346px] h-[60px] rounded-[20px] px-5 border-2 border-dashed border-[#A08DFF] bg-white font-jua text-xl leading-6 text-[#6F6A8C] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isWithdrawing ? "철회하는 중..." : "철회하기"}
         </button>

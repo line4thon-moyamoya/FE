@@ -25,7 +25,7 @@ export default function ChildHeader({
   const unlocked = coupons >= STAMP_SLOTS + 1;
 
   return (
-    <header className="flex w-full items-center justify-between px-5 py-1.5">
+    <header className="flex w-full shrink-0 items-center justify-between px-5 py-1.5">
       <div className="flex items-center gap-3">
         <img
           src={avatarSrc ?? avatarDefault}

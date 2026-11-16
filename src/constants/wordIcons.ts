@@ -15,6 +15,9 @@ function iconUrl(slug: string): string {
   return ICON_URLS[`../assets/icons/words/${slug}.svg`];
 }
 
+/** 아이콘도 서버 이미지도 없는 단어 */
+export const WORD_DEFAULT_IMAGE = iconUrl("basic");
+
 /** 한글 단어 -> 아이콘 파일 이름 */
 const WORD_SLUGS: Record<string, string> = {
   감지하다: "detect",
@@ -25,7 +28,6 @@ const WORD_SLUGS: Record<string, string> = {
   국정감사: "state-audit",
   국회의원: "lawmaker",
   권리: "rights",
-  기본: "basic",
   기자: "reporter",
   단풍: "autumn-leaves",
   미세먼지: "fine-dust",
@@ -72,6 +74,20 @@ const WORD_SLUGS: Record<string, string> = {
 
 /** 아이콘이 있는 단어 목록 */
 export const WORD_LIST = Object.keys(WORD_SLUGS);
+
+/**
+ * 서버가 준 그림 주소 -> 내장 아이콘 -> 기본 그림 순으로 고른다.
+ *
+ * 서버가 그림이 없는 단어에 `/images/default-word.png` 같은 자기 쪽 경로를 주는 경우가 있는데,
+ * 그대로 쓰면 우리 도메인에서 404 가 나 깨진 그림이 뜬다. 그래서 바로 쓸 수 있는 주소만 받는다.
+ */
+export function getWordImage(
+  imageUrl: string | null | undefined,
+  word: string,
+): string {
+  const usable = imageUrl && /^(https?:|data:|blob:)/.test(imageUrl);
+  return (usable ? imageUrl : undefined) ?? getWordIcon(word) ?? WORD_DEFAULT_IMAGE;
+}
 
 /** 한글 단어로 아이콘 주소를 찾음. 없으면 undefined */
 export function getWordIcon(word: string): string | undefined {

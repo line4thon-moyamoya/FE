@@ -16,15 +16,15 @@ interface GuardianPageProps {
  */
 export default function GuardianPage({ title, children }: GuardianPageProps) {
   return (
-    <main className="pt-status flex min-h-full w-full flex-col bg-guardian">
-      <header className="flex items-center gap-2.5 px-6 py-1.5">
+    <main className="pt-status flex h-full w-full flex-col bg-guardian">
+      <header className="flex shrink-0 items-center gap-2.5 px-6 py-1.5">
         <BackButton />
         <h1 className="font-jua text-[21px] leading-[1.35] font-normal text-ink">
           {title}
         </h1>
       </header>
 
-      {children}
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">{children}</div>
     </main>
   );
 }

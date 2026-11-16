@@ -2,7 +2,7 @@ import wordBook from "../../assets/icons/word-book.svg";
 import Button from "../common/Button/Button";
 import CouponStamp from "./CouponStamp";
 import MoyaAside from "./MoyaAside";
-import { getWordIcon } from "../../constants/wordIcons";
+import { getWordImage } from "../../constants/wordIcons";
 import { COUPON_GOAL } from "../../types/child";
 import { iya } from "../../utils/josa";
 
@@ -15,6 +15,8 @@ interface CardEarnedProps {
   onAskAnother: () => void;
   /** 단어 수첩 버튼 */
   onOpenNotebook?: () => void;
+  /** 서버가 준 단어 그림. 없으면 내장 아이콘을 쓴다 */
+  imageUrl?: string | null;
 }
 
 /**
@@ -27,9 +29,10 @@ export default function CardEarned({
   coupons,
   onAskAnother,
   onOpenNotebook,
+  imageUrl,
 }: CardEarnedProps) {
   const complete = coupons >= COUPON_GOAL;
-  const icon = getWordIcon(word);
+  const icon = getWordImage(imageUrl, word);
 
   const line = complete
     ? "쿠폰 다섯 장!\n우리 노래가 생겼어!"
@@ -40,6 +43,7 @@ export default function CardEarned({
       <MoyaAside line={line} mood="excited" moyaSize={88} />
 
       <div className="flex flex-col gap-9">
+        <div className="relative">
         <div className="flex flex-col items-center gap-2.5 overflow-hidden rounded-[28px] bg-white pb-[22px] shadow-word-card">
           {/* 머리띠 */}
           <div className="flex w-full items-center gap-1.5 bg-lime-card px-[18px] py-2.5">
@@ -56,9 +60,9 @@ export default function CardEarned({
             <span className="font-jua text-2xl font-normal text-ink-muted">{iya(word)}</span>
           </p>
 
-          <span className="h-0.5 w-[306px] bg-line-cream" />
+          <span className="h-0.5 w-[calc(100%-48px)] bg-line-cream" />
 
-          <p className="w-[306px] text-center font-noto text-[15px] leading-[1.55] font-bold text-ink">
+          <p className="w-[calc(100%-48px)] text-center font-noto text-[15px] leading-[1.55] font-bold text-ink">
             {description}
           </p>
         </div>
@@ -82,9 +86,9 @@ export default function CardEarned({
             <img src={wordBook} alt="" className="h-[26px] w-[26px]" />
           </button>
         </div>
+          <CouponStamp label={complete ? `쿠폰 ${COUPON_GOAL}/${COUPON_GOAL}` : "쿠폰 +1"} />
+        </div>
       </div>
-
-      <CouponStamp label={complete ? `쿠폰 ${COUPON_GOAL}/${COUPON_GOAL}` : "쿠폰 +1"} />
     </div>
   );
 }

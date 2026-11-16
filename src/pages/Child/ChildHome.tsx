@@ -23,15 +23,18 @@ import {
   analyzeQuestion,
   clarifyQuestion,
   confirmWord,
+  getOtherMeanings,
   saveWordRequest,
   type AnalyzeResult,
   type ConfirmResult,
+  type OtherMeaningsResult,
   type Voice,
   type HeardContext,
 } from "../../api/question";
 import { sendRepetition, type RepetitionResult } from "../../api/word";
 import { getSongDetail, type SongDetail } from "../../api/song";
-import { playVoice, stopAudio } from "../../utils/playAudio";
+import { playAudio, playVoice, stopAudio } from "../../utils/playAudio";
+import { COMMON_VOICE } from "../../constants/commonVoice";
 import type { ChildErrorType, MoyaStage, TalkStage } from "../../types/child";
 import { MOYA_LOOK_INFO } from "../../constants/moyaLook";
 import { useChildMode } from "../../contexts/ChildModeContext";
@@ -39,6 +42,28 @@ import { getVoiceConsent, setVoiceConsent } from "../../utils/voiceConsent";
 import { requestMicPermission } from "../../utils/micPermission";
 import { isOnline } from "../../utils/network";
 import { getDebugError } from "../../utils/debugError";
+import {
+  DEBUG_REPETITION,
+  debugMeanings,
+  debugSession,
+  DEBUG_SONG,
+  DEBUG_WORD,
+  getDebugStage,
+} from "../../utils/debugStage";
+
+/** 다른 뜻을 보여 줄 때 모야가 하는 공통 대사. 서버가 따로 주지 않는다 */
+const MEANING_LINE = {
+  one: "혹시 이 뜻이야?",
+  two: "둘 중에 더 가까운 게 뭐야?",
+};
+
+/** 실패 응답에서 상태 코드와 에러 코드를 꺼낸다 */
+const errorInfo = (error: unknown) => {
+  const response = (
+    error as { response?: { status?: number; data?: { code?: string } } }
+  )?.response;
+  return { status: response?.status, code: response?.data?.code };
+};
 
 /** 평소 홈에서 모야가 건네는 말 */
 const GREETING = "안녕! 나는 모야야.\n궁금한 말 물어봐!";
@@ -60,17 +85,34 @@ export default function ChildHome() {
   const justPicked = Boolean(navState?.justPicked);
   const [intro, setIntro] = useState(justPicked);
 
-  const [stage, setStage] = useState<TalkStage>("idle");
+  // 테스트: /home?stage=meaning 처럼 마이크 없이 다음 화면을 바로 열어 본다 (개발 모드 전용)
+  const debugStage = getDebugStage();
+
+  const [stage, setStage] = useState<TalkStage>(debugStage ?? "idle");
   const [songModalOpen, setSongModalOpen] = useState(false);
 
   /** 질문 세션. 녹음을 보내면 채워진다 */
-  const [session, setSession] = useState<AnalyzeResult | null>(null);
+  const [session, setSession] = useState<AnalyzeResult | null>(
+    debugStage ? debugSession() : null,
+  );
+  /** 아니야를 눌렀을 때 가져온 같은 단어의 다른 뜻들 */
+  const [meanings, setMeanings] = useState<OtherMeaningsResult | null>(
+    debugStage === "meanings" ? debugMeanings() : null,
+  );
+  /** 그 뜻들이 2차 후보에서 온 것인지. 다 아니라고 했을 때 갈 곳이 달라진다 */
+  const [fromSecondRound, setFromSecondRound] = useState(false);
   /** 아이가 고른 뒤 확정된 단어 */
-  const [word, setWord] = useState<ConfirmResult | null>(null);
+  const [word, setWord] = useState<ConfirmResult | null>(
+    debugStage ? DEBUG_WORD : null,
+  );
   /** 따라 말하기 결과 */
-  const [repetition, setRepetition] = useState<RepetitionResult | null>(null);
+  const [repetition, setRepetition] = useState<RepetitionResult | null>(
+    debugStage ? DEBUG_REPETITION : null,
+  );
   /** 다섯 장을 채우면 만들어지는 노래 */
-  const [song, setSong] = useState<SongDetail | null>(null);
+  const [song, setSong] = useState<SongDetail | null>(
+    debugStage ? DEBUG_SONG : null,
+  );
 
   // 음성 수집 동의 여부 (설정에서 철회하면 false)
   const [hasVoiceConsent, setHasVoiceConsent] = useState(getVoiceConsent());
@@ -136,8 +178,7 @@ export default function ChildHome() {
    *   그 밖의 통신 오류  -> 연결 끊김
    */
   const handleApiError = (error: unknown) => {
-    const status = (error as { response?: { status?: number } })?.response
-      ?.status;
+    const { status } = errorInfo(error);
 
     if (status === 422) {
       setStage("sayAgain");
@@ -211,6 +252,8 @@ export default function ChildHome() {
   const startListening = () => {
     stopAudio();
     setSession(null);
+    setMeanings(null);
+    setFromSecondRound(false);
     setWord(null);
     setRepetition(null);
     setStage("listening");
@@ -259,19 +302,74 @@ export default function ChildHome() {
   };
 
   /** 아이가 고른 후보를 확정하고 뜻 알려주기로 */
-  const handleConfirm = async (candidateId: string) => {
+  const handleConfirm = async (candidateId: string, meaningId?: string) => {
     if (!session) return;
 
     try {
-      const result = await confirmWord(session.sessionId, candidateId);
+      const result = await confirmWord(
+        session.sessionId,
+        candidateId,
+        meaningId,
+      );
       setWord(result);
-      if (result.descriptionAudioUrl) {
-        playVoice({ audioUrl: result.descriptionAudioUrl });
+      if (result.wordAudioUrl) {
+        playVoice({ audioUrl: result.wordAudioUrl });
       }
       setStage("meaning");
     } catch (error) {
       handleApiError(error);
     }
+  };
+
+  /**
+   * 다른 뜻까지 다 아니라고 했을 때 갈 곳.
+   *   1차 후보였으면 어디서 들었는지 물어보고
+   *   2차 후보였으면 더 물어볼 데가 없으니 물어볼 단어로 남긴다
+   */
+  const giveUpCandidate = (fromSecond: boolean) => {
+    setMeanings(null);
+    if (fromSecond) void handleWordRequest();
+    else setStage("place");
+  };
+
+  /**
+   * 아니야. 후보가 하나뿐인 신규 외부 단어면 다른 뜻을 먼저 보여 준다.
+   * 볼 게 없거나 서버가 거절하면 그냥 다음 단계로 넘긴다.
+   */
+  const handleDeny = async (fromSecond: boolean) => {
+    const only = session?.candidates.length === 1 ? session.candidates[0] : null;
+
+    // 후보가 하나뿐인 신규 외부 단어에만 다른 뜻이 있다
+    if (!session || !only || only.canCheckOtherMeanings === false) {
+      giveUpCandidate(fromSecond);
+      return;
+    }
+
+    try {
+      const result = await getOtherMeanings(session.sessionId, only.candidateId);
+      if (!result.hasOtherMeanings || result.meanings.length === 0) {
+        giveUpCandidate(fromSecond);
+        return;
+      }
+      setMeanings(result);
+      setFromSecondRound(fromSecond);
+      playAudio(result.meanings.length > 1 ? COMMON_VOICE["2-4a"] : COMMON_VOICE["2-4c"]);
+      setStage("meanings");
+    } catch (error) {
+      const { status } = errorInfo(error);
+      // 조회할 수 없는 후보(409)거나 사전·LLM이 실패(502)한 거면 다음 단계로 넘긴다
+      if (status === 409 || status === 502) {
+        giveUpCandidate(fromSecond);
+        return;
+      }
+      handleApiError(error);
+    }
+  };
+
+  /** 모르겠어. 되묻지 않고 바로 물어볼 단어로 남긴다 */
+  const handleUnknown = () => {
+    setMeanings(null);
+    void handleWordRequest();
   };
 
   /** 들은 곳을 알려 주고 2차 후보를 찾는다 */
@@ -303,6 +401,21 @@ export default function ChildHome() {
       await saveWordRequest(id);
       setStage("askLater");
     } catch (error) {
+      const { status, code } = errorInfo(error);
+
+      // 이미 저장돼 있으면 저장된 것과 다름없다
+      if (status === 409 && code === "WORD_REQUEST_ALREADY_SAVED") {
+        setStage("askLater");
+        return;
+      }
+
+      // 서버는 아직 2차 후보 단계에서만 저장을 받는다.
+      // 1차에서 모르겠어를 누른 경우가 여기 걸리므로 되묻기로 돌린다
+      if (status === 409) {
+        setStage("place");
+        return;
+      }
+
       handleApiError(error);
     }
   };
@@ -391,12 +504,47 @@ export default function ChildHome() {
     if (stage === "confirm" && session) {
       return (
         <ConfirmQuestion
-          candidates={session.candidates}
+          options={session.candidates.map((c) => ({
+            id: c.candidateId,
+            word: c.word,
+            description: c.description,
+            imageUrl: c.imageUrl,
+          }))}
           line={session.dialogue?.text ?? ""}
           onConfirm={handleConfirm}
-          onDeny={() => setStage("place")}
+          onDeny={() => void handleDeny(false)}
+          // 후보가 여럿인 화면에는 모르겠어를 두지 않는다
+          onUnknown={
+            session.candidates.length === 1 ? handleUnknown : undefined
+          }
           onRetry={tryStartListening}
           onReplay={() => session.dialogue && speakDialogue(session.dialogue)}
+        />
+      );
+    }
+
+    // 같은 단어의 다른 뜻 고르기. 뜻이 1개면 2-4c, 2개면 2-4a
+    if (stage === "meanings" && session && meanings) {
+      const only = session.candidates[0];
+      const twoOrMore = meanings.meanings.length > 1;
+
+      return (
+        <ConfirmQuestion
+          options={meanings.meanings.map((meaning) => ({
+            id: meaning.meaningId,
+            word: only.word,
+            description: meaning.description,
+            // 다른 뜻에는 단어 그림이 따로 없다
+            imageUrl: null,
+          }))}
+          line={twoOrMore ? MEANING_LINE.two : MEANING_LINE.one}
+          onConfirm={(meaningId) => handleConfirm(only.candidateId, meaningId)}
+          onDeny={() => giveUpCandidate(fromSecondRound)}
+          onUnknown={handleUnknown}
+          onRetry={tryStartListening}
+          onReplay={() =>
+            playAudio(twoOrMore ? COMMON_VOICE["2-4a"] : COMMON_VOICE["2-4c"])
+          }
         />
       );
     }
@@ -415,7 +563,7 @@ export default function ChildHome() {
         <CandidatePick
           candidates={session?.candidates ?? []}
           onPick={handleConfirm}
-          onDeny={handleWordRequest}
+          onDeny={() => void handleDeny(true)}
         />
       );
     }
@@ -430,8 +578,7 @@ export default function ChildHome() {
           bubbleWidth={340}
           onNext={() => setStage("repeat")}
           onReplay={() =>
-            word?.descriptionAudioUrl &&
-            playVoice({ audioUrl: word.descriptionAudioUrl })
+            word?.wordAudioUrl && playVoice({ audioUrl: word.wordAudioUrl })
           }
         />
       );
@@ -477,6 +624,7 @@ export default function ChildHome() {
         <CardEarned
           word={word?.word ?? ""}
           description={word?.description ?? ""}
+          imageUrl={word?.imageUrl}
           coupons={coupons}
           onAskAnother={tryStartListening}
           onOpenNotebook={() => navigate(childPath("notebook"))}

@@ -41,7 +41,7 @@ import { isOnline } from "../../utils/network";
 import { getDebugError } from "../../utils/debugError";
 import {
   DEBUG_REPETITION,
-  DEBUG_SESSION,
+  debugSession,
   DEBUG_SONG,
   DEBUG_WORD,
   getDebugStage,
@@ -75,7 +75,7 @@ export default function ChildHome() {
 
   /** 질문 세션. 녹음을 보내면 채워진다 */
   const [session, setSession] = useState<AnalyzeResult | null>(
-    debugStage ? DEBUG_SESSION : null,
+    debugStage ? debugSession() : null,
   );
   /** 아이가 고른 뒤 확정된 단어 */
   const [word, setWord] = useState<ConfirmResult | null>(
@@ -409,10 +409,17 @@ export default function ChildHome() {
     if (stage === "confirm" && session) {
       return (
         <ConfirmQuestion
-          candidates={session.candidates}
+          options={session.candidates.map((c) => ({
+            id: c.candidateId,
+            word: c.word,
+            description: c.description,
+            imageUrl: c.imageUrl,
+          }))}
           line={session.dialogue?.text ?? ""}
           onConfirm={handleConfirm}
           onDeny={() => setStage("place")}
+          // 모르겠어. 단어 요청으로 보내는 건 #125 에서 붙인다
+          onUnknown={() => setStage("place")}
           onRetry={tryStartListening}
           onReplay={() => session.dialogue && speakDialogue(session.dialogue)}
         />

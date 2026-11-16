@@ -22,6 +22,8 @@ export interface Candidate {
   wordAudioUrl: string | null;
   wordAudioBase64: string | null;
   wordAudioContentType: string | null;
+  /** 아니야를 눌렀을 때 이 단어의 다른 뜻을 더 볼 수 있는지 */
+  canCheckOtherMeanings?: boolean;
 }
 
 export interface AnalyzeResult {
@@ -31,6 +33,18 @@ export interface AnalyzeResult {
   candidates: Candidate[];
   dialogue: Dialogue | null;
   nextStep?: string | null;
+}
+
+/** 같은 단어의 다른 뜻 하나 */
+export interface OtherMeaning {
+  meaningId: string;
+  description: string;
+}
+
+export interface OtherMeaningsResult {
+  hasOtherMeanings: boolean;
+  meaningCount: number;
+  meanings: OtherMeaning[];
 }
 
 /** 아이가 단어를 들은 곳 */
@@ -73,10 +87,29 @@ export const clarifyQuestion = async (
   return response.data.data as AnalyzeResult;
 };
 
-/** 아이가 고른 후보를 확정한다 */
-export const confirmWord = async (sessionId: string, candidateId: string) => {
+/**
+ * 후보가 하나뿐인 신규 외부 단어일 때, 아니야를 누르면 다른 뜻을 가져온다.
+ * 같은 후보로 다시 불러도 서버가 처음 결과를 그대로 돌려준다.
+ */
+export const getOtherMeanings = async (
+  sessionId: string,
+  candidateId: string,
+) => {
+  const response = await api.get(
+    `/api/v1/questions/${sessionId}/candidates/${candidateId}/meanings`,
+  );
+  return response.data.data as OtherMeaningsResult;
+};
+
+/** 아이가 고른 후보를 확정한다. 다른 뜻을 골랐으면 meaningId 도 같이 보낸다 */
+export const confirmWord = async (
+  sessionId: string,
+  candidateId: string,
+  meaningId?: string,
+) => {
   const response = await api.post(`/api/v1/questions/${sessionId}/confirm`, {
     candidateId,
+    ...(meaningId ? { meaningId } : {}),
   });
   return response.data.data as ConfirmResult;
 };

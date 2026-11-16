@@ -59,7 +59,8 @@ export default function ConfirmQuestion({
         </div>
       )}
 
-      <div className="flex flex-col items-center gap-6">
+      {/* 카드가 하나면 사이에 다시 말하기 줄이 없어서 직접 띄운다 */}
+      <div className={`flex flex-col items-center gap-6 ${single ? "mt-4" : ""}`}>
         {single ? (
           <WordCard
             word={only.word}

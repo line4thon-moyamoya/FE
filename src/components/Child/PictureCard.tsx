@@ -1,5 +1,5 @@
 import ReplayButton from "../common/ReplayButton/ReplayButton";
-import { getWordIcon, WORD_DEFAULT_IMAGE } from "../../constants/wordIcons";
+import { getWordImage } from "../../constants/wordIcons";
 
 interface PictureCardProps {
   word: string;
@@ -18,7 +18,7 @@ export default function PictureCard({
   onClick,
   imageUrl,
 }: PictureCardProps) {
-  const icon = imageUrl ?? getWordIcon(word) ?? WORD_DEFAULT_IMAGE;
+  const icon = getWordImage(imageUrl, word);
 
   return (
     <div

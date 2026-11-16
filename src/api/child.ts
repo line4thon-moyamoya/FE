@@ -34,6 +34,18 @@ export const addChild = async ({
   return response.data.data;
 };
 
+/**
+ * 첫 실행 때 고른 모야를 저장한다.
+ * 일반 아이 정보 수정과 달리 로그인 토큰만 있으면 돼서 보호자 인증이 필요 없다.
+ */
+export const setInitialMoyaLook = async (childId: number, look: MoyaLook) => {
+  const response = await api.patch(
+    `/api/v1/children/${childId}/initial-profile`,
+    { moyaType: MOYA_TYPE_MAP[look] },
+  );
+  return response.data.data as { childId: number; moyaType: string };
+};
+
 export const toAgeGroup = (serverValue: string): AgeGroup =>
   serverValue === "AGE_5" ? "5" : "3-4";
 

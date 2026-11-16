@@ -1,6 +1,20 @@
 @import "tailwindcss";
 
 /*
+  스크롤바 숨기기.
+  아이가 쓰는 화면이라 막대가 보이면 거슬리고, 폰에서는 어차피 안 보인다.
+  스크롤 자체는 그대로 된다.
+*/
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/*
   화면 맨 위 여백.
   피그마의 62px 은 iPhone 상태바 높이 그 자체라 브라우저에서는 비워 둘 이유가 없다.
   실제로 가려지는 만큼(노치·상태바)만 비우고, 그런 영역이 없으면 숨 쉴 틈만 둔다.

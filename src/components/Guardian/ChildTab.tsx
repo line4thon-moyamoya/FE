@@ -12,7 +12,7 @@ export default function ChildTab({
   onSelect,
 }: ChildTabProps) {
   return (
-    <div className="-mx-6 flex gap-2 overflow-x-auto px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="-mx-6 flex gap-2 overflow-x-auto px-6">
       {childList.map(({ id, name }) => {
         const isSelected = id === selectedId;
 

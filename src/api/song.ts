@@ -12,9 +12,10 @@ export interface SongSummary {
 export interface SongWord {
   wordId: number;
   word: string;
+  /** 서버가 S3 경로(prod/words/...)로 줄 때가 있음 → getWordImage 로 걸러서 사용 */
   imageUrl: string | null;
   /** 가사에 쓰는 짧은 설명 */
-  songDescription: string;
+  description: string;
   /** 이 단어를 부르기 시작하는 시점(초) */
   startSec: number;
 }

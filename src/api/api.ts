@@ -20,6 +20,15 @@ api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
+  /*
+    파일을 보낼 때는 Content-Type 을 지워 브라우저가 직접 채우게 한다.
+    기본값으로 둔 application/json 이 남아 있으면 multipart 경계(boundary)가 빠져
+    서버가 본문을 읽지 못한다.
+  */
+  if (config.data instanceof FormData) {
+    delete config.headers["Content-Type"];
+  }
+
   // 보호자 모드 토큰이 있으면 같이 붙이기
   const parentModeToken = sessionStorage.getItem("parentModeToken");
   if (parentModeToken) {

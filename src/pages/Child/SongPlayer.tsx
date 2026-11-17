@@ -22,7 +22,6 @@ export default function SongPlayer() {
 
   // 노래 정보 불러오기
   useEffect(() => {
-
     if (!Number.isInteger(id)) return;
 
     let alive = true;
@@ -51,14 +50,6 @@ export default function SongPlayer() {
 
   const words = song?.words ?? [];
   const current = words[player.currentWordIndex];
-
-  /** 고른 단어 구간의 처음부터 재생 */
-  const playFromWord = (index: number) => {
-    const target = words[index];
-    if (!target) return;
-    player.seekTo(target.startSec);
-    player.play();
-  };
 
   return (
     <>
@@ -101,16 +92,16 @@ export default function SongPlayer() {
               <SongWordChips
                 words={words.map((w) => w.word)}
                 currentIndex={player.currentWordIndex}
-                onSelect={playFromWord}
+                onSelect={player.playFromWord}
               />
             </div>
 
-            {/* 재생 컨트롤 */}
+            {/* 재생 컨트롤 (오른쪽 빈 칸으로 재생 버튼을 가운데에 둠) */}
             <div className="flex items-center justify-center gap-6">
               <button
                 type="button"
-                onClick={() => playFromWord(player.currentWordIndex)}
-                aria-label="지금 단어 처음부터 다시 듣기"
+                onClick={player.restart}
+                aria-label="처음부터 다시 듣기"
                 className="flex h-13 w-13 cursor-pointer items-center justify-center
                   rounded-full border-2 border-line-lavender bg-white"
               >

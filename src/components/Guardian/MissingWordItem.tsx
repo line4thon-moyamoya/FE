@@ -112,7 +112,7 @@ export default function MissingWordItem({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="아이가 말한 단어는?"
-            className="w-[322px] h-[50px] rounded-2xl bg-[#F6F5FA] px-4 font-noto font-bold text-base leading-6 text-[#241F48] placeholder:text-[#9E98BF] outline-none focus:ring-2 focus:ring-[#D9D2FF]"
+            className="w-full h-[50px] rounded-2xl bg-[#F6F5FA] px-4 font-noto font-bold text-base leading-6 text-[#241F48] placeholder:text-[#9E98BF] outline-none focus:ring-2 focus:ring-[#D9D2FF]"
           />
           <button
             type="submit"

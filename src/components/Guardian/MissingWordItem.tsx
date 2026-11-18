@@ -105,7 +105,7 @@ export default function MissingWordItem({
             e.preventDefault();
             handleSubmit();
           }}
-          className="flex flex-col gap-3 mt-4"
+          className="flex flex-col w-full gap-3 mt-4"
         >
           <input
             type="text"

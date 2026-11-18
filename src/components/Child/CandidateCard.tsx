@@ -1,5 +1,5 @@
 import ReplayButton from "../common/ReplayButton/ReplayButton";
-import { getWordIcon } from "../../constants/wordIcons";
+import { getWordIcon, WORD_DEFAULT_IMAGE } from "../../constants/wordIcons";
 
 interface CandidateCardProps {
   word: string;
@@ -14,7 +14,7 @@ export default function CandidateCard({
   onReplay,
   onClick,
 }: CandidateCardProps) {
-  const icon = getWordIcon(word);
+  const icon = getWordIcon(word) ?? WORD_DEFAULT_IMAGE;
 
   return (
     // 안에 다시 듣기 버튼이 들어가므로 바깥은 div 로 둠 (button 중첩 불가)

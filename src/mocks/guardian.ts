@@ -1,9 +1,5 @@
 import type { Child } from "../types/guardian";
-import receipt from "../assets/icons/words/receipt.svg";
-import savings from "../assets/icons/words/savings.svg";
-import brave from "../assets/icons/words/brave.svg";
-import recycling from "../assets/icons/words/separate-recycling.svg";
-import finedust from "../assets/icons/words/fine-dust.svg";
+import { getWordImage } from "../constants/wordIcons";
 
 export const MOCK_CHILD_LIST: Child[] = [
   {
@@ -45,7 +41,7 @@ export const MOCK_CHILD_LIST: Child[] = [
           id: 1,
           word: "영수증",
           spokenAs: "편니점",
-          image: receipt,
+          image: getWordImage(null, "영수증"),
           bgColor: "#E3F5D6",
           stars: 2,
         },
@@ -53,7 +49,7 @@ export const MOCK_CHILD_LIST: Child[] = [
           id: 2,
           word: "적금",
           spokenAs: "저궁통",
-          image: savings,
+          image: getWordImage(null, "적금"),
           bgColor: "#FFE4EC",
           stars: 0,
         },
@@ -61,7 +57,7 @@ export const MOCK_CHILD_LIST: Child[] = [
           id: 3,
           word: "용기",
           spokenAs: "무지게",
-          image: brave,
+          image: getWordImage(null, "용기"),
           bgColor: "#FFF2C7",
           stars: 3,
         },
@@ -115,7 +111,7 @@ export const MOCK_CHILD_LIST: Child[] = [
           id: 4,
           word: "분리수거",
           spokenAs: "분리수고",
-          image: recycling,
+          image: getWordImage(null, "분리수거"),
           bgColor: "#E3F5D6",
           stars: 1,
         },
@@ -123,7 +119,7 @@ export const MOCK_CHILD_LIST: Child[] = [
           id: 5,
           word: "미세먼지",
           spokenAs: "미세먼디",
-          image: finedust,
+          image: getWordImage(null, "미세먼지"),
           bgColor: "#FFF2C7",
           stars: 3,
         },

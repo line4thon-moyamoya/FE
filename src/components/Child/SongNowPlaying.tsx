@@ -1,5 +1,5 @@
 import type { SongWord } from "../../api/song";
-import { getWordIcon } from "../../constants/wordIcons";
+import { getWordImage } from "../../constants/wordIcons";
 import NoteIcon from "../common/NoteIcon/NoteIcon";
 
 interface SongNowPlayingProps {
@@ -11,7 +11,7 @@ export default function SongNowPlaying({
   word,
   isPlaying,
 }: SongNowPlayingProps) {
-  const image = word.imageUrl ?? getWordIcon(word.word);
+  const image = getWordImage(word.imageUrl, word.word);
 
   // 노래가 멈추면 음표도 그 자리에서 멈춤
   const noteMotion = `animate-note-sway ${

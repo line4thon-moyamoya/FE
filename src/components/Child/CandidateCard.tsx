@@ -1,11 +1,13 @@
 import ReplayButton from "../common/ReplayButton/ReplayButton";
-import { getWordIcon } from "../../constants/wordIcons";
+import { getWordImage } from "../../constants/wordIcons";
 
 interface CandidateCardProps {
   word: string;
   hint: string;
   onReplay?: () => void;
   onClick?: () => void;
+  /** 서버가 준 단어 그림. 없으면 내장 그림을 쓴다 */
+  imageUrl?: string | null;
 }
 
 export default function CandidateCard({
@@ -13,8 +15,9 @@ export default function CandidateCard({
   hint,
   onReplay,
   onClick,
+  imageUrl,
 }: CandidateCardProps) {
-  const icon = getWordIcon(word);
+  const icon = getWordImage(imageUrl, word);
 
   return (
     // 안에 다시 듣기 버튼이 들어가므로 바깥은 div 로 둠 (button 중첩 불가)

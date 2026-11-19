@@ -26,6 +26,7 @@ export default function CandidatePick({
               key={candidate.candidateId}
               word={candidate.word}
               hint={candidate.description}
+              imageUrl={candidate.imageUrl}
               onClick={() => onPick(candidate.candidateId)}
             />
           ))}

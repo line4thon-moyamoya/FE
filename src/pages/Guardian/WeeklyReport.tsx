@@ -13,7 +13,7 @@ import {
   getWeekStartDate,
 } from "../../utils/formatDate";
 import { iga } from "../../utils/josa";
-import { getWordIcon } from "../../constants/wordIcons";
+import { getWordImage } from "../../constants/wordIcons";
 import type { WordRecord } from "../../types/guardian";
 
 // 리포트는 주가 끝난 뒤(다음 주 월요일 00:10) 만들어지므로 지난주를 조회
@@ -87,7 +87,7 @@ export default function WeeklyReport() {
     id: w.wordId ?? -(i + 1), // wordId 가 null 인 단어 대비
     word: w.word,
     spokenAs: w.recognizedTexts.filter((t) => t !== w.word).join(", "),
-    image: w.imageUrl ?? getWordIcon(w.word),
+    image: getWordImage(w.imageUrl, w.word),
   }));
 
   const firstMissing = report.unrecognizedWords[0]?.recognizedText;

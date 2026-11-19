@@ -24,7 +24,7 @@ export default function MissingWordCard({
     <button
       type="button"
       onClick={onClick}
-      className="cursor-pointer flex w-full justify-start items-center gap-3 bg-white rounded-3xl p-4 shadow-[0px_5px_0px_0px_rgba(231,228,243,1.00)] text-left"
+      className="cursor-pointer flex w-full justify-between items-center gap-3 bg-white rounded-3xl p-4 shadow-[0px_5px_0px_0px_rgba(231,228,243,1.00)] text-left"
     >
       <div className="flex gap-3">
         <img src={mailbox} alt="" className="w-13 h-13" />

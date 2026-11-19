@@ -67,7 +67,7 @@ export default function CardEarned({
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 mt-9">
           <Button
             text="또 물어볼래"
             size="normal"

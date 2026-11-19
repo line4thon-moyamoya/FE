@@ -146,7 +146,7 @@ export const DEBUG_SONG: SongDetail = {
   status: "READY",
   audioUrl: null,
   words: [
-    { wordId: 101, word: "적금", imageUrl: null, songDescription: "매달 모으는 돈", startSec: 0 },
-    { wordId: 102, word: "예금", imageUrl: null, songDescription: "맡겨 두는 돈", startSec: 4 },
+    { wordId: 101, word: "적금", imageUrl: null, description: "매달 모으는 돈", startSec: 0 },
+    { wordId: 102, word: "예금", imageUrl: null, description: "맡겨 두는 돈", startSec: 4 },
   ],
 };
